@@ -5,11 +5,12 @@ import { FaRegUserCircle } from "react-icons/fa";
 import { FaClipboardList } from "react-icons/fa";
 import Link from 'next/link';
 import { signOut } from '@/auth';
+import Image from 'next/image';
 const ProfileNavBar = async () => {
     return (
         <div className='flex flex-col gap-5 w-[180px]'>
             <div className='flex gap-3'>
-                <img src="/globe.svg" alt="" className='w-[50px]' />
+                <Image src="/globe.svg" alt="" className='w-[50px]' width={50} height={50}/>
                 <div className='flex flex-col gap-0 justify-start text-start'>
                     <label htmlFor="">Username</label>
                     <Link href="/profile" className='p-0 m-0 text-[13px] text-white/80 flex gap-1 items-center justify-start'><FaRegPenToSquare />Edit profile</Link>

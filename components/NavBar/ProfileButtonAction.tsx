@@ -20,7 +20,7 @@ const ProfileButtonAction = ({ session }: Props) => {
 
     return (
         <div className="cursor-pointer">
-            <FaRegUserCircle onClick={() => viewProfile()} className="text-2xl text-white" />
+            <FaRegUserCircle onClick={() => viewProfile()} className="text-lg text-white" />
         </div>
     )
 }

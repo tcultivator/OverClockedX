@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
         const addressData = rows as AddressType[];
         console.log('eto laman ng result ', addressData.length)
         if (addressData.length == 0) {
-            console.log('dapat gagana to')
+
             await db.query('INSERT INTO user_address (email,rname,address,postal,description)VALUES(?,?,?,?,?)', [body.email, body.rName, body.address, body.postal, body.description])
             return NextResponse.json({ status: 200 })
         }
@@ -18,6 +18,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ status: 200 })
 
     } catch (err) {
+        console.log(err)
         return NextResponse.json({ status: 500 })
     }
 

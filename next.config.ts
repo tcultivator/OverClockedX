@@ -1,12 +1,16 @@
-import type { NextConfig } from "next";
+import { hostname } from "os";
 
-const nextConfig: NextConfig = {
-  /* config options here */
-  images:{
+/** @type {import('next').NextConfig} */
+module.exports = {
+  images: {
     remotePatterns: [
-      {hostname: "lh3.googleusercontent.com"}
-    ]
-  }
+      { hostname: "lh3.googleusercontent.com" },
+      { hostname: "files.edgestore.dev" },
+      { hostname: "res.cloudinary.com" },
+      { hostname: "https://b.tile.openstreetmap.org" }
+    ],
+  },
+  allowedDevOrigins: [
+    'https://eruptional-deposable-alejandro.ngrok-free.dev',
+  ],
 };
-
-export default nextConfig;
