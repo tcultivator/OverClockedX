@@ -8,10 +8,13 @@ import { ProductsType } from '@/types/ProductTypes';
 import { Skeleton } from "@/components/ui/skeleton"
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useCartStore } from '@/stores/cartStore';
 const Dashboard = () => {
     const router = useRouter();
     const [current, setCurrent] = useState(0);
     const [featuredProducts, setFeaturedProducts] = useState<ProductsType[]>([])
+
+    const addToCart = useCartStore((state) => state.addToCart)
     useEffect(() => {
         const getFeaturedProductsFunc = async () => {
             const getFeaturedProducts = await fetch('/api/featuredProducts', {
@@ -27,33 +30,7 @@ const Dashboard = () => {
         }
         getFeaturedProductsFunc()
     }, [])
-    const images: string[] = [
-        "/laptop.png",
-        "/DESKTOP.png",
-        "/CPU.png",
-        "/GPU.png"
-    ];
 
-    const labelTitleItems: string[] = [
-        "Asus TUF A15 FA506NFR-HN005W",
-        "Ryzen 7 Light Gaming Build",
-        "AMD Ryzen 9 9900X3D",
-        "Palit RTX 5060"
-    ]
-
-    const sublabelItems: string[] = [
-        "Gaming Laptop (Graphite Black) 15.6' FHD (1920x1080) IPS 144Hz | Ryzen 7 7435HS | 8GB RAM | 512GB SSD | RTX 2050 | Windows 11 Home + Asus Backpack",
-        "AMD Ryzen 7 5700G 8-Core | B550M | 16GB DDR4 RAM | 1TB NVMe SSD | 550W Bronze PSU | Sting Pro mATX Case | CPU Package",
-        "AMD Ryzen 9 9900X3D 4.40GHz-5.50GHz 12Core 24Threads Processor Box",
-        "Palit RTX 5060 White OC 8GB GDDR7 Graphics Card NE75060U19P1-GB2063M"
-    ]
-
-    const priceItems: string[] = [
-        "₱39.995.00",
-        "₱23.995.00",
-        "₱39.415.00",
-        "₱20.275.00"
-    ]
 
     function prevSlide() {
         setCurrent((prev) => (prev === 0 ? featuredProducts.length - 1 : prev - 1));
@@ -100,7 +77,7 @@ const Dashboard = () => {
                             </label>
                             <div className="mt-4 flex flex-col gap-1 sm:flex-row">
                                 <button onClick={() => router.push(`/product/${featuredProducts[current].product_id}`)} className='bg-white text-[10px] py-2 w-full text-black   rounded-[10px] md:text-[12px]  rounded-[5px]'>BUY</button>
-                                <button className='bg-white text-[10px] py-2 w-full flex flex-col items-center justify-center text-black  rounded-[10px] md:text-[12px] rounded-[5px] lg:flex-row '><AiOutlineShoppingCart className='text-[15px]' />  ADD TO CART</button>
+                                <button onClick={addToCart} className='bg-white text-[10px] py-2 w-full flex flex-col items-center justify-center text-black  rounded-[10px] md:text-[12px] rounded-[5px] lg:flex-row '><AiOutlineShoppingCart className='text-[15px]' />  ADD TO CART</button>
                             </div>
 
                         </div>) :

@@ -1,8 +1,9 @@
 import React from 'react'
-import { CiShoppingCart } from "react-icons/ci";
+
 import Link from 'next/link';
 import DropDownMenu from './DropDownMenu';
 import ProfileButtonAction from './ProfileButtonAction';
+import CartButtonAction from './CartButtonAction';
 import { auth } from '@/auth';
 const NavBar = async () => {
     const session = await auth()
@@ -14,16 +15,13 @@ const NavBar = async () => {
                     <DropDownMenu
                     />
                     <div className=" gap-5 items-center justify-center flex ">
-                        <div className="relative cursor-pointer ">
-                            <CiShoppingCart className="text-2xl text-white" />
-                            <label className="flex absolute bg-white text-black  w-[17px] h-[17px] text-[10px] justify-center items-center rounded top-[-7px] right-[-10px]" htmlFor="">0</label>
-                        </div>
+                        <CartButtonAction />
                         <ProfileButtonAction
                             session={session}
                         />
                     </div>
                 </div>
-               
+
 
 
             </div>
