@@ -19,6 +19,8 @@ const CartButtonAction = ({ session }: Props) => {
     const cartItems = useCartStore((state) => state.cartItems)
     const clearCart = useCartStore((state) => state.clearCart)
 
+    const openCartToggle = useCartStore((state) => state.openCartToggle)
+
     useEffect(() => {
         if (session) {
             console.log('eto ung laman ng session ', session.user?.email)
@@ -32,9 +34,7 @@ const CartButtonAction = ({ session }: Props) => {
 
     return (
         <div className="relative cursor-pointer ">
-            <CiShoppingCart onClick={() => {
-                console.log('eto ung laman ng cart, ', cartItems)
-            }} className="text-2xl text-white" />
+            <CiShoppingCart onClick={openCartToggle} className="text-2xl text-white" />
             <label className="flex absolute bg-white text-black  w-[17px] h-[17px] text-[10px] justify-center items-center rounded top-[-7px] right-[-10px]" htmlFor="">{cartCount}</label>
         </div>
     )

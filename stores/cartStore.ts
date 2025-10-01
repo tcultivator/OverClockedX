@@ -7,7 +7,9 @@ type cart = {
     addToCart: (email: string | null | undefined, products: ProductsType | null | undefined) => void,
     clearCart: () => void,
     fetchCartItems: (email: string | null | undefined) => void,
-    cartItems: ProductsInCartTypes[]
+    cartItems: ProductsInCartTypes[],
+    openCart: boolean,
+    openCartToggle: () => void
 }
 
 export const useCartStore = create<cart>((set) => ({
@@ -77,5 +79,10 @@ export const useCartStore = create<cart>((set) => ({
             cartCount: 0,
             cartItems: []
         })
-    }
+    },
+    openCart: false,
+    openCartToggle: () => set((state) => ({
+        openCart: !state.openCart
+    }))
+
 }))

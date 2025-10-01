@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Orbitron, Anton } from "next/font/google";
 
 import NavBar from "@/components/NavBar/NavBar";
 import Footer from "@/components/Footer/Footer";
+import CartSideBar from "@/components/CartSideBar/CartSideBar";
 import './globals.css';
 
 const geistSans = Geist({
@@ -42,6 +43,7 @@ export default function RootLayout({
       <body className="antialiased overflow-x-hidden">
         <NavBar />
         {children}
+        <CartSideBar />
         <Footer />
       </body>
     </html>
