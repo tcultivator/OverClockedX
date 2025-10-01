@@ -15,7 +15,7 @@ const NavBar = async () => {
                     <DropDownMenu
                     />
                     <div className=" gap-5 items-center justify-center flex ">
-                        <CartButtonAction />
+                        <CartButtonAction session={session} />
                         <ProfileButtonAction
                             session={session}
                         />

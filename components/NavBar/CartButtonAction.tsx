@@ -2,11 +2,39 @@
 import React from 'react'
 import { CiShoppingCart } from "react-icons/ci";
 import { useCartStore } from '@/stores/cartStore';
-const CartButtonAction = () => {
+import { useEffect } from 'react';
+type session = {
+    user?: {
+        email?: string | null;
+        image?: string | null;
+        name?: string | null;
+    }
+}
+type Props = {
+    session: session | null
+}
+const CartButtonAction = ({ session }: Props) => {
     const cartCount = useCartStore((state) => state.cartCount)
+    const fetchCartItems = useCartStore((state) => state.fetchCartItems)
+    const cartItems = useCartStore((state) => state.cartItems)
+    const clearCart = useCartStore((state) => state.clearCart)
+
+    useEffect(() => {
+        if (session) {
+            console.log('eto ung laman ng session ', session.user?.email)
+            const email = session.user?.email;
+            fetchCartItems(email)
+        } else {
+            console.log('try kung gagana to kapag nabago laman ng session')
+            clearCart()
+        }
+    }, [session])
+
     return (
         <div className="relative cursor-pointer ">
-            <CiShoppingCart className="text-2xl text-white" />
+            <CiShoppingCart onClick={() => {
+                console.log('eto ung laman ng cart, ', cartItems)
+            }} className="text-2xl text-white" />
             <label className="flex absolute bg-white text-black  w-[17px] h-[17px] text-[10px] justify-center items-center rounded top-[-7px] right-[-10px]" htmlFor="">{cartCount}</label>
         </div>
     )
