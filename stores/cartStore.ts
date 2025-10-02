@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import { ProductsInCartTypes } from '@/types/ProductsInCartTypes'
 import { ProductsType } from '@/types/ProductTypes'
 import { useToast } from './toastStore'
-
+import { ProductsInCheckoutTypes } from '@/types/ProductsInCheckoutTypes'
 
 type tempData = {
     email: string | null | undefined,
@@ -18,7 +18,10 @@ type cart = {
     openCartToggle: () => void,
     tempData: tempData | null,
     storeTempData: (email: string | null | undefined, products: ProductsType | null | undefined) => void,
-    retryAddtoCart: () => void
+    retryAddtoCart: () => void,
+    checkoutItems: ProductsInCheckoutTypes[],
+    addToCheckout: (products: ProductsInCartTypes | null | undefined) => void,
+    removeItemFromCheckoutItems: (products: ProductsInCartTypes | null | undefined) => void
 }
 let toastTimeout: ReturnType<typeof setTimeout> | null = null;
 export const useCartStore = create<cart>((set) => ({
@@ -151,8 +154,38 @@ export const useCartStore = create<cart>((set) => ({
         const email = useCartStore.getState().tempData?.email
         const products = useCartStore.getState().tempData?.products
         useCartStore.getState().addToCart(email, products)
+    },
+    checkoutItems: [],
+    addToCheckout: (products: ProductsInCartTypes | null | undefined) => {
+        console.log('gumana ung add')
+        const newChecoutItems = {
+            id: products?.id!,
+            product_id: products?.product_id!,
+            product_name: products?.product_name!,
+            product_image: products?.product_image!,
+            price: products?.price!,
+            stocks: products?.stocks!,
+        };
+        set((state) => ({
+            checkoutItems: [...state.checkoutItems, newChecoutItems],
+        }))
+    },
+    removeItemFromCheckoutItems: (products: ProductsInCartTypes | null | undefined) => {
+        console.log('gumana remove')
+        const newChecoutItems = {
+            id: products?.id!,
+            product_id: products?.product_id!,
+            product_name: products?.product_name!,
+            product_image: products?.product_image!,
+            price: products?.price!,
+            stocks: products?.stocks!,
+        };
+
+        const newCheckoutItems = useCartStore.getState().checkoutItems.filter(products => products.id !== newChecoutItems.id)
+        console.log(newCheckoutItems)
+        set({
+            checkoutItems: newCheckoutItems
+        })
+
     }
-
-
-
 }))

@@ -4,13 +4,15 @@ import { useCartStore } from '@/stores/cartStore';
 import { LiaTimesSolid } from "react-icons/lia";
 import Image from 'next/image';
 import { Button } from '../ui/button';
-import { FaAngleRight } from "react-icons/fa";
 import { useRouter } from 'next/navigation';
 const CartSideBar = () => {
     const router = useRouter();
     const openCart = useCartStore((state) => state.openCart)
     const openCartToggle = useCartStore((state) => state.openCartToggle)
     const cartItems = useCartStore((state) => state.cartItems)
+    const checkoutItems = useCartStore((state) => state.checkoutItems)
+    const addToCheckout = useCartStore((state) => state.addToCheckout)
+    const removeItemFromCheckoutItems = useCartStore((state) => state.removeItemFromCheckoutItems)
     return (
         <div id='cartMenu' className={`${openCart ? ' shadow-md absolute w-[500px] h-screen bg-[#1E1E1E] top-0 right-0 fixed z-50 text-white ' : 'hidden'}`}>
             <div className='relative  h-full box-border flex flex-col'>
@@ -22,7 +24,11 @@ const CartSideBar = () => {
                     {
                         cartItems.map((src, index) => (
                             <div key={index} className='flex gap-1 items-center justify-center'>
-                                <input type="checkbox" />
+                                <input disabled={src.stocks <= 0} type="checkbox" className='cursor-pointer' onChange={(e) => {
+                                    console.log(e.target.checked)
+                                    e.target.checked ? addToCheckout(src) : removeItemFromCheckoutItems(src)
+                                    // addToCheckout(src)
+                                }} />
                                 <div className='w-[40%]'>
                                     <Image
                                         src={src.product_image}
@@ -38,14 +44,10 @@ const CartSideBar = () => {
                                             currency: 'PHP',
                                         }).format(src.price)}
                                         </label>
-                                        <label htmlFor="">Stocks: {src.stocks > 0 ? <span>{src.stocks}</span> : <span className='text-red-500'>No Stocks Available</span>}</label>
+                                        <label htmlFor="">Stocks: {src.stocks > 0 ? <span>{src.stocks}</span> : <span className='text-red-500'>Out of stocks</span>}</label>
                                     </div>
                                     <div className='flex gap-1 w-full'>
                                         <Button variant={'secondary'}>Remove</Button>
-                                        <Button onClick={() => {
-                                            openCartToggle()
-                                            router.push(`/product/${src.product_id}`)
-                                        }} disabled={src.stocks <= 0} variant={'secondary'}>Buy</Button>
                                     </div>
                                 </div>
                             </div>
@@ -54,11 +56,19 @@ const CartSideBar = () => {
                 </div>
                 <div className='fixed relative bottom-0 w-full border-t border-white/50 bg-black p-3 flex justify-between items-center'>
                     <div className='w-full'>
-                        <label htmlFor="">0 selected</label>
+                        <label htmlFor=""><span>{checkoutItems.length}</span> selected</label>
                     </div>
                     <div className='flex flex-col gap-1 w-full'>
-                        <label htmlFor="">SubTotal:₱20,275.00</label>
-                        <Button variant={'secondary'}>Checkout</Button>
+                        <label htmlFor="">SubTotal: <span>{checkoutItems.length > 0 ? new Intl.NumberFormat('en-PH', {
+                            style: 'currency',
+                            currency: 'PHP',
+                        }).format(checkoutItems.reduce((sum, item) => sum + item.price * 1, 0)) : new Intl.NumberFormat('en-PH', {
+                            style: 'currency',
+                            currency: 'PHP',
+                        }).format(0)}</span></label>
+                        <Button onClick={() => {
+                            console.log('eto ung laman ng checkout items, ', checkoutItems)
+                        }} variant={'secondary'}>Checkout</Button>
                     </div>
                 </div>
             </div>
