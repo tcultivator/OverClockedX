@@ -127,18 +127,21 @@ const CheckoutProduct = ({ product_id, product_image,
                             <input type="number" className=" text-white px-1 w-[50px] text-center outline-none" placeholder="0" />
                             <button className="text-white" ><FaPlus /></button>
                         </div>
-                        <button disabled={loading === true} onClick={() => console.log('eto ung selected payment options, ', paymentOptions)} className="p-2 bg-red-400 w-full rounded-[25px]">Add to Cart</button>
                     </div>
-                    <button onClick={() => {
-                        CheckoutProduct()
-                    }} className='bg-green-400 rounded-[25px] p-4 flex gap-2 items-center justify-center' disabled={loading === true}> {loading && (
-                        <ClipLoader
+                    <div className='w-full flex flex-col gap-2'>
+                        <button disabled={loading === true} onClick={() => console.log('eto ung selected payment options, ', paymentOptions)} className="border white rounded-[25px] p-4 flex gap-2 items-center justify-center">Add to Cart</button>
+                        <button onClick={() => {
+                            CheckoutProduct()
+                        }} className='bg-white text-black rounded-[25px] p-4 flex gap-2 items-center justify-center' disabled={loading === true}> {loading && (
+                            <ClipLoader
 
-                            color='white'
-                            size={20}
-                        />
-                    )}
-                        {loading ? "Please Wait..." : "Checkout"}</button>
+                                color='white'
+                                size={20}
+                            />
+                        )}
+                            {loading ? "Please Wait..." : "Checkout"}</button>
+                    </div>
+
 
 
                     <h1 className="font-bold">Description</h1>

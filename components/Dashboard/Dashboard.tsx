@@ -13,6 +13,7 @@ import { useRouter } from 'next/navigation';
 // shared state
 import { useCartStore } from '@/stores/cartStore';
 import { useUserStore } from '@/stores/userStore';
+import { useToast } from '@/stores/toastStore';
 
 const Dashboard = () => {
     const router = useRouter();
@@ -21,6 +22,7 @@ const Dashboard = () => {
 
     const addToCart = useCartStore((state) => state.addToCart)
     const user = useUserStore((state) => state.user)
+    const toastState = useToast((state) => state.toastState)
     useEffect(() => {
         const getFeaturedProductsFunc = async () => {
             const getFeaturedProducts = await fetch('/api/featuredProducts', {
@@ -86,7 +88,7 @@ const Dashboard = () => {
                             </label>
                             <div className="mt-4 flex flex-col gap-1 sm:flex-row">
                                 <button onClick={() => router.push(`/product/${featuredProducts[current].product_id}`)} className='bg-white text-[10px] py-2 w-full text-black   rounded-[10px] md:text-[12px]  rounded-[5px]'>BUY</button>
-                                <button onClick={() => {
+                                <button disabled={toastState} onClick={() => {
                                     addToCart(user?.email, featuredProducts[current])
                                 }} className='bg-white text-[10px] py-2 w-full flex flex-col items-center justify-center text-black  rounded-[10px] md:text-[12px] rounded-[5px] lg:flex-row '><AiOutlineShoppingCart className='text-[15px]' />  ADD TO CART</button>
                             </div>

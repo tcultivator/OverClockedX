@@ -1,7 +1,13 @@
 import { create } from 'zustand'
 import { ProductsInCartTypes } from '@/types/ProductsInCartTypes'
 import { ProductsType } from '@/types/ProductTypes'
+import { useToast } from './toastStore'
 
+
+type tempData = {
+    email: string | null | undefined,
+    products: ProductsType | null | undefined
+}
 type cart = {
     cartCount: number,
     addToCart: (email: string | null | undefined, products: ProductsType | null | undefined) => void,
@@ -9,12 +15,18 @@ type cart = {
     fetchCartItems: (email: string | null | undefined) => void,
     cartItems: ProductsInCartTypes[],
     openCart: boolean,
-    openCartToggle: () => void
+    openCartToggle: () => void,
+    tempData: tempData | null,
+    storeTempData: (email: string | null | undefined, products: ProductsType | null | undefined) => void,
+    retryAddtoCart: () => void
 }
-
+let toastTimeout: ReturnType<typeof setTimeout> | null = null;
 export const useCartStore = create<cart>((set) => ({
     cartCount: 0,
+
     cartItems: [],
+
+
     //this get the items in the cart of a user if login, if not login the default value should be zero
     fetchCartItems: async (email: string | null | undefined) => {
         try {
@@ -39,7 +51,13 @@ export const useCartStore = create<cart>((set) => ({
         }
     },
 
+
+
     addToCart: async (email: string | null | undefined, products: ProductsType | null | undefined) => {
+
+
+        useToast.getState().displayToast(true)
+
         try {
             console.log('eto ung laman sa kapag add to cart')
             console.log(email)
@@ -53,7 +71,6 @@ export const useCartStore = create<cart>((set) => ({
 
             })
             const response = await addtocart.json()
-            console.log('ano to', response)
             const newCartItem = {
                 id: products?.id!,
                 email: email!,
@@ -63,26 +80,79 @@ export const useCartStore = create<cart>((set) => ({
                 price: products?.price!,
                 stocks: products?.stocks!,
             };
+
             if (response.status == 201) {
+                useToast.getState().setToastStatus('success')
                 set((state) => ({
                     cartCount: state.cartCount + 1,
                     cartItems: [...state.cartItems, newCartItem],
                 }))
+
+            }
+            if (response.status == 500 && !email) {
+
+                useToast.getState().setToastStatus('notLogin')
+                useCartStore.getState().storeTempData(email, products)
+
+                if (toastTimeout != null) clearTimeout(toastTimeout);
+                toastTimeout = setTimeout(() => {
+                    useToast.getState().displayToast(false)
+                }, 8000);
+                console.log(toastTimeout)
+            } else {
+                useToast.getState().setToastStatus('success')
+                if (toastTimeout != null) clearTimeout(toastTimeout);
+                toastTimeout = setTimeout(() => {
+                    useToast.getState().displayToast(false)
+                }, 8000);
             }
 
+
         } catch (err) {
+            useToast.getState().setToastStatus('failed');
+            if (toastTimeout != null) clearTimeout(toastTimeout);
+            toastTimeout = setTimeout((): void => {
+                useToast.getState().displayToast(false)
+            }, 8000);
+            console.log(toastTimeout)
 
         }
     },
+
+
     clearCart: () => {
         set({
             cartCount: 0,
             cartItems: []
         })
     },
+
+
+
+
     openCart: false,
+
+
     openCartToggle: () => set((state) => ({
         openCart: !state.openCart
-    }))
+    })),
+
+
+
+    tempData: { email: '', products: {} as ProductsType },
+
+
+    storeTempData: (email: string | null | undefined, products: ProductsType | null | undefined) => set({
+        tempData: { email, products }
+    }),
+
+
+    retryAddtoCart: () => {
+        const email = useCartStore.getState().tempData?.email
+        const products = useCartStore.getState().tempData?.products
+        useCartStore.getState().addToCart(email, products)
+    }
+
+
 
 }))

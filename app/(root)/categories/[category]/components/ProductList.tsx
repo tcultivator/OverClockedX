@@ -7,6 +7,10 @@ import { useEffect } from 'react';
 import CategoriesHeader from '@/components/Categories/CategoriesHeader';
 import { Skeleton } from "@/components/ui/skeleton"
 import { useRouter } from 'next/navigation';
+//shared states using zustand
+import { useCartStore } from '@/stores/cartStore';
+import { useUserStore } from '@/stores/userStore';
+import { useToast } from '@/stores/toastStore';
 type Props = {
     products: ProductsType[]
     category: string
@@ -16,6 +20,10 @@ const ProductList = ({ products, category }: Props) => {
     const [finalProducts, setFinalProducts] = useState(products)
     const searchParams = useSearchParams();
     const [loadingProducts, setLoadingProducts] = useState(false)
+
+    const addToCart = useCartStore((state) => state.addToCart)
+    const user = useUserStore((state) => state.user)
+    const toastState = useToast((state) => state.toastState)
     useEffect(() => {
         const SortBy = searchParams.get('Sortby') || ''
         const Availability = searchParams.get('availability') || ''
@@ -76,7 +84,9 @@ const ProductList = ({ products, category }: Props) => {
                                 </label>
                             </div>
                             <div className='w-full'>
-                                <button className='w-full bg-white text-black py-2 px-3 rounded-[10px] mt-5 md:text-[12px] py-2 px-3 rounded-[5px]'>Add to cart</button>
+                                <button disabled={toastState} onClick={() => {
+                                    addToCart(user?.email, data)
+                                }} className='w-full bg-white text-black py-2 px-3 rounded-[10px] mt-5 md:text-[12px] py-2 px-3 rounded-[5px]'>Add to cart</button>
                             </div>
 
                         </div>

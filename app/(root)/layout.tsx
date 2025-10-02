@@ -5,6 +5,7 @@ import NavBar from "@/components/NavBar/NavBar";
 import Footer from "@/components/Footer/Footer";
 import CartSideBar from "@/components/CartSideBar/CartSideBar";
 import './globals.css';
+import Toast from "@/components/ToastNotification/Toast";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -43,6 +44,7 @@ export default function RootLayout({
       <body className="antialiased overflow-x-hidden">
         <NavBar />
         {children}
+        <Toast />
         <CartSideBar />
         <Footer />
       </body>
