@@ -30,8 +30,7 @@ const ProfileNavBar = async () => {
             </div>
             <div>
                 <div className='flex gap-2 items-center'>
-                    <FaClipboardList />
-                    <button>My Purchase</button>
+                    <Link href={"/profile/Purchase"} className='text-start'>My Purchase</Link>
                 </div>
             </div>
             <form

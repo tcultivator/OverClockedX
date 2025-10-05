@@ -5,6 +5,7 @@ import { LiaTimesSolid } from "react-icons/lia";
 import Image from 'next/image';
 import { Button } from '../ui/button';
 import { useRouter } from 'next/navigation';
+
 const CartSideBar = () => {
     const router = useRouter();
     const openCart = useCartStore((state) => state.openCart)
@@ -13,14 +14,17 @@ const CartSideBar = () => {
     const checkoutItems = useCartStore((state) => state.checkoutItems)
     const addToCheckout = useCartStore((state) => state.addToCheckout)
     const removeItemFromCheckoutItems = useCartStore((state) => state.removeItemFromCheckoutItems)
+    const removeItemInCart = useCartStore((state) => state.removeItemInCart)
+
+    const addToFinalCheckout = useCartStore((state) => state.addToFinalCheckout)
     return (
-        <div id='cartMenu' className={`${openCart ? ' shadow-md absolute w-[500px] h-screen bg-[#1E1E1E] top-0 right-0 fixed z-50 text-white ' : 'hidden'}`}>
-            <div className='relative  h-full box-border flex flex-col'>
+        <div id='cartMenu' className={`${openCart ? ' shadow-md absolute w-[500px] h-screen bg-[#1E1E1E] top-0 right-0 fixed z-50 text-white box-border' : 'hidden'}`} >
+            <div className='relative w-full h-full box-border flex flex-col'>
                 <div className='fixed relative w-full border-b border-white/50 bg-black p-3 flex justify-between items-center'>
                     <label htmlFor="">Shopping Cart</label>
                     <button onClick={openCartToggle}><LiaTimesSolid /></button>
                 </div>
-                <div className='overflow-y-auto max-h-[90vh] flex flex-col gap-1 rounded-[10px] px-2'>
+                <div className='overflow-y-auto max-h-[90vh] flex flex-col gap-1 rounded-[10px] px-5'>
                     {
                         cartItems.map((src, index) => (
                             <div key={index} className='flex gap-1 items-center justify-center'>
@@ -47,14 +51,14 @@ const CartSideBar = () => {
                                         <label htmlFor="">Stocks: {src.stocks > 0 ? <span>{src.stocks}</span> : <span className='text-red-500'>Out of stocks</span>}</label>
                                     </div>
                                     <div className='flex gap-1 w-full'>
-                                        <Button variant={'secondary'}>Remove</Button>
+                                        <Button onClick={() => removeItemInCart(src)} variant={'secondary'}>Remove</Button>
                                     </div>
                                 </div>
                             </div>
                         ))
                     }
                 </div>
-                <div className='fixed relative bottom-0 w-full border-t border-white/50 bg-black p-3 flex justify-between items-center'>
+                <div className='fixed bottom-0 w-[500px] border-t border-white/50 bg-black p-3 flex justify-between items-center'>
                     <div className='w-full'>
                         <label htmlFor=""><span>{checkoutItems.length}</span> selected</label>
                     </div>
@@ -66,7 +70,10 @@ const CartSideBar = () => {
                             style: 'currency',
                             currency: 'PHP',
                         }).format(0)}</span></label>
-                        <Button onClick={() => {
+                        <Button disabled={checkoutItems.length <= 0} onClick={() => {
+                            addToFinalCheckout()
+                            router.push('/checkout')
+                            openCartToggle()
                             console.log('eto ung laman ng checkout items, ', checkoutItems)
                         }} variant={'secondary'}>Checkout</Button>
                     </div>

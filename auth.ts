@@ -2,7 +2,7 @@
 import NextAuth from "next-auth"
 import Google from "next-auth/providers/google"
 import db from "./lib/db";
-import { redirect } from "next/navigation";
+
 // types of accounts
 // the expected types of a value get from database
 import { Accounts } from "./types/AccountsType";

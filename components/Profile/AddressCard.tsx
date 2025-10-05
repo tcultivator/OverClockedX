@@ -40,8 +40,6 @@ const AddressCard = ({ address, email }: Props) => {
             setLoading(false)
             console.log('the request is done ', result)
         }, 1000);
-
-
     }
     return (
         <div className='w-full bg-black p-10'>

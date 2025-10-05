@@ -87,9 +87,6 @@ const CheckoutProduct = ({ product_id, product_image,
                 break;
         }
 
-
-
-
     }
     return (
         <div className='px-2'>

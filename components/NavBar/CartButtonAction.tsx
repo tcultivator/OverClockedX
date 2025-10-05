@@ -14,7 +14,6 @@ type Props = {
     session: session | null
 }
 const CartButtonAction = ({ session }: Props) => {
-    const cartCount = useCartStore((state) => state.cartCount)
     const fetchCartItems = useCartStore((state) => state.fetchCartItems)
     const cartItems = useCartStore((state) => state.cartItems)
     const clearCart = useCartStore((state) => state.clearCart)
@@ -35,7 +34,7 @@ const CartButtonAction = ({ session }: Props) => {
     return (
         <div className="relative cursor-pointer ">
             <CiShoppingCart onClick={openCartToggle} className="text-2xl text-white" />
-            <label className="flex absolute bg-white text-black  w-[17px] h-[17px] text-[10px] justify-center items-center rounded top-[-7px] right-[-10px]" htmlFor="">{cartCount}</label>
+            <label className="flex absolute bg-white text-black  w-[17px] h-[17px] text-[10px] justify-center items-center rounded top-[-7px] right-[-10px]" htmlFor="">{cartItems.length}</label>
         </div>
     )
 }
