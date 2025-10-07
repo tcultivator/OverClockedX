@@ -89,7 +89,7 @@ const CategoriesFilter = () => {
 
 
     return (
-        <div id="left" className="w-[350px] bg-black rounded-[10px] hidden p-5 sticky top-10 h-screen md:block lg:block xl:block font-thin">
+        <div id="left" className="w-[350px] bg-black inset-shadow-sm inset-shadow-white/50 rounded-[10px] hidden p-5 sticky top-10 h-screen md:block lg:block xl:block font-thin">
             <div className="sticky top-0">
                 <div className='py-6 border-b border-gray-400 flex flex-col gap-2'>
                     <h1 className='text-xl'>Availability</h1>

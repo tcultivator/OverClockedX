@@ -19,8 +19,8 @@ export async function POST(req: NextRequest) {
         const resultData = result as queryResult
         console.log(resultData.insertId)
         for (const item of body.checkoutItems) {
-            await db.query('INSERT INTO order_items (order_id, product_id, quantity, price, sub_total)VALUES(?,?,?,?,?)', [resultData.insertId, item.product_id, 1, item.price, item.price * 1])
-            await db.query('UPDATE products SET stocks = stocks - ? WHERE product_id = ?', [1, item.product_id])
+            await db.query('INSERT INTO order_items (order_id, product_id, quantity, price, sub_total)VALUES(?,?,?,?,?)', [resultData.insertId, item.product_id, item.quantity, item.price, item.price * item.quantity])
+            await db.query('UPDATE products SET stocks = stocks - ? WHERE product_id = ?', [item.quantity, item.product_id])
         }
         return NextResponse.json({ status: 200 })
 

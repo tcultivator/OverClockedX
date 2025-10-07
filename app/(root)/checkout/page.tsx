@@ -12,6 +12,7 @@ import { luzonProvinces } from '@/datasetAddress/province'
 import { luzonPlaces } from '@/datasetAddress/citiesAndMunicipality'
 import { barangaysJaen } from '@/datasetAddress/barangay'
 import { useUserStore } from '@/stores/userStore';
+import Image from 'next/image';
 type GcashCB = {
     referenceId: string;
     actions: {
@@ -47,13 +48,14 @@ const Checkout = () => {
 
 
     const CheckoutProduct = async () => {
+        setLoading(true)
         switch (paymentOptions) {
             case 'Gcash':
                 const res = await fetch('/api/create-gcash-payment', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        amount: finalCheckoutItems.reduce((sum, item) => sum + item.price * 1, 0) + shippingCost,
+                        amount: finalCheckoutItems.reduce((sum, item) => sum + item.price * item.quantity, 0) + shippingCost,
                         referenceId: 'txn-' + Date.now(),
                         phoneNumber: '09171234567',
                     }),
@@ -70,7 +72,7 @@ const Checkout = () => {
                     body: JSON.stringify({
                         email: user?.email,
                         referenceId: data.referenceId,
-                        total_amount: finalCheckoutItems.reduce((sum, item) => sum + item.price * 1, 0) + shippingCost,
+                        total_amount: finalCheckoutItems.reduce((sum, item) => sum + item.price * item.quantity, 0) + shippingCost,
                         checkoutItems: finalCheckoutItems
                     }),
                 })
@@ -78,6 +80,7 @@ const Checkout = () => {
                 console.log("eto laman ng inser orderr ", insertOrdersDone)
                 if (insertOrdersDone.status == 200) {
                     router.push(data.actions[0].url);
+                    setLoading(false)
                 }
 
                 break;
@@ -215,7 +218,7 @@ const Checkout = () => {
                     {finalCheckoutItems.map((data, index) => (
                         <div key={index} className='flex justify-between gap-5 p-5 items-center bg-black rounded'>
                             <div className='flex gap-3 items-center'>
-                                <img src={data.product_image} alt="" className='w-20 border border-white/50' />
+                                <Image src={data.product_image} alt="" className='w-20 border border-white/50' width={100} height={100} />
                                 <div className='flex flex-col'>
                                     <label htmlFor="">{data.product_name}</label>
                                     <label htmlFor="">{data.price}</label>
@@ -242,7 +245,7 @@ const Checkout = () => {
                         <label htmlFor="">{finalCheckoutItems.length > 0 ? new Intl.NumberFormat('en-PH', {
                             style: 'currency',
                             currency: 'PHP',
-                        }).format(finalCheckoutItems.reduce((sum, item) => sum + item.price * 1, 0)) : new Intl.NumberFormat('en-PH', {
+                        }).format(finalCheckoutItems.reduce((sum, item) => sum + item.price * item.quantity, 0)) : new Intl.NumberFormat('en-PH', {
                             style: 'currency',
                             currency: 'PHP',
                         }).format(0)}</label>
@@ -263,7 +266,7 @@ const Checkout = () => {
                         <label htmlFor="">{finalCheckoutItems.length > 0 ? new Intl.NumberFormat('en-PH', {
                             style: 'currency',
                             currency: 'PHP',
-                        }).format(finalCheckoutItems.reduce((sum, item) => sum + item.price * 1, 0) + shippingCost) : new Intl.NumberFormat('en-PH', {
+                        }).format(finalCheckoutItems.reduce((sum, item) => sum + item.price * item.quantity, 0) + shippingCost) : new Intl.NumberFormat('en-PH', {
                             style: 'currency',
                             currency: 'PHP',
                         }).format(0)}</label>
@@ -277,7 +280,7 @@ const Checkout = () => {
                     }} className='bg-white text-black rounded-[25px] p-2 flex gap-2 items-center justify-center w-full' disabled={loading === true}> {loading && (
                         <ClipLoader
 
-                            color='white'
+                            color='black'
                             size={20}
                         />
                     )}

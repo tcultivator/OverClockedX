@@ -8,7 +8,8 @@ import { ProductsType } from '@/types/ProductTypes';
 import { Skeleton } from "@/components/ui/skeleton"
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-
+import { Button } from '../ui/button';
+import { ProductsInCartTypes } from '@/types/ProductsInCartTypes';
 //zustand
 // shared state
 import { useCartStore } from '@/stores/cartStore';
@@ -26,7 +27,7 @@ const Dashboard = () => {
     const addToCart = useCartStore((state) => state.addToCart)
     const user = useUserStore((state) => state.user)
     const toastState = useToast((state) => state.toastState)
-    
+
     useEffect(() => {
         const getFeaturedProductsFunc = async () => {
             const getFeaturedProducts = await fetch('/api/featuredProducts', {
@@ -69,16 +70,16 @@ const Dashboard = () => {
     return (
         <div className="flex flex-col gap-5">
             <div className='flex flex-col px-2 gap-2 sm: md:flex-row lg:flex-row '>
-                <div className='text-white w-full flex flex-col bg-black justify-center items-start px-[3%] py-[5%] rounded-[10px] w-[40%] md:w-[30%] 2xl:w-[35%]'>
+                <div className='text-white w-full flex flex-col rounded-t-xl bg-black inset-shadow-sm inset-shadow-white/50 justify-center items-start px-[3%] py-[5%] rounded-[10px] w-[40%] md:w-[30%] 2xl:w-[35%]'>
                     <div className='flex flex-col text-[70px] font-anton md:text-[30px] lg:text-[50px] xl:text-[70px] 2xl:text-[90px]'>
                         <p >Gear Up</p>
                         <p >Plug In</p>
                         <p >Power On</p>
                     </div>
-                    <label htmlFor="" className='font-thin md:text-[12px] lg:text-[15px] xl:text-[16px] 2xl:text-[18px]'>OverClockedX - upgrade yours now</label>
-                    <button className='bg-white text-black py-4 px-6 rounded-[10px] mt-5 md:text-[12px] py-2 px-3 rounded-[5px]'>SHOP NOW</button>
+                    <label htmlFor="" className='font-normal md:text-[12px] lg:text-[15px] xl:text-[16px] 2xl:text-[18px]'>OverClockedX - upgrade yours now</label>
+                    <Button className='p-5'>SHOP NOW</Button>
                 </div>
-                <div className='text-white w-full gap-1 flex flex-col items-center bg-black py-7 rounded-[10px] w-[60%] px-[3%] relative sm:py-3 md:w-[70%] py-3 flex-row 2xl:ww-[65%] py-3'>
+                <div className='text-white w-full gap-1 flex flex-col items-center bg-black inset-shadow-sm inset-shadow-white/50 py-7 rounded-[10px] w-[60%] px-[3%] relative sm:py-3 md:w-[70%] py-3 flex-row 2xl:ww-[65%] py-3'>
                     <AnimatePresence mode='wait'>
                         {featuredProducts.length > 0 ?
                             (<motion.div className='flex flex-col w-full lg:w-[30%]'
@@ -98,7 +99,16 @@ const Dashboard = () => {
                                 <div className="mt-4 flex flex-col gap-1 sm:flex-row">
                                     <button onClick={() => router.push(`/product/${featuredProducts[current].product_id}`)} className='bg-white text-[10px] py-2 w-full text-black   rounded-[10px] md:text-[12px]  rounded-[5px]'>BUY</button>
                                     <button disabled={toastState} onClick={() => {
-                                        addToCart(user?.email, featuredProducts[current])
+                                        addToCart({
+                                            id: featuredProducts[current].id,
+                                            email: user?.email!,
+                                            product_id: featuredProducts[current].product_id,
+                                            product_name: featuredProducts[current].product_name,
+                                            product_image: featuredProducts[current].product_image,
+                                            price: featuredProducts[current].price,
+                                            stocks: featuredProducts[current].stocks,
+                                            quantity: 1
+                                        })
                                     }} className='bg-white text-[10px] py-2 w-full flex flex-col items-center justify-center text-black  rounded-[10px] md:text-[12px] rounded-[5px] lg:flex-row '><AiOutlineShoppingCart className='text-[15px]' />  ADD TO CART</button>
                                 </div>
 

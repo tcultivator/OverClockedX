@@ -23,7 +23,7 @@ const CategoryPage = async ({ params }: PageProps) => {
     const products = rows as ProductsType[];
     return (
         <div className=' w-full h-[screen]'>
-            <div className="flex p-2 text-white gap-2">
+            <div className="flex px-2 text-white gap-2">
                 <CategoriesFilter />
                 <ProductList
                     products={products}

@@ -6,7 +6,7 @@ import Footer from "@/components/Footer/Footer";
 import CartSideBar from "@/components/CartSideBar/CartSideBar";
 import './globals.css';
 import Toast from "@/components/ToastNotification/Toast";
-
+import Loading from "@/components/loader/loading";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -47,6 +47,7 @@ export default function RootLayout({
         <Toast />
         <CartSideBar />
         <Footer />
+        <Loading />
       </body>
     </html>
   );

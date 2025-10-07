@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import db from '@/lib/db';
 import { auth } from '@/auth';
 import PurchaseCard from '@/components/Profile/PurchaseCard';

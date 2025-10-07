@@ -2,7 +2,6 @@
 import React from 'react'
 import { FaRegPenToSquare } from "react-icons/fa6";
 import { FaRegUserCircle } from "react-icons/fa";
-import { FaClipboardList } from "react-icons/fa";
 import Link from 'next/link';
 import { signOut } from '@/auth';
 import Image from 'next/image';

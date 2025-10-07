@@ -42,7 +42,7 @@ const ShopByCategory = () => {
             </div>
             <div className=" grid grid-cols-2 justify-center gap-2 md:grid-cols-3 lg:grid-cols-6 xl:grid-cols-6 2xl:grid-cols-6">
                 {categoryImage.map((src, index) => (
-                    <div key={index} className="relative flex justify-center bg-black rounded-[20px]">
+                    <div key={index} className="relative flex justify-center bg-black inset-shadow-sm inset-shadow-white/50 rounded-[20px]">
                         <Image
                             src={src.src}
                             alt=""

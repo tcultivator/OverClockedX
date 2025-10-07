@@ -49,7 +49,7 @@
 
 body {
 
-  background-color: #1E1E1E;
+  background-color: #161616;
 }
 
 option {
@@ -148,9 +148,6 @@ input[type="number"] {
   -moz-appearance: textfield;
 }
 
-#cartMenu {
-  box-shadow: -10px 0 20px rgba(255, 255, 255, 0.212);
-}
 
 
 
@@ -162,7 +159,7 @@ input[type="number"] {
   --card-foreground: oklch(0.129 0.042 264.695);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
+  --primary: oklch(17.574% 0.03267 266.567);
   --primary-foreground: oklch(0.984 0.003 247.858);
   --secondary: oklch(0.968 0.007 247.896);
   --secondary-foreground: oklch(0.208 0.042 265.755);

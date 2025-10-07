@@ -5,4 +5,5 @@ export interface ProductsInCheckoutTypes {
     product_image: string
     price: number
     stocks: number
+    quantity: number
 }

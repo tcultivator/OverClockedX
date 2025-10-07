@@ -1,5 +1,6 @@
 "use client"
 import React from 'react'
+import Image from 'next/image';
 type GroupedOrder = {
     order_id: number;
     email: string;
@@ -62,10 +63,12 @@ const PurchaseCard = ({ groupData }: Props) => {
                                     key={itemIndex}
                                 >
                                     <div className='flex gap-1 items-start'>
-                                        <img
+                                        <Image
                                             src={item.product_image}
                                             alt=""
                                             className='w-20 border border-white/50'
+                                            width={100}
+                                            height={100}
                                         />
                                         <div className='flex flex-col'>
                                             <h1>{item.product_name}</h1>

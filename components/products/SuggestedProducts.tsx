@@ -14,7 +14,7 @@ const SuggestedProducts = ({ relatedProducts }: Props) => {
             <div className='grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5'>
                 {
                     relatedProducts.map((data, index) => (
-                        <div key={index} className="flex flex-col gap-3 cursor-pointer bg-white/20 p-4 rounded" onClick={() => redirect(`/product/${data.product_id}`)} >
+                        <div key={index} className="flex flex-col gap-3 cursor-pointer bg-primary p-4 rounded" onClick={() => redirect(`/product/${data.product_id}`)} >
                             <Image
                                 src={data.product_image}
                                 alt=''

@@ -4,27 +4,50 @@ import { ProductsType } from '@/types/ProductTypes'
 import { useToast } from './toastStore'
 import { ProductsInCheckoutTypes } from '@/types/ProductsInCheckoutTypes'
 import { useUserStore } from './userStore'
+import { useLoading } from './loadingStore'
+import { FaBullseye } from 'react-icons/fa'
 
 type tempData = {
-    email: string | null | undefined,
-    products: ProductsType | null | undefined
+    products: ProductsInCartTypes | null | undefined
 }
 type cart = {
-    addToCart: (email: string | null | undefined, products: ProductsType | null | undefined) => void,
-    clearCart: () => void,
-    fetchCartItems: (email: string | null | undefined) => void,
     cartItems: ProductsInCartTypes[],
+
+    seperateItem: ProductsInCheckoutTypes[],
+
     openCart: boolean,
-    openCartToggle: () => void,
+
     tempData: tempData | null,
-    storeTempData: (email: string | null | undefined, products: ProductsType | null | undefined) => void,
-    retryAddtoCart: () => void,
+
     checkoutItems: ProductsInCheckoutTypes[],
-    addToCheckout: (products: ProductsInCartTypes | null | undefined) => void,
-    removeItemFromCheckoutItems: (products: ProductsInCartTypes | null | undefined) => void,
-    removeItemInCart: (products: ProductsInCartTypes | null | undefined) => void,
+
     finalCheckoutItems: ProductsInCheckoutTypes[],
-    addToFinalCheckout: () => void
+
+    addToCart: (products: ProductsInCartTypes | null | undefined) => void,
+
+    clearCart: () => void,
+
+    fetchCartItems: (email: string | null | undefined) => void,
+
+    openCartToggle: () => void,
+
+    storeTempData: (products: ProductsInCartTypes | null | undefined) => void,
+
+    retryAddtoCart: () => void,
+
+    addToCheckout: (products: ProductsInCartTypes | null | undefined) => void,
+
+    removeItemFromCheckoutItems: (products: ProductsInCartTypes | null | undefined) => void,
+
+    removeItemInCart: (products: ProductsInCartTypes | null | undefined) => void,
+
+    addToFinalCheckout: () => void,
+
+    clearSelectedItemsInCart: () => void,
+
+    addToSeperateItem: (products: ProductsInCartTypes | null | undefined) => void,
+
+    clearSeperateItem: () => void,
 }
 let toastTimeout: ReturnType<typeof setTimeout> | null = null;
 export const useCartStore = create<cart>((set) => ({
@@ -54,32 +77,33 @@ export const useCartStore = create<cart>((set) => ({
 
 
 
-    addToCart: async (email: string | null | undefined, products: ProductsType | null | undefined) => {
+    addToCart: async (products: ProductsInCartTypes | null | undefined) => {
 
 
         useToast.getState().displayToast(true)
-
+        console.log(useCartStore.getState().cartItems)
         try {
             console.log('eto ung laman sa kapag add to cart')
-            console.log(email)
+            console.log(products?.email)
             console.log(products)
             const addtocart = await fetch('/api/addToCart', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ email: email, product_id: products?.product_id })
+                body: JSON.stringify({ email: products?.email, product_id: products?.product_id, quantity: products?.quantity })
 
             })
             const response = await addtocart.json()
             const newCartItem = {
                 id: products?.id!,
-                email: email!,
+                email: products?.email!,
                 product_id: products?.product_id!,
                 product_name: products?.product_name!,
                 product_image: products?.product_image!,
                 price: products?.price!,
                 stocks: products?.stocks!,
+                quantity: products?.quantity!,
             };
 
             if (response.status == 201) {
@@ -87,24 +111,33 @@ export const useCartStore = create<cart>((set) => ({
                 set((state) => ({
                     cartItems: [...state.cartItems, newCartItem],
                 }))
+                if (toastTimeout != null) clearTimeout(toastTimeout);
+                toastTimeout = setTimeout((): void => {
+                    useToast.getState().displayToast(false)
+                }, 1000);
+                console.log(toastTimeout)
 
             }
-            if (response.status == 500 && !email) {
-
+            else if (response.status == 500 && !products?.email) {
                 useToast.getState().setToastStatus('notLogin')
-                useCartStore.getState().storeTempData(email, products)
+                useCartStore.getState().storeTempData(products)
 
                 if (toastTimeout != null) clearTimeout(toastTimeout);
                 toastTimeout = setTimeout(() => {
                     useToast.getState().displayToast(false)
-                }, 8000);
+                }, 5000);
                 console.log(toastTimeout)
-            } else {
+            } else if (response.status == 200) {
                 useToast.getState().setToastStatus('success')
+                const updatedCartItems = useCartStore.getState().cartItems.map(item =>
+                    item.product_id == newCartItem.product_id ? { ...item, quantity: item.quantity + 1 } :
+                        item
+                )
+                set({ cartItems: updatedCartItems })
                 if (toastTimeout != null) clearTimeout(toastTimeout);
                 toastTimeout = setTimeout(() => {
                     useToast.getState().displayToast(false)
-                }, 2000);
+                }, 1000);
             }
 
 
@@ -113,17 +146,33 @@ export const useCartStore = create<cart>((set) => ({
             if (toastTimeout != null) clearTimeout(toastTimeout);
             toastTimeout = setTimeout((): void => {
                 useToast.getState().displayToast(false)
-            }, 8000);
+            }, 5000);
             console.log(toastTimeout)
 
         }
     },
 
 
-    clearCart: () => {
-        set({
-            cartItems: []
+    clearCart: async () => {
+        useLoading.getState().setLoading('Deleting cart items...')
+        const clearCartItems = await fetch('/api/clearCart', {
+            method: 'DELETE',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify({ email: useUserStore.getState().user?.email })
         })
+        const response = await clearCartItems.json()
+        if (response.status == 200) {
+            console.log('success')
+            useLoading.getState().setLoading('')
+            set({
+                cartItems: []
+            })
+            console.log(useCartStore.getState().cartItems)
+        }
+
+
     },
 
     removeItemInCart: async (products: ProductsInCartTypes | null | undefined) => {
@@ -136,6 +185,7 @@ export const useCartStore = create<cart>((set) => ({
                 product_image: products?.product_image!,
                 price: products?.price!,
                 stocks: products?.stocks!,
+                quantity: products?.quantity!,
             };
             const email = useUserStore.getState().user?.email
 
@@ -194,18 +244,17 @@ export const useCartStore = create<cart>((set) => ({
 
 
 
-    tempData: { email: '', products: {} as ProductsType },
+    tempData: { products: {} as ProductsInCartTypes },
 
 
-    storeTempData: (email: string | null | undefined, products: ProductsType | null | undefined) => set({
-        tempData: { email, products }
+    storeTempData: (products: ProductsInCartTypes | null | undefined) => set({
+        tempData: { products }
     }),
 
 
     retryAddtoCart: () => {
-        const email = useCartStore.getState().tempData?.email
         const products = useCartStore.getState().tempData?.products
-        useCartStore.getState().addToCart(email, products)
+        useCartStore.getState().addToCart(products)
     },
     checkoutItems: [],
     addToCheckout: (products: ProductsInCartTypes | null | undefined) => {
@@ -217,6 +266,7 @@ export const useCartStore = create<cart>((set) => ({
             product_image: products?.product_image!,
             price: products?.price!,
             stocks: products?.stocks!,
+            quantity: products?.quantity!,
         };
         set((state) => ({
             checkoutItems: [...state.checkoutItems, newChecoutItems],
@@ -240,12 +290,52 @@ export const useCartStore = create<cart>((set) => ({
         })
 
     },
+    clearSelectedItemsInCart: () => {
+        set({ checkoutItems: [] })
+    },
     finalCheckoutItems: [],
     addToFinalCheckout: () => {
         console.log('gumana ung add')
+        const newSeperatedItem = useCartStore.getState().seperateItem
         const finalCheckouts = useCartStore.getState().checkoutItems
+        console.log('eto laman ng seperated items', newSeperatedItem)
+        if (newSeperatedItem.length < 1) {
+            console.log('eto naman kapag ung sa cart check gumana')
+            set({
+                finalCheckoutItems: finalCheckouts,
+            })
+
+
+        } else {
+            console.log('eto pag meron ng laman ung seperated checkout')
+            set({
+                finalCheckoutItems: newSeperatedItem,
+            })
+            useCartStore.getState().clearSeperateItem()
+        }
+
+
+    },
+
+    seperateItem: [],
+    addToSeperateItem: (products: ProductsInCartTypes | null | undefined) => {
+        const newChecoutItems = {
+            id: products?.id!,
+            product_id: products?.product_id!,
+            product_name: products?.product_name!,
+            product_image: products?.product_image!,
+            price: products?.price!,
+            stocks: products?.stocks!,
+            quantity: products?.quantity!,
+        };
         set({
-            finalCheckoutItems: finalCheckouts,
+            seperateItem: [newChecoutItems]
+        })
+        useCartStore.getState().addToFinalCheckout()
+    },
+    clearSeperateItem: () => {
+        set({
+            seperateItem: []
         })
     },
 
