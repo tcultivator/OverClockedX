@@ -14,6 +14,7 @@ import { luzonPlaces } from '@/datasetAddress/citiesAndMunicipality'
 import { barangaysJaen } from '@/datasetAddress/barangay'
 import { useUserStore } from '@/stores/userStore';
 import Image from 'next/image';
+import { toast } from 'sonner'
 type GcashCB = {
     referenceId: string;
     actions: {
@@ -35,6 +36,22 @@ const Checkout = () => {
 
     const updateQuantityOfFinalCheckoutItem = useCartStore((state) => state.updateQuantityOfFinalCheckoutItem)
     const removeItemFromFinalCheckoutItems = useCartStore((state) => state.removeItemFromFinalCheckoutItems)
+
+    const addToUserAdress = useUserStore((state) => state.addToUserAdress)
+    const userAdress = useUserStore((state) => state.userAdress)
+
+    const [rName, setRName] = useState<string>('');
+    const [country, setCountry] = useState<string>('');
+    const [cityMunicipality, setCityMunicipality] = useState<string>('');
+    const [description, setDescription] = useState<string>('');
+    const [barangay, setBarangay] = useState<string>('');
+    const [province, setProvince] = useState<string>('');
+    const [email, setEmail] = useState<string>('');
+    const [phoneNumber, setPhoneNumber] = useState<string | number>('');
+
+
+    const useCustomInput = useUserStore((state) => state.useCustomInput)
+    const addCustomAddress = useUserStore((state) => state.addCustomAddress)
     useEffect(() => {
         switch (shippingOptions) {
             case 'delivery':
@@ -103,11 +120,9 @@ const Checkout = () => {
 
     }
 
-
-
     return (
         <div className='px-2 pb-2 text-white flex gap-2'>
-            <div className='bg-black rounded-[10px] flex flex-col gap-5 p-10'>
+            <div className='bg-black rounded-[10px] flex flex-col gap-5 p-10 w-full inset-shadow-sm inset-shadow-white/50'>
                 <h1>Checkout</h1>
                 <div className='flex gap-2 items center'>
                     <div className='flex items-center justify-center gap-2 bg-[#1E1E1E] p-5 rounded-[10px] border border-white/50'>
@@ -148,28 +163,33 @@ const Checkout = () => {
                         <option value={CODorOTC}>{CODorOTC}</option>
                     </select>
                 </div>
-
-                <h1>Shipping Information</h1>
+                <div className='flex items-center justify-between'>
+                    <h1>Shipping Information</h1>
+                    <button onClick={() => {
+                        userAdress.length > 0 ? useCustomInput() :
+                            addToUserAdress()
+                    }} className='underline text-[12px] text-blue-400'>{userAdress.length > 0 ? 'Edit Address' : 'Use Current Address'}</button>
+                </div>
                 <form>
 
                     <div className='flex flex-col'>
                         <label htmlFor="">Fullname</label>
-                        <input type="text" className='input-Profile' />
+                        <input disabled={userAdress.length > 0} type="text" className='input-Profile' value={userAdress[0]?.rname ?? rName} onChange={(e) => setRName(e.target.value)} />
                     </div>
 
                     <div className='flex flex-col'>
                         <label htmlFor="">Email Address</label>
-                        <input type="email" className='input-Profile' />
+                        <input disabled={userAdress.length > 0} type="email" className='input-Profile' value={userAdress[0]?.email ?? email} onChange={(e) => setEmail(e.target.value)} />
                     </div>
 
                     <div className='flex flex-col'>
                         <label htmlFor="">Phone Number</label>
-                        <input type="number" className='input-Profile' />
+                        <input disabled={userAdress.length > 0} type="number" className='input-Profile' value={userAdress[0]?.phone_number ?? phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
                     </div >
 
                     <div className='flex flex-col'>
                         <label htmlFor="">Country</label>
-                        <input list="countries" name="countries" className='input-Profile' />
+                        <input disabled={userAdress.length > 0} list="countries" name="countries" className='input-Profile' value={userAdress[0]?.country ?? country} onChange={(e) => setCountry(e.target.value)} />
                         <datalist id='countries' className='absolute bg-white text-black'>
                             {countries.map((data, index) => (
                                 <option key={index} value={data}>{data}</option>
@@ -178,9 +198,9 @@ const Checkout = () => {
                     </div>
                     <div className='flex gap-1'>
 
-                        <div className='flex flex-col'>
+                        <div className='flex flex-col w-full'>
                             <label htmlFor="">City/Municipality</label>
-                            <input list='city' name='city' className='input-Profile' />
+                            <input disabled={userAdress.length > 0} list='city' name='city' className='input-Profile' value={userAdress[0]?.cityMunicipality ?? cityMunicipality} onChange={(e) => setCityMunicipality(e.target.value)} />
                             <datalist id='city'>
                                 {luzonPlaces.map((data, index) => (
                                     <option key={index} value={data}>{data}</option>
@@ -188,9 +208,9 @@ const Checkout = () => {
                             </datalist>
                         </div>
 
-                        <div className='flex flex-col'>
+                        <div className='flex flex-col w-full'>
                             <label htmlFor="">Barangay</label>
-                            <input list='barangay' name='barangay' className='input-Profile' />
+                            <input disabled={userAdress.length > 0} list='barangay' name='barangay' className='input-Profile w-full' value={userAdress[0]?.barangay ?? barangay} onChange={(e) => setBarangay(e.target.value)} />
                             <datalist id='barangay'>
                                 {barangaysJaen.map((data, index) => (
                                     <option key={index} value={data}>{data}</option>
@@ -198,9 +218,9 @@ const Checkout = () => {
                             </datalist>
                         </div>
 
-                        <div className='flex flex-col'>
+                        <div className='flex flex-col w-full'>
                             <label htmlFor="">Province</label>
-                            <input list='province' name='province' className='input-Profile' />
+                            <input disabled={userAdress.length > 0} list='province' name='province' className='input-Profile w-full' value={userAdress[0]?.province ?? province} onChange={(e) => setProvince(e.target.value)} />
                             <datalist id='province'>
                                 {luzonProvinces.map((data, index) => (
                                     <option key={index} value={data}>{data}</option>
@@ -212,11 +232,32 @@ const Checkout = () => {
 
                     <div className='flex flex-col'>
                         <label htmlFor="">Trademark</label>
-                        <input type="text" className='input-Profile' />
+                        <input disabled={userAdress.length > 0} type="text" className='input-Profile w-full' value={userAdress[0]?.trademark ?? description} onChange={(e) => setDescription(e.target.value)} />
                     </div>
                 </form>
+                {
+                    userAdress.length <= 0 && <Button onClick={() => {
+                        if (rName != '' && country != '' && cityMunicipality != '' && description != '' && barangay != '' && province != '' && email != '' && phoneNumber != '') {
+                            addCustomAddress([{
+
+                                email: email,
+                                rname: rName,
+                                phone_number: phoneNumber.toString(),
+                                country: country,
+                                cityMunicipality: cityMunicipality,
+                                barangay: barangay,
+                                province: province,
+                                trademark: description,
+
+                            }])
+                        } else {
+                            alert('you need to fillup all the field')
+                        }
+                    }} variant={'secondary'}>Submit</Button>
+                }
+
             </div>
-            <div className='flex flex-col gap-5 p-10'>
+            <div className='flex flex-col gap-5 p-10 w-full'>
                 <h1>Review your cart</h1>
 
                 <div className='flex flex-col gap-2'>
@@ -294,8 +335,9 @@ const Checkout = () => {
 
                 <div>
                     <button onClick={() => {
-                        CheckoutProduct()
-                    }} className='bg-white text-black rounded-[25px] p-2 flex gap-2 items-center justify-center w-full' disabled={loading === true}> {loading && (
+                        finalCheckoutItems.reduce((sum, item) => sum + item.price * item.quantity, 0) + shippingCost > 100000 ? alert('Order Price Maximum is 100000') :
+                            CheckoutProduct()
+                    }} className='bg-white text-black rounded-[25px] p-2 flex gap-2 items-center justify-center w-full' disabled={loading === true || finalCheckoutItems.length <= 0}> {loading && (
                         <ClipLoader
 
                             color='black'

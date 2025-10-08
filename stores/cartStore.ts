@@ -142,6 +142,7 @@ export const useCartStore = create<cart>((set) => ({
                 toastTimeout = setTimeout(() => {
                     useToast.getState().displayToast(false)
                 }, 1000);
+                
             }
 
 
