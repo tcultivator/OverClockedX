@@ -48,6 +48,10 @@ type cart = {
     addToSeperateItem: (products: ProductsInCartTypes | null | undefined) => void,
 
     clearSeperateItem: () => void,
+
+    updateQuantityOfFinalCheckoutItem: (operator: boolean, product_id: string) => void,
+
+    removeItemFromFinalCheckoutItems: (product_id: string) => void,
 }
 let toastTimeout: ReturnType<typeof setTimeout> | null = null;
 export const useCartStore = create<cart>((set) => ({
@@ -274,7 +278,7 @@ export const useCartStore = create<cart>((set) => ({
     },
     removeItemFromCheckoutItems: (products: ProductsInCartTypes | null | undefined) => {
         console.log('gumana remove')
-        const newChecoutItems = {
+        const newChecoutItemss = {
             id: products?.id!,
             product_id: products?.product_id!,
             product_name: products?.product_name!,
@@ -283,7 +287,7 @@ export const useCartStore = create<cart>((set) => ({
             stocks: products?.stocks!,
         };
 
-        const newCheckoutItems = useCartStore.getState().checkoutItems.filter(products => products.product_id !== newChecoutItems.product_id)
+        const newCheckoutItems = useCartStore.getState().checkoutItems.filter(products => products.product_id !== newChecoutItemss.product_id)
         console.log(newCheckoutItems)
         set({
             checkoutItems: newCheckoutItems
@@ -337,6 +341,31 @@ export const useCartStore = create<cart>((set) => ({
         set({
             seperateItem: []
         })
+    },
+
+    updateQuantityOfFinalCheckoutItem: (operator: boolean, product_id: string) => {
+        const updatedFinalCheckoutItems = useCartStore.getState().finalCheckoutItems.map(item =>
+            operator ? (item.product_id == product_id ? {
+                ...item, quantity: item.quantity + 1
+            } :
+                item) : (
+                item.product_id == product_id ? {
+                    ...item, quantity: item.quantity - 1
+                } :
+                    item
+            )
+        )
+        set({ finalCheckoutItems: updatedFinalCheckoutItems })
+    },
+
+    removeItemFromFinalCheckoutItems: (product_id: string) => {
+        if (useCartStore.getState().finalCheckoutItems.length > 1) {
+            const newCheckoutItems = useCartStore.getState().finalCheckoutItems.filter(products => products.product_id !== product_id)
+            console.log(newCheckoutItems)
+            set({
+                finalCheckoutItems: newCheckoutItems
+            })
+        }
     },
 
 }))

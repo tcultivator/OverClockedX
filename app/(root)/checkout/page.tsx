@@ -5,7 +5,8 @@ import { PiPackageDuotone } from "react-icons/pi";
 import { BiSolidDiscount } from "react-icons/bi";
 import { useCartStore } from '@/stores/cartStore';
 import { Button } from '@/components/ui/button';
-
+import { RiDeleteBack2Fill } from 'react-icons/ri';
+import { FaPlus, FaMinus } from "react-icons/fa6";
 //import of dataset for address
 import { countries } from '@/datasetAddress/country'
 import { luzonProvinces } from '@/datasetAddress/province'
@@ -31,6 +32,9 @@ const Checkout = () => {
     const user = useUserStore((state) => state.user)
     const router = useRouter();
     const [loading, setLoading] = useState(false)
+
+    const updateQuantityOfFinalCheckoutItem = useCartStore((state) => state.updateQuantityOfFinalCheckoutItem)
+    const removeItemFromFinalCheckoutItems = useCartStore((state) => state.removeItemFromFinalCheckoutItems)
     useEffect(() => {
         switch (shippingOptions) {
             case 'delivery':
@@ -64,6 +68,7 @@ const Checkout = () => {
 
                 const result = await res.json()
                 const data = result as GcashCB
+                console.log(data)
                 const insertOrders = await fetch('/api/order', {
                     method: 'POST',
                     headers: {
@@ -216,7 +221,7 @@ const Checkout = () => {
 
                 <div className='flex flex-col gap-2'>
                     {finalCheckoutItems.map((data, index) => (
-                        <div key={index} className='flex justify-between gap-5 p-5 items-center bg-black rounded'>
+                        <div key={index} className='flex justify-between gap-5 p-5 items-center bg-black rounded relative'>
                             <div className='flex gap-3 items-center'>
                                 <Image src={data.product_image} alt="" className='w-20 border border-white/50' width={100} height={100} />
                                 <div className='flex flex-col'>
@@ -224,7 +229,20 @@ const Checkout = () => {
                                     <label htmlFor="">{data.price}</label>
                                 </div>
                             </div>
-                            <Button disabled={finalCheckoutItems.length <= 0} variant={'secondary'}>Remove</Button>
+                            <div className="flex gap-2 bg-black w-max p-1 px-2 rounded text-[10px]">
+                                <button onClick={() => {
+                                    data.quantity > 1 &&
+                                        updateQuantityOfFinalCheckoutItem(false, data.product_id)
+                                }} className="text-white" ><FaMinus /></button>
+                                <input disabled type="number" className=" text-white px-1 w-[20px] bg-white/30 text-center outline-none rounded p-1" value={data.quantity} />
+                                <button onClick={() => {
+                                    data.stocks > data.quantity &&
+                                        updateQuantityOfFinalCheckoutItem(true, data.product_id)
+                                }} className="text-white"><FaPlus /></button>
+
+                            </div>
+                            <button disabled={finalCheckoutItems.length <= 0} onClick={() => removeItemFromFinalCheckoutItems(data.product_id)} className='absolute top-0 right-0 text-[25px] text-red-400'><RiDeleteBack2Fill /></button>
+
                         </div>
                     ))}
 

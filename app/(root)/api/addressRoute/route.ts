@@ -10,11 +10,11 @@ export async function POST(req: NextRequest) {
         console.log('eto laman ng result ', addressData.length)
         if (addressData.length == 0) {
 
-            await db.query('INSERT INTO user_address (email,rname,address,postal,description)VALUES(?,?,?,?,?)', [body.email, body.rName, body.address, body.postal, body.description])
+            await db.query('INSERT INTO user_address (email,rname,country,cityMunicipality,barangay,province,trademark)VALUES(?,?,?,?,?,?,?)', [body.email, body.rName, body.country, body.cityMunicipality, body.barangay, body.province, body.trademark])
             return NextResponse.json({ status: 200 })
         }
         console.log('ere kapag di gumana unag query')
-        await db.query('UPDATE user_address SET email = ?, rname = ?, address=?, postal=?, description=? WHERE email = ?', [body.email, body.rName, body.address, body.postal, body.description, body.email])
+        await db.query('UPDATE user_address SET email = ?, rname = ?, country=?, cityMunicipality=?,barangay=?,province=?,trademark=? WHERE email = ?', [body.email, body.rName, body.country, body.cityMunicipality, body.barangay, body.province, body.trademark, body.email])
         return NextResponse.json({ status: 200 })
 
     } catch (err) {

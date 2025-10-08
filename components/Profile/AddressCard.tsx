@@ -2,12 +2,20 @@
 import React from 'react'
 import { useState } from 'react';
 import { ClipLoader } from 'react-spinners'
+
+import { countries } from '@/datasetAddress/country'
+import { luzonProvinces } from '@/datasetAddress/province'
+import { luzonPlaces } from '@/datasetAddress/citiesAndMunicipality'
+import { barangaysJaen } from '@/datasetAddress/barangay'
+
 interface UserAddress {
     id: number;
     email: string;
     rname: string;
-    address: string;
-    postal: string;
+    country: string;
+    cityMunicipality: string;
+    barangay: string;
+    province: string;
     description: string;
 
 }
@@ -18,9 +26,11 @@ interface Props {
 const AddressCard = ({ address, email }: Props) => {
     const [loading, setLoading] = useState(false)
     const [rName, setRName] = useState<string>(address?.rname ?? '');
-    const [addresses, setAddresses] = useState<string>(address?.address ?? '');
-    const [postal, setPostal] = useState<string>(address?.postal ?? '');
+    const [country, setCountry] = useState<string>(address?.country ?? '');
+    const [cityMunicipality, setCityMunicipality] = useState<string>(address?.cityMunicipality ?? '');
     const [description, setDescription] = useState<string>(address?.description ?? '');
+    const [barangay, setBarangay] = useState<string>(address?.barangay ?? '');
+    const [province, setProvince] = useState<string>(address?.province ?? '');
     const UpdateAddress = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!email) {
@@ -33,7 +43,7 @@ const AddressCard = ({ address, email }: Props) => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ rName: rName, address: addresses, postal: postal, description: description, email: email }),
+            body: JSON.stringify({ rName: rName, country: country, cityMunicipality: cityMunicipality, barangay: barangay, province: province, trademark: description, email: email }),
         })
         const result = await res.json()
         setTimeout(() => {
@@ -49,21 +59,58 @@ const AddressCard = ({ address, email }: Props) => {
             <div className='flex '>
                 <div className='w-full  p-10'>
                     <form onSubmit={UpdateAddress} className='flex flex-col gap-3'>
-                        <div className='flex flex-col gap-2'>
-                            <label htmlFor="">Reciever Name</label>
-                            <input className='input-Profile' type="text" value={rName} onChange={(e) => setRName(e.target.value)} />
+
+                        <div className='flex flex-col'>
+                            <label htmlFor="">Fullname</label>
+                            <input type="text" className='input-Profile' value={rName} onChange={(e) => setRName(e.target.value)} />
                         </div>
-                        <div className='flex flex-col gap-2'>
-                            <label className='w-max' htmlFor="">Complete Address</label>
-                            <input className='input-Profile' type="text" value={addresses} onChange={(e) => setAddresses(e.target.value)} />
+
+                        <div className='flex flex-col'>
+                            <label htmlFor="">Country</label>
+                            <input list="countries" name="countries" className='input-Profile' value={country} onChange={(e) => setCountry(e.target.value)} />
+                            <datalist id='countries' className='absolute bg-white text-black'>
+                                {countries.map((data, index) => (
+                                    <option key={index} value={data}>{data}</option>
+                                ))}
+                            </datalist>
                         </div>
-                        <div className='flex flex-col gap-2'>
-                            <label className='w-max' htmlFor="">Postal Code</label>
-                            <input className='input-Profile' type="number" value={postal} onChange={(e) => setPostal(e.target.value)} />
+                        <div className='flex gap-1'>
+
+                            <div className='flex flex-col'>
+                                <label htmlFor="">City/Municipality</label>
+                                <input list='city' name='city' className='input-Profile' value={cityMunicipality} onChange={(e)=>setCityMunicipality(e.target.value)}/>
+                                <datalist id='city'>
+                                    {luzonPlaces.map((data, index) => (
+                                        <option key={index} value={data}>{data}</option>
+                                    ))}
+                                </datalist>
+                            </div>
+
+                            <div className='flex flex-col'>
+                                <label htmlFor="">Barangay</label>
+                                <input list='barangay' name='barangay' className='input-Profile' value={barangay} onChange={(e)=>setBarangay(e.target.value)}/>
+                                <datalist id='barangay'>
+                                    {barangaysJaen.map((data, index) => (
+                                        <option key={index} value={data}>{data}</option>
+                                    ))}
+                                </datalist>
+                            </div>
+
+                            <div className='flex flex-col'>
+                                <label htmlFor="">Province</label>
+                                <input list='province' name='province' className='input-Profile' value={province} onChange={(e)=>setProvince(e.target.value)}/>
+                                <datalist id='province'>
+                                    {luzonProvinces.map((data, index) => (
+                                        <option key={index} value={data}>{data}</option>
+                                    ))}
+                                </datalist>
+                            </div>
+
                         </div>
-                        <div className='flex flex-col gap-2'>
-                            <label htmlFor="">Specific Address Description</label>
-                            <textarea className='input-Profile' value={description} onChange={(e) => setDescription(e.target.value)}  name="" id="" placeholder='please specify which location. eg. street sign, trademark'></textarea>
+
+                        <div className='flex flex-col'>
+                            <label htmlFor="">Trademark</label>
+                            <input type="text" className='input-Profile' value={description} onChange={(e) => setDescription(e.target.value)} name="" id="" placeholder='please specify which location. eg. street sign, trademark' />
                         </div>
 
                         <button

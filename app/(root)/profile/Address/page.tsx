@@ -3,12 +3,14 @@ import AddressCard from '@/components/Profile/AddressCard'
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
 import db from '@/lib/db';
-interface userAddress {
+interface UserAddress {
     id: number;
     email: string;
     rname: string;
-    address: string;
-    postal: string;
+    country: string;
+    cityMunicipality: string;
+    barangay: string;
+    province: string;
     description: string;
 }
 const Address = async () => {
@@ -17,7 +19,7 @@ const Address = async () => {
         redirect('/')
     }
     const result = await db.query('SELECT * FROM user_address WHERE email = ?', [session.user?.email])
-    const address = result[0] as userAddress[]
+    const address = result[0] as UserAddress[]
 
     return (
         <AddressCard
