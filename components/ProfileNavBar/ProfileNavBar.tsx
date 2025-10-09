@@ -25,6 +25,7 @@ const ProfileNavBar = async () => {
                 <div className='flex flex-col gap-1 text-start ml-11 text-white/80 text-[13px]'>
                     <Link href={"/profile"} className='text-start'>Profile</Link>
                     <Link href={"/profile/Address"} className='text-start'>Address</Link>
+                    <Link href={"/profile/Voucher"} className='text-start'>Vouchers</Link>
                 </div>
             </div>
             <div>

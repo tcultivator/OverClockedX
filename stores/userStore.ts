@@ -1,4 +1,6 @@
 import { create } from 'zustand'
+import { useLoading } from './loadingStore';
+import { toast } from "sonner"
 interface UserAddress {
     email: string;
     rname: string;
@@ -33,7 +35,7 @@ export const useUserStore = create<useStore>((set) => ({
     clearUser: () => set({ user: null }),
     userAdress: [],
     addToUserAdress: async () => {
-
+        useLoading.getState().setLoading('Getting user information...')
         const userAdressInfo = await fetch('/api/fetchUserAdress', {
             method: 'POST',
             headers: {
@@ -45,6 +47,10 @@ export const useUserStore = create<useStore>((set) => ({
         set({
             userAdress: response
         })
+        useLoading.getState().setLoading('')
+        toast("Event has been created", {
+            description: "Successfully added shipping information",
+        })
     },
     useCustomInput: () => {
         set({
@@ -54,5 +60,8 @@ export const useUserStore = create<useStore>((set) => ({
 
     addCustomAddress: (value: UserAddress[]) => {
         set({ userAdress: value })
+        toast("Event has been created", {
+            description: "Successfully added shipping information",
+        })
     },
 }))

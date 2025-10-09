@@ -7,6 +7,8 @@ import CartSideBar from "@/components/CartSideBar/CartSideBar";
 import './globals.css';
 import Toast from "@/components/ToastNotification/Toast";
 import Loading from "@/components/loader/loading";
+
+import { Toaster } from "@/components/ui/sonner"
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -43,11 +45,13 @@ export default function RootLayout({
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable} ${orbitron.variable} ${anton.variable}`}>
       <body className="antialiased overflow-x-hidden">
         <NavBar />
+         <Toaster />
         {children}
         <Toast />
         <CartSideBar />
         <Footer />
         <Loading />
+        
       </body>
     </html>
   );

@@ -19,6 +19,7 @@ import { useToast } from '@/stores/toastStore';
 //this is the framer motion import, this allow to have an animation
 import { motion, AnimatePresence } from 'framer-motion'
 
+
 const Dashboard = () => {
     const router = useRouter();
     const [current, setCurrent] = useState(0);
@@ -27,6 +28,8 @@ const Dashboard = () => {
     const addToCart = useCartStore((state) => state.addToCart)
     const user = useUserStore((state) => state.user)
     const toastState = useToast((state) => state.toastState)
+
+    
 
     useEffect(() => {
         const getFeaturedProductsFunc = async () => {
@@ -43,6 +46,7 @@ const Dashboard = () => {
 
         }
         getFeaturedProductsFunc()
+        
     }, [])
 
 
