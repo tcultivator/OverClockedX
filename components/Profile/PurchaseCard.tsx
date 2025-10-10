@@ -33,13 +33,13 @@ const PurchaseCard = ({ groupData }: Props) => {
     };
 
     return (
-        <div className='flex flex-col gap-2 p-2 w-full bg-black p-10'>
+        <div className='flex flex-col gap-2 w-full bg-black lg:max-h-[400px] overflow-auto lg:p-2'>
             {groupData.map((group, groupIndex) => {
                 const isExpanded = expandedGroups[groupIndex] || false;
 
                 return (
                     <div
-                        className='flex flex-col gap-2 bg-[#1E1E1E] rounded-[10px] p-4'
+                        className='flex flex-col gap-2 bg-[#1E1E1E]  p-2 text-[11px] lg:text-[15px] lg:rounded-[10px] lg:p-4'
                         key={groupIndex}
                     >
                         <div className='flex justify-between items-center'>

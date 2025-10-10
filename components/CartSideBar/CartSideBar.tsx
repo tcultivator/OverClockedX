@@ -36,7 +36,7 @@ const CartSideBar = () => {
     const clearCart = useCartStore((state) => state.clearCart)
     console.log(cartItems)
     return (
-        <div id='cartMenu' className={`${openCart ? ' rounded-xl bg-[#1a1a1a] shadow-[inset_3px_0_3px_rgba(255,255,255,0.4)] w-[500px] h-screen top-0 right-0 fixed z-50 text-white box-border' : 'hidden'}`} >
+        <div id='cartMenu' className={`${openCart ? '  bg-[#1a1a1a]  w-screen h-screen top-0 right-0 fixed z-50 text-white box-border md:w-[500px] shadow-[inset_3px_0_3px_rgba(255,255,255,0.4)] rounded-xl lg:w-[500px] shadow-[inset_3px_0_3px_rgba(255,255,255,0.4)] rounded-xl xl:w-[500px] shadow-[inset_3px_0_3px_rgba(255,255,255,0.4)] rounded-xl 2xl:w-[500px] shadow-[inset_3px_0_3px_rgba(255,255,255,0.4)] rounded-xl' : 'hidden'}`} >
             <div className='relative w-full h-full box-border flex flex-col gap-2'>
                 <div className='fixed relative w-full border-b border-white/50  p-3 flex justify-between items-center'>
                     <label htmlFor="">Shopping Cart</label>
@@ -105,7 +105,7 @@ const CartSideBar = () => {
                         ))
                     }
                 </div>
-                <div className='fixed bottom-0 w-[500px] border-t border-white/50 p-3 flex justify-between items-center'>
+                <div className='fixed bottom-0 border-t w-screen border-white/50 p-3 flex justify-between items-center md:w-[500px] lg:w-[500px] xl:w-[500px] 2xl:2-[500px]'>
                     <div className='w-full flex gap-2'>
                         <button className={`${checkoutItems.length > 0 ? 'underline text-blue-400' : 'hidden'}`} onClick={() => {
                             clearSelectedItemsInCart()

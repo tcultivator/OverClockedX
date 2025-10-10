@@ -71,6 +71,10 @@ const Dashboard = () => {
 
         return () => clearInterval(interval);
     });
+
+     function SelectCategories(category: string): void {
+        router.push(`/categories/${category}`);
+    }
     return (
         <div className="flex flex-col gap-5">
             <div className='flex flex-col px-2 gap-2 sm: md:flex-row lg:flex-row '>
@@ -81,7 +85,7 @@ const Dashboard = () => {
                         <p >Power On</p>
                     </div>
                     <label htmlFor="" className='font-normal md:text-[12px] lg:text-[15px] xl:text-[16px] 2xl:text-[18px]'>OverClockedX - upgrade yours now</label>
-                    <Button className='p-5'>SHOP NOW</Button>
+                    <Button onClick={()=>SelectCategories('allProducts')} variant={'secondary'} className='p-5'>SHOP NOW</Button>
                 </div>
                 <div className='text-white w-full gap-1 flex flex-col items-center bg-black inset-shadow-sm inset-shadow-white/50 py-7 rounded-[10px] w-[60%] px-[3%] relative sm:py-3 md:w-[70%] py-3 flex-row 2xl:ww-[65%] py-3'>
                     <AnimatePresence mode='wait'>

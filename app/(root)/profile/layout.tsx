@@ -5,13 +5,11 @@ import ProfileNavBar from '@/components/ProfileNavBar/ProfileNavBar'
 
 export default function ProfileLayout({ children }: { children: React.ReactNode }) {
     return (
-        <div className=' text-white p-10 rounded  flex gap-10 w-[1200px] h-screen m-auto items-center'>
+        <div className=' text-white p-2 rounded flex flex-col box-border  h-screen items-center lg:flex-row gap-2 lg:w-[90%] lg:mx-auto xl:w-[70%] 2xl:w-[60%]'>
             <ProfileNavBar />
             <EdgeStoreProvider>
                 {children}
             </EdgeStoreProvider>
-
-
         </div>
     )
 }
