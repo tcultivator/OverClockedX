@@ -5,21 +5,8 @@ import Image from 'next/image';
 import { ClipLoader } from 'react-spinners'
 import { useEdgeStore } from '@/lib/edgestore';
 import { Input } from "@/components/ui/input"
+import { user } from '@/types/UserType'
 
-type user = {
-    user: {
-        id: number;
-        email: string;
-        password: string;
-        username: string;
-        phone_number: number;
-        profile_Image: string;
-        gender: string;
-        role: string;
-        login_method: string;
-    }
-
-}
 const ProfileCard = ({ user }: user) => {
     const [loading, setLoading] = useState(false)
 
@@ -96,21 +83,21 @@ const ProfileCard = ({ user }: user) => {
                     <form onSubmit={UpdateProfile} className='flex flex-col gap-3'>
                         <div className='flex flex-col gap-2'>
                             <label htmlFor="">Username</label>
-                            <Input  type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
+                            <Input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
                         </div>
                         <div className='flex flex-col gap-2'>
                             <label className='w-max' htmlFor="">Contact Number</label>
-                            <Input  type="number" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
+                            <Input type="number" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
                         </div>
                         <div>
                             <label>Gender</label>
                             <div className="flex gap-4">
                                 <div className="flex gap-2 items-center">
-                                    <Input  type="radio" id="male" name="gender" value="male" checked={gender === 'male'} onChange={(e) => setGender(e.target.value)} />
+                                    <Input type="radio" id="male" name="gender" value="male" checked={gender === 'male'} onChange={(e) => setGender(e.target.value)} />
                                     <label htmlFor="male">Male</label>
                                 </div>
                                 <div className="flex gap-2 items-center">
-                                    <Input  type="radio" id="female" name="gender" value="female" checked={gender === 'female'} onChange={(e) => setGender(e.target.value)} />
+                                    <Input type="radio" id="female" name="gender" value="female" checked={gender === 'female'} onChange={(e) => setGender(e.target.value)} />
                                     <label htmlFor="female">Female</label>
                                 </div>
                             </div>

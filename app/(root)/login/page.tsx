@@ -3,33 +3,80 @@ import { signIn } from "@/auth"
 import { auth } from '@/auth'
 import { FcGoogle } from "react-icons/fc";
 import { redirect } from 'next/navigation'
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs"
 const Login = async () => {
   const session = await auth()
   if (session) {
     redirect('/profile')
   }
   return (
-    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white text-black p-10 rounded w-[400px] flex flex-col gap-3">
-      <form action={async () => {
-        "use server"
-        await signIn("google")
-      }}>
+    <div className='w-screen h-[70vh] flex'>
+      <div className="flex w-max max-w-sm flex-col gap-3 m-auto">
+        <Tabs defaultValue="signin">
+          <TabsList >
+            <TabsTrigger value="signin">SIGNIN</TabsTrigger>
+            <TabsTrigger value="signup">SIGNUP</TabsTrigger>
+          </TabsList>
+          <TabsContent value="signin">
+            <div className="px-4 py-10 rounded-xl bg-black inset-shadow-sm inset-shadow-white/50 w-[300px] flex flex-col gap-3">
+              <Label className='text-white text-[18px] text-center w-full  flex justify-center py-1' htmlFor="">SIGNIN</Label>
+              <form action="" className="flex flex-col gap-3 text-white">
+                <div className="w-full ">
+                  <Label htmlFor="">Email</Label>
+                  <Input type="email" placeholder="Email" className='bg-[#161616]' />
+                </div>
+                <div className="w-full">
+                  <Label htmlFor="">Password</Label>
+                  <Input type="password" placeholder="Password" className='bg-[#161616]' />
+                </div>
+                <Button variant={'secondary'} className="">Signin</Button>
+              </form>
+              <Label className='text-white/60 text-[12px] text-center w-full  flex justify-center py-1' htmlFor="">or continue using email</Label>
+              <form action={async () => {
+                "use server"
+                await signIn("google")
+              }}>
 
-        <button type="submit" className="py-2 px-5 bg-black w-full rounded flex items-center gap-5 text-white justify-center cursor-pointer"><FcGoogle /> Signin with Google</button>
-      </form>
-      <div className="text-center w-full">or continue using email</div>
-      <form action="" className="flex flex-col gap-2">
-        <div className="w-full ">
-          <label htmlFor="">Email</label>
-          <input type="email" placeholder="Email" />
-        </div>
-        <div className="w-full">
-          <label htmlFor="">Password</label>
-          <input type="password" placeholder="Password" />
-        </div>
-        <button className="py-2 px-5 bg-green-400 w-full rounded flex items-center gap-5 text-white justify-center ">Signin</button>
-      </form>
+                <Button variant={'secondary'} type="submit" className="w-full"><FcGoogle /> Signin with Google</Button>
+              </form>
+            </div>
+          </TabsContent>
+          <TabsContent value="signup">
+            <div className="px-4 py-10 rounded-xl bg-black inset-shadow-sm inset-shadow-white/50 w-[300px] flex flex-col gap-3">
+              <Label className='text-white text-[18px] text-center w-full  flex justify-center py-1' htmlFor="">SIGNUP</Label>
+              <form action="" className="flex flex-col gap-3 text-white">
+                <div className="w-full ">
+                  <Label htmlFor="">Email</Label>
+                  <Input type="email" placeholder="Email" className='bg-[#161616]' />
+                </div>
+                <div className="w-full">
+                  <Label htmlFor="">Password</Label>
+                  <Input type="password" placeholder="Password" className='bg-[#161616]' />
+                </div>
+                <Button variant={'secondary'} className="">Signin</Button>
+              </form>
+              <Label className='text-white/60 text-[12px] text-center w-full  flex justify-center py-1' htmlFor="">or continue using email</Label>
+              <form action={async () => {
+                "use server"
+                await signIn("google")
+              }}>
+
+                <Button variant={'secondary'} type="submit" className="w-full"><FcGoogle /> Signin with Google</Button>
+              </form>
+            </div>
+          </TabsContent>
+        </Tabs>
+      </div>
     </div>
+
 
   )
 }

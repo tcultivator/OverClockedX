@@ -2,12 +2,7 @@
 import React from 'react'
 import { SyncLoader } from 'react-spinners'
 import { useLoading } from '@/stores/loadingStore';
-import {
-    Item,
-    ItemContent,
-    ItemMedia,
-    ItemTitle,
-} from "@/components/ui/item"
+import {Item,ItemContent,ItemMedia,ItemTitle} from "@/components/ui/item"
 import { Spinner } from "@/components/ui/spinner"
 const Loading = () => {
     const loading = useLoading((state) => state.loading)

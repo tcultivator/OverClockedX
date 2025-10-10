@@ -9,17 +9,7 @@ import { luzonPlaces } from '@/datasetAddress/citiesAndMunicipality'
 import { barangaysJaen } from '@/datasetAddress/barangay'
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-interface UserAddress {
-    id: number;
-    email: string;
-    rname: string;
-    country: string;
-    cityMunicipality: string;
-    barangay: string;
-    province: string;
-    description: string;
-
-}
+import { UserAddress } from '@/types/UserAddressTypes'
 interface Props {
     address?: UserAddress;
     email?: string | null | undefined
@@ -79,7 +69,7 @@ const AddressCard = ({ address, email }: Props) => {
 
                             <div className='flex flex-col'>
                                 <label htmlFor="">City/Municipality</label>
-                                <Input list='city' name='city' value={cityMunicipality} onChange={(e)=>setCityMunicipality(e.target.value)}/>
+                                <Input list='city' name='city' value={cityMunicipality} onChange={(e) => setCityMunicipality(e.target.value)} />
                                 <datalist id='city'>
                                     {luzonPlaces.map((data, index) => (
                                         <option key={index} value={data}>{data}</option>
@@ -89,7 +79,7 @@ const AddressCard = ({ address, email }: Props) => {
 
                             <div className='flex flex-col'>
                                 <label htmlFor="">Barangay</label>
-                                <Input list='barangay' name='barangay' value={barangay} onChange={(e)=>setBarangay(e.target.value)}/>
+                                <Input list='barangay' name='barangay' value={barangay} onChange={(e) => setBarangay(e.target.value)} />
                                 <datalist id='barangay'>
                                     {barangaysJaen.map((data, index) => (
                                         <option key={index} value={data}>{data}</option>
@@ -99,7 +89,7 @@ const AddressCard = ({ address, email }: Props) => {
 
                             <div className='flex flex-col'>
                                 <label htmlFor="">Province</label>
-                                <Input list='province' name='province' value={province} onChange={(e)=>setProvince(e.target.value)}/>
+                                <Input list='province' name='province' value={province} onChange={(e) => setProvince(e.target.value)} />
                                 <datalist id='province'>
                                     {luzonProvinces.map((data, index) => (
                                         <option key={index} value={data}>{data}</option>

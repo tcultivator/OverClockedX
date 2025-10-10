@@ -52,6 +52,8 @@ type cart = {
     updateQuantityOfFinalCheckoutItem: (operator: boolean, product_id: string) => void,
 
     removeItemFromFinalCheckoutItems: (product_id: string) => void,
+
+    clearUserCartInSignout: () => void,
 }
 let toastTimeout: ReturnType<typeof setTimeout> | null = null;
 export const useCartStore = create<cart>((set) => ({
@@ -142,7 +144,7 @@ export const useCartStore = create<cart>((set) => ({
                 toastTimeout = setTimeout(() => {
                     useToast.getState().displayToast(false)
                 }, 1000);
-                
+
             }
 
 
@@ -176,7 +178,6 @@ export const useCartStore = create<cart>((set) => ({
             })
             console.log(useCartStore.getState().cartItems)
         }
-
 
     },
 
@@ -368,5 +369,11 @@ export const useCartStore = create<cart>((set) => ({
             })
         }
     },
+
+    clearUserCartInSignout: () => {
+        set({
+            cartItems: []
+        })
+    }
 
 }))

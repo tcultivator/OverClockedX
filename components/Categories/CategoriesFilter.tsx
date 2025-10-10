@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { BsFillXCircleFill } from "react-icons/bs";
 import { FaCheckCircle } from "react-icons/fa";
-
+import { Slider } from "@/components/ui/slider"
 import { Button } from '../ui/button';
 const CategoriesFilter = () => {
     const searchParams = useSearchParams();
@@ -28,17 +28,11 @@ const CategoriesFilter = () => {
     };
 
 
-    // for input filter
-    const [lowValue, setLowValue] = useState('0')
-    const [highValue, setHightValue] = useState('100000')
-
     const handleInputFilter = () => {
-        console.log(lowValue)
-        console.log(highValue)
         setPriceRangeFilterState(true)
         const params = new URLSearchParams(searchParams.toString());
-        params.set('low', lowValue || '0');
-        params.set('high', highValue || '100000')
+        params.set('low', value[0].toString() || '0');
+        params.set('high', value[1].toString() || '100000')
         window.history.pushState({}, '', `?${params.toString()}`);
 
     }
@@ -77,15 +71,15 @@ const CategoriesFilter = () => {
 
     const clearFilterPriceRange = () => {
         setPriceRangeFilterState(false)
-        setLowValue('')
-        setHightValue('')
+        setValue([0, 100000])
         const params = new URLSearchParams(searchParams.toString());
         params.delete('low');
         params.delete('high');
         window.history.pushState({}, '', `?${params.toString()}`);
     }
 
-
+    // for input filter
+    const [value, setValue] = useState([0, 100000])
 
 
     return (
@@ -143,25 +137,36 @@ const CategoriesFilter = () => {
                     <div className='flex box-border  gap-2 items-center relative'>
                         <div className='box-border flex items-center'>
                             <input className='w-full p-2 pl-5 border border-gray-400 rounded-[25px]' type="number" placeholder="0"
-                                value={lowValue}
+                                value={value[0]}
                                 onChange={(e) => {
-                                    setLowValue(e.target.value)
-
-                                }} />
+                                    const newValue = Number(e.target.value);
+                                    setValue([newValue, value[1]]);
+                                }}
+                            />
                             <label className='absolute ml-3' htmlFor="">₱</label>
                         </div>
                         -
                         <div className='box-border flex items-center relative'>
                             <input className='w-full p-2 pl-5 border border-gray-400 rounded-[25px]' type="number" placeholder="100000"
-                                value={highValue}
+                                value={value[1]}
                                 onChange={(e) => {
-                                    setHightValue(e.target.value)
-
-                                }} />
+                                    const newValue = Number(e.target.value);
+                                    setValue([value[0], newValue]);
+                                }}
+                            />
                             <label className='absolute ml-3' htmlFor="">₱</label>
                         </div>
 
                     </div>
+                    <Slider
+                        value={value}
+                        onValueChange={setValue}
+                        max={100000}
+                        min={0}
+                        step={10}
+                        className="mt-2 w-full"
+                        aria-label="Price Range"
+                    />
                     <div >
                         <Button onClick={() => handleInputFilter()} className='w-full flex items-center justify-center gap-3' variant={'secondary'}><FaCheckCircle />Apply</Button>
                     </div>
@@ -171,36 +176,6 @@ const CategoriesFilter = () => {
                             <button className='flex items-center justify-center gap-2' onClick={() => clearFilterPriceRange()}><BsFillXCircleFill className='text-red-400' /> Clear filter</button>
                         </div>
                     }
-                    {/* <div className="p-5">
-                        <Range
-                            step={STEP}
-                            min={MIN}
-                            max={MAX}
-                            values={values}
-                            onChange={(newValues) => setValues(newValues)}
-                            renderTrack={({ props, children }) => (
-                                <div
-                                    {...props}
-                                    className="h-2 bg-gray-300 rounded relative"
-                                    style={{
-                                        ...props.style,
-                                        height: '2px'
-
-                                    }}
-                                >
-                                    {children}
-                                </div>
-                            )}
-                            renderThumb={({ props, index }) => (
-                                <div
-                                    {...props}
-                                    className="w-5 h-5 bg-white rounded-full shadow"
-                                    style={{ ...props.style }}
-                                >
-                                </div>
-                            )}
-                        />
-                    </div> */}
                 </div>
 
                 <div>
@@ -213,5 +188,6 @@ const CategoriesFilter = () => {
         </div>
     )
 }
+
 
 export default CategoriesFilter

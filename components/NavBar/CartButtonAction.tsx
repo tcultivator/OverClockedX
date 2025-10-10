@@ -16,7 +16,7 @@ type Props = {
 const CartButtonAction = ({ session }: Props) => {
     const fetchCartItems = useCartStore((state) => state.fetchCartItems)
     const cartItems = useCartStore((state) => state.cartItems)
-    const clearCart = useCartStore((state) => state.clearCart)
+    const clearUserCartInSignout = useCartStore((state) => state.clearUserCartInSignout)
 
     const openCartToggle = useCartStore((state) => state.openCartToggle)
 
@@ -27,7 +27,7 @@ const CartButtonAction = ({ session }: Props) => {
             fetchCartItems(email)
         } else {
             console.log('try kung gagana to kapag nabago laman ng session')
-            clearCart()
+            clearUserCartInSignout()
         }
     }, [session])
 

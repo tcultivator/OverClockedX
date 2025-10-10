@@ -11,17 +11,8 @@ import { useCartStore } from '@/stores/cartStore';
 import { useUserStore } from '@/stores/userStore';
 import { TfiShoppingCart } from "react-icons/tfi";
 import { MdShoppingCartCheckout } from "react-icons/md";
+import { Props } from '@/types/CheckoutPageProps'
 
-type Props = {
-    id: number,
-    product_id: string;
-    product_image: string;
-    description: string;
-    brand: string;
-    product_name: string;
-    price: number;
-    stocks: number;
-}
 
 const CheckoutProduct = ({ id, product_id, product_image,
     description,

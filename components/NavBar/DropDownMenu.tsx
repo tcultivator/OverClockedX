@@ -1,14 +1,7 @@
 "use client";
 import React from 'react'
 import { useState } from 'react';
-import {
-    NavigationMenu,
-    NavigationMenuContent,
-    NavigationMenuItem,
-    NavigationMenuLink,
-    NavigationMenuList,
-    NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu"
+import {NavigationMenu,NavigationMenuContent,NavigationMenuItem,NavigationMenuLink,NavigationMenuList,NavigationMenuTrigger} from "@/components/ui/navigation-menu"
 import { useRouter } from 'next/navigation';
 const DropDownMenu = () => {
     const router = useRouter();
