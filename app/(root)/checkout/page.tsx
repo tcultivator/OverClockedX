@@ -19,6 +19,13 @@ import Image from 'next/image';
 import { toast } from 'sonner'
 import { voucherTypes } from '@/types/voucherTypes';
 
+import {
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+} from "@/components/ui/accordion"
+
 type GcashCB = {
     referenceId: string;
     actions: {
@@ -31,7 +38,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select"
 
-import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
+import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { useRouter } from 'next/navigation';
 import { ClipLoader } from 'react-spinners';
 const Checkout = () => {
@@ -61,7 +68,7 @@ const Checkout = () => {
     const [phoneNumber, setPhoneNumber] = useState<string | number>('');
 
 
-    const useCustomInput = useUserStore((state) => state.useCustomInput)
+    const CustomInput = useUserStore((state) => state.CustomInput)
     const addCustomAddress = useUserStore((state) => state.addCustomAddress)
 
     const getAllVouchers = useVoucherStore((state) => state.getAllVouchers)
@@ -82,7 +89,7 @@ const Checkout = () => {
 
     useEffect(() => {
         getAllVouchers()
-    }, [])
+    }, [getAllVouchers])
 
 
 
@@ -149,13 +156,12 @@ const Checkout = () => {
             },
         })
     }
-
     return (
-        <div className='px-2 pb-2 text-white flex gap-2'>
-            <div className='bg-black rounded-[10px] flex flex-col gap-5 p-10 w-full inset-shadow-sm inset-shadow-white/50'>
+        <div className='px-2 pb-2 text-white flex flex-col md:gap-2 md:flex-row'>
+            <div className='bg-black  flex flex-col rounded-t-[10px] gap-5 p-3 w-full md:inset-shadow-sm inset-shadow-white/50 md:p-10 md:rounded-[10px]'>
                 <h1>Checkout</h1>
                 <div className='flex gap-2 items center'>
-                    <div className='flex items-center justify-center gap-2 bg-[#1E1E1E] p-5 rounded-[10px] border border-white/50'>
+                    <div className='flex items-center justify-center gap-2 bg-[#1E1E1E] text-[13px]  p-2  rounded-[10px] border border-white/50 md:p-5 md:text-[15px]'>
                         <input
                             id='delivery'
                             type="radio"
@@ -170,7 +176,7 @@ const Checkout = () => {
                         <TbTruckDelivery />
                         <label htmlFor="delivery" className='cursor-pointer'>Delivery</label>
                     </div>
-                    <div className='flex items-center justify-center gap-2 bg-[#1E1E1E] p-5 rounded-[10px] border border-white/50'>
+                    <div className='flex items-center justify-center gap-2 bg-[#1E1E1E] text-[13px] p-2 rounded-[10px] border border-white/50 md:p-5 md:text-[15px]'>
                         <input
                             id='pickup'
                             type="radio"
@@ -200,108 +206,119 @@ const Checkout = () => {
                             </SelectGroup>
                         </SelectContent>
                     </Select>
-                    {/* <select name="" id="" className='input-Profile' onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setPaymentOptions(e.target.value)}>
-                        <option value="Gcash">Gcash</option>
-                        <option value="Maya">Maya</option>
-                        <option value={CODorOTC}>{CODorOTC}</option>
-                    </select> */}
-                </div>
-                <div className='flex items-center justify-between'>
-                    <h1>Shipping Information</h1>
-                    <button onClick={() => {
-                        userAdress.length > 0 ? useCustomInput() :
-                            addToUserAdress()
-                    }} className='underline text-[12px] text-blue-400'>{userAdress.length > 0 ? 'Edit Address' : 'Use Current Address'}</button>
                 </div>
 
-                <form>
+                <Accordion
+                    type="single"
+                    collapsible
+                    className="w-full"
+                    defaultValue="item-1"
+                >
+                    <AccordionItem value="item-1">
+                        <AccordionTrigger>Shipping Information</AccordionTrigger>
+                        <AccordionContent className="flex flex-col gap-4 text-balance">
+                            <div className='flex items-center justify-between'>
+                                <h1>Update Shipping Information</h1>
+                                <button onClick={() => {
+                                    if (userAdress.length > 0) {
+                                        CustomInput();
+                                    } else {
+                                        addToUserAdress();
+                                    }
+                                }} className='underline text-[12px] text-blue-400'>{userAdress.length > 0 ? 'Edit Address' : 'Use Current Address'}</button>
+                            </div>
 
-                    <div className='flex flex-col'>
-                        <label htmlFor="">Fullname</label>
-                        <Input required disabled={userAdress.length > 0} type="text" value={userAdress[0]?.rname ?? rName} onChange={(e) => setRName(e.target.value)} />
-                    </div>
 
-                    <div className='flex flex-col'>
-                        <label htmlFor="">Email Address</label>
-                        <Input disabled={userAdress.length > 0} type="email" value={userAdress[0]?.email ?? email} onChange={(e) => setEmail(e.target.value)} />
-                    </div>
+                            <form className='flex flex-col gap-1 md:flex  '>
 
-                    <div className='flex flex-col'>
-                        <label htmlFor="">Phone Number</label>
-                        <Input disabled={userAdress.length > 0} type="number" value={userAdress[0]?.phone_number ?? phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
-                    </div >
+                                <div className='flex flex-col'>
+                                    <label htmlFor="">Fullname</label>
+                                    <Input required disabled={userAdress.length > 0} type="text" value={userAdress[0]?.rname ?? rName} onChange={(e) => setRName(e.target.value)} />
+                                </div>
 
-                    <div className='flex flex-col'>
-                        <label htmlFor="">Country</label>
-                        <Input disabled={userAdress.length > 0} list="countries" name="countries" value={userAdress[0]?.country ?? country} onChange={(e) => setCountry(e.target.value)} />
-                        <datalist id='countries' className='absolute bg-white text-black'>
-                            {countries.map((data, index) => (
-                                <option key={index} value={data}>{data}</option>
-                            ))}
-                        </datalist>
-                    </div>
-                    <div className='flex gap-1'>
+                                <div className='flex flex-col'>
+                                    <label htmlFor="">Email Address</label>
+                                    <Input disabled={userAdress.length > 0} type="email" value={userAdress[0]?.email ?? email} onChange={(e) => setEmail(e.target.value)} />
+                                </div>
 
-                        <div className='flex flex-col w-full'>
-                            <label htmlFor="">City/Municipality</label>
-                            <Input disabled={userAdress.length > 0} list='city' name='city' value={userAdress[0]?.cityMunicipality ?? cityMunicipality} onChange={(e) => setCityMunicipality(e.target.value)} />
-                            <datalist id='city'>
-                                {luzonPlaces.map((data, index) => (
-                                    <option key={index} value={data}>{data}</option>
-                                ))}
-                            </datalist>
-                        </div>
+                                <div className='flex flex-col'>
+                                    <label htmlFor="">Phone Number</label>
+                                    <Input disabled={userAdress.length > 0} type="number" value={userAdress[0]?.phone_number ?? phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
+                                </div >
 
-                        <div className='flex flex-col w-full'>
-                            <label htmlFor="">Barangay</label>
-                            <Input disabled={userAdress.length > 0} list='barangay' name='barangay' value={userAdress[0]?.barangay ?? barangay} onChange={(e) => setBarangay(e.target.value)} />
-                            <datalist id='barangay'>
-                                {barangaysJaen.map((data, index) => (
-                                    <option key={index} value={data}>{data}</option>
-                                ))}
-                            </datalist>
-                        </div>
+                                <div className='flex flex-col'>
+                                    <label htmlFor="">Country</label>
+                                    <Input disabled={userAdress.length > 0} list="countries" name="countries" value={userAdress[0]?.country ?? country} onChange={(e) => setCountry(e.target.value)} />
+                                    <datalist id='countries' className='absolute bg-white text-black'>
+                                        {countries.map((data, index) => (
+                                            <option key={index} value={data}>{data}</option>
+                                        ))}
+                                    </datalist>
+                                </div>
+                                <div className='flex gap-1'>
 
-                        <div className='flex flex-col w-full'>
-                            <label htmlFor="">Province</label>
-                            <Input disabled={userAdress.length > 0} list='province' name='province' value={userAdress[0]?.province ?? province} onChange={(e) => setProvince(e.target.value)} />
-                            <datalist id='province'>
-                                {luzonProvinces.map((data, index) => (
-                                    <option key={index} value={data}>{data}</option>
-                                ))}
-                            </datalist>
-                        </div>
+                                    <div className='flex flex-col w-full'>
+                                        <label htmlFor="">City/Municipality</label>
+                                        <Input disabled={userAdress.length > 0} list='city' name='city' value={userAdress[0]?.cityMunicipality ?? cityMunicipality} onChange={(e) => setCityMunicipality(e.target.value)} />
+                                        <datalist id='city'>
+                                            {luzonPlaces.map((data, index) => (
+                                                <option key={index} value={data}>{data}</option>
+                                            ))}
+                                        </datalist>
+                                    </div>
 
-                    </div>
+                                    <div className='flex flex-col w-full'>
+                                        <label htmlFor="">Barangay</label>
+                                        <Input disabled={userAdress.length > 0} list='barangay' name='barangay' value={userAdress[0]?.barangay ?? barangay} onChange={(e) => setBarangay(e.target.value)} />
+                                        <datalist id='barangay'>
+                                            {barangaysJaen.map((data, index) => (
+                                                <option key={index} value={data}>{data}</option>
+                                            ))}
+                                        </datalist>
+                                    </div>
 
-                    <div className='flex flex-col'>
-                        <label htmlFor="">Trademark</label>
-                        <Textarea disabled={userAdress.length > 0} value={userAdress[0]?.trademark ?? description} onChange={(e) => setDescription(e.target.value)} />
-                    </div>
-                </form>
-                {
-                    userAdress.length <= 0 && <Button onClick={() => {
-                        if (rName != '' && country != '' && cityMunicipality != '' && description != '' && barangay != '' && province != '' && email != '' && phoneNumber != '') {
-                            addCustomAddress([{
+                                    <div className='flex flex-col w-full'>
+                                        <label htmlFor="">Province</label>
+                                        <Input disabled={userAdress.length > 0} list='province' name='province' value={userAdress[0]?.province ?? province} onChange={(e) => setProvince(e.target.value)} />
+                                        <datalist id='province'>
+                                            {luzonProvinces.map((data, index) => (
+                                                <option key={index} value={data}>{data}</option>
+                                            ))}
+                                        </datalist>
+                                    </div>
 
-                                email: email,
-                                rname: rName,
-                                phone_number: phoneNumber.toString(),
-                                country: country,
-                                cityMunicipality: cityMunicipality,
-                                barangay: barangay,
-                                province: province,
-                                trademark: description,
+                                </div>
 
-                            }])
-                        } else {
-                            alert('you need to fillup all the field')
-                        }
-                    }} variant={'secondary'}>Submit</Button>
-                }
+                                <div className='flex flex-col'>
+                                    <label htmlFor="">Trademark</label>
+                                    <Textarea disabled={userAdress.length > 0} value={userAdress[0]?.trademark ?? description} onChange={(e) => setDescription(e.target.value)} />
+                                </div>
+                                {
+                                    userAdress.length <= 0 && <Button onClick={() => {
+                                        if (rName != '' && country != '' && cityMunicipality != '' && description != '' && barangay != '' && province != '' && email != '' && phoneNumber != '') {
+                                            addCustomAddress([{
 
+                                                email: email,
+                                                rname: rName,
+                                                phone_number: phoneNumber.toString(),
+                                                country: country,
+                                                cityMunicipality: cityMunicipality,
+                                                barangay: barangay,
+                                                province: province,
+                                                trademark: description,
+
+                                            }])
+                                        } else {
+                                            alert('you need to fillup all the field')
+                                        }
+                                    }} variant={'secondary'} className='w-full'>Submit</Button>
+                                }
+                            </form>
+                        </AccordionContent>
+                    </AccordionItem>
+                </Accordion>
             </div>
-            <div className='flex flex-col gap-5 p-10 w-full'>
+            <div className='flex flex-col gap-5 bg-black p-3 w-full md:bg-black/0 md:p-10'>
                 <h1>Review your cart</h1>
 
                 <div className='flex flex-col gap-2'>
@@ -316,13 +333,15 @@ const Checkout = () => {
                             </div>
                             <div className="flex gap-2 bg-black w-max p-1 px-2 rounded text-[10px]">
                                 <button onClick={() => {
-                                    data.quantity > 1 &&
+                                    if (data.quantity > 1) {
                                         updateQuantityOfFinalCheckoutItem(false, data.product_id)
+                                    }
                                 }} className="text-white" ><FaMinus /></button>
                                 <input disabled type="number" className=" text-white px-1 w-[20px] bg-white/30 text-center outline-none rounded p-1" value={data.quantity} />
                                 <button onClick={() => {
-                                    data.stocks > data.quantity &&
+                                    if (data.stocks > data.quantity) {
                                         updateQuantityOfFinalCheckoutItem(true, data.product_id)
+                                    }
                                 }} className="text-white"><FaPlus /></button>
 
                             </div>
@@ -379,15 +398,6 @@ const Checkout = () => {
                     </SheetContent>
                 </Sheet>
 
-
-                {/* <div className='flex p-2 rounded-[10px] items-center bg-white justify-between '>
-                    <div className='flex gap-1 items-center'>
-                        <BiSolidDiscount className='text-black/50' />
-                        <input type="text" placeholder='Enter discount code' className='outline-none text-black/80' value={inputVoucherCode} onChange={(e) => setInputVoucherCode(e.target.value)} />
-                    </div>
-                    <button onClick={applyVoucher} className='text-blue-400 underline'>Apply</button>
-                </div> */}
-
                 <div className=''>
                     <div className='flex justify-between items-center'>
                         <label htmlFor="" className='text-white/90 font-thin'>Subtotal</label>
@@ -439,8 +449,12 @@ const Checkout = () => {
 
                 <div>
                     <Button onClick={() => {
-                        finalCheckoutItems.reduce((sum, item) => sum + item.price * item.quantity, 0) + shippingCost > 100000 ? alert('Order Price Maximum is 100000') :
-                            CheckoutProduct()
+                        const totalPrice = finalCheckoutItems.reduce((sum, item) => sum + item.price * item.quantity, 0) + shippingCost;
+                        if (totalPrice > 100000) {
+                            alert('Order Price Maximum is 100000');
+                        } else {
+                            CheckoutProduct();
+                        }
                     }} variant={'secondary'} className=' p-2 flex gap-2 items-center justify-center w-full' disabled={loading === true || finalCheckoutItems.length <= 0 || paymentOptions == '' || userAdress.length == 0}> {loading && (
                         <ClipLoader
 

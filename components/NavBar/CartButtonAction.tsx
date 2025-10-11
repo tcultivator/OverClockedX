@@ -29,7 +29,7 @@ const CartButtonAction = ({ session }: Props) => {
             console.log('try kung gagana to kapag nabago laman ng session')
             clearUserCartInSignout()
         }
-    }, [session])
+    }, [session,clearUserCartInSignout])
 
     return (
         <div className="relative cursor-pointer ">

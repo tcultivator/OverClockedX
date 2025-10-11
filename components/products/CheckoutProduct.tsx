@@ -28,14 +28,14 @@ const CheckoutProduct = ({ id, product_id, product_image,
     return (
         <div className='px-2'>
             <div className=" w-full flex-column gap-2 sm:flex flex-row">
-                <div className="w-full text-white inset-shadow-sm inset-shadow-white/50 h-full p-2 bg-black rounded-[10px] sm:w-[50%] p-10">
+                <div className="w-full text-white  h-full p-2 bg-black rounded-t-[10px] sm:w-[50%] sm:p-10 sm:inset-shadow-sm inset-shadow-white/50 sm:rounded-[10px]">
                     <div className=' rounded-[10px] relative'>
                         <Image
                             src={product_image}
                             width={500}
                             height={500}
                             alt=''
-                            className="w-[90%] m-auto"
+                            className="w-full m-auto sm:w-[90%]"
                         />
                         <div className="w-full flex p-3 justify-between text-4xl absolute top-[50%] transform -translate-y-1/2 text-white">
                             <button><LuCircleChevronLeft /></button>
@@ -43,7 +43,7 @@ const CheckoutProduct = ({ id, product_id, product_image,
                         </div>
                     </div>
                 </div>
-                <div className="w-full text-white inset-shadow-sm inset-shadow-white/50 flex flex-col gap-3 p-2 bg-black rounded-[10px] sm:w-[50%] p-10 ">
+                <div className="w-full text-white  flex flex-col gap-3 p-2 bg-black rounded-b-[10px] sm:w-[50%] sm:p-10 sm:inset-shadow-sm inset-shadow-white/50 sm:rounded-[10px] ">
                     <label htmlFor="">{brand}</label>
                     <label className="text-[20px] font-anton md:text-[20px] lg:text-[30px] xl:text-[40px] 2xl:text-[50px]">{product_name}</label>
                     <label className="text-[25px] font-anton md:text-[15px] lg:text-[35px] xl:text-[45px] 2xl:text-[55px]">₱{price}</label>
@@ -70,7 +70,7 @@ const CheckoutProduct = ({ id, product_id, product_image,
                         <Button className='p-5 flex items-center justify-center gap-3' onClick={() => {
                             addToSeperateItem({
                                 id: id,
-                                email: user?.email!,
+                                email: user?.email,
                                 product_id: product_id,
                                 product_name: product_name,
                                 product_image: product_image,

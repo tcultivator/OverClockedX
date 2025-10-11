@@ -5,6 +5,9 @@ import { BsFillXCircleFill } from "react-icons/bs";
 import { FaCheckCircle } from "react-icons/fa";
 import { Slider } from "@/components/ui/slider"
 import { Button } from '../ui/button';
+import { useFilterStore } from '@/stores/filterStore';
+import { RiCloseLargeFill } from "react-icons/ri";
+
 const CategoriesFilter = () => {
     const searchParams = useSearchParams();
 
@@ -80,11 +83,18 @@ const CategoriesFilter = () => {
 
     // for input filter
     const [value, setValue] = useState([0, 100000])
-
-
+    const displayFilter = useFilterStore((state) => state.displayFilter)
+    const setFilterDisplay = useFilterStore((state) => state.setFilterDisplay)
     return (
-        <div id="left" className="w-[350px] bg-black inset-shadow-sm inset-shadow-white/50 rounded-[10px] hidden p-5 sticky top-10 h-screen md:block lg:block xl:block font-thin">
+        <div id="left" className={`w-full bg-black  ${displayFilter == false ? 'hidden' : 'block'} h-screen w-full box-border left-0 p-5  absolute   top-0 h-screen md:block lg:block xl:block font-thin md:sticky md:relative md:w-[350px] md:inset-shadow-sm md:inset-shadow-white/50 z-50 md:rounded-[10px] md:p-5`}>
             <div className="sticky top-0">
+                <div className='w-full flex justify-end'>
+                    <button className='block md:hidden ' onClick={() => {
+                        console.log(displayFilter)
+                        setFilterDisplay(false)
+                    }}><RiCloseLargeFill /></button>
+                </div>
+
                 <div className='py-6 border-b border-gray-400 flex flex-col gap-2'>
                     <h1 className='text-xl'>Availability</h1>
 

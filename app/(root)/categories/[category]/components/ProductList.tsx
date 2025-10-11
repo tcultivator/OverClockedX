@@ -13,6 +13,7 @@ import { TfiShoppingCart } from "react-icons/tfi";
 import { useCartStore } from '@/stores/cartStore';
 import { useUserStore } from '@/stores/userStore';
 import { useToast } from '@/stores/toastStore';
+import { useCategoriesHeaderStore } from '@/stores/categoriesHeaderStore';
 type Props = {
     products: ProductsType[]
     category: string
@@ -52,13 +53,15 @@ const ProductList = ({ products, category }: Props) => {
 
         getFilter()
 
-    }, [searchParams])
+    }, [searchParams, category])
+
+    const productListDisplayOrientation = useCategoriesHeaderStore((state) => state.productListDisplayOrientation)
 
     return (
         <div className='flex flex-col bg-black inset-shadow-sm inset-shadow-white/50 rounded-[10px] max-h-[100vh] overflow-auto justify-start w-full font-thin'>
             <CategoriesHeader />
 
-            <div id="right" className={`w-full  grid grid-cols-2  rounded-[10px] ${loadingProducts ? 'opacity-25' : 'opacity-100'}  p-5 overflow-y-auto gap-4 items-start sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5`}>
+            <div id="right" className={`${loadingProducts ? 'opacity-25' : 'opacity-100'} ${productListDisplayOrientation[0]}`}>
                 {loadingProducts ? (
 
                     finalProducts && finalProducts.map((data, index) => (
@@ -72,26 +75,29 @@ const ProductList = ({ products, category }: Props) => {
                     ))
                 ) : (
                     finalProducts && finalProducts.map((data, index) => (
-                        <div key={index} className='bg-white/5 inset-shadow-sm inset-shadow-white/50 rounded-[10px]'>
-                            <div className="flex flex-col h-full justify-between gap-1 cursor-pointer p-4 rounded  " onClick={() => router.push(`/product/${data.product_id}`)} >
-                                <div className="flex flex-col gap-1 cursor-pointer">
-                                    <div className='aspect-square w-full rounded'>
+                        <div key={index} className={`${productListDisplayOrientation[1]}`}>
+                            <div className={`${productListDisplayOrientation[2]}`} onClick={() => router.push(`/product/${data.product_id}`)} >
+                                <div className={`${productListDisplayOrientation[3]}`}>
+                                    <div className={`${productListDisplayOrientation[6]}`}>
                                         <Image src={data.product_image} alt='' className='w-full h-full max-w-xs' width={400} height={400} />
                                     </div>
-                                    <label className='text-xs'>{data.product_name}</label>
-                                    <label className="text-sm md:text-2xl">
-                                        {new Intl.NumberFormat('en-PH', {
-                                            style: 'currency',
-                                            currency: 'PHP',
-                                        }).format(data.price)}
-                                    </label>
+                                    <div className='flex flex-col'>
+                                        <label className='text-xs'>{data.product_name}</label>
+                                        <label className="text-sm md:text-2xl">
+                                            {new Intl.NumberFormat('en-PH', {
+                                                style: 'currency',
+                                                currency: 'PHP',
+                                            }).format(data.price)}
+                                        </label>
+                                    </div>
+
                                 </div>
                             </div>
-                            <div className='w-full'>
+                            <div className={`${productListDisplayOrientation[4]}`}>
                                 <button disabled={toastState} onClick={() => {
                                     addToCart({
                                         id: data.id,
-                                        email: user?.email!,
+                                        email: user?.email,
                                         product_id: data.product_id,
                                         product_name: data.product_name,
                                         product_image: data.product_image,
@@ -99,7 +105,7 @@ const ProductList = ({ products, category }: Props) => {
                                         stocks: data.stocks,
                                         quantity: 1
                                     })
-                                }} className='w-full flex items-center gap-2 justify-center font-normal bg-white text-black py-2 px-3 md:text-[12px] py-2 px-3'><TfiShoppingCart className='text-[15px]' /> Add to cart</button>
+                                }} className={`${productListDisplayOrientation[5]}`}><TfiShoppingCart className='text-[15px]' /> Add to cart</button>
                             </div>
 
                         </div>

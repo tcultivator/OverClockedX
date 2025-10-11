@@ -23,7 +23,7 @@ type useStore = {
     clearUser: () => void,
     userAdress: UserAddress[],
     addToUserAdress: () => void,
-    useCustomInput: () => void,
+    CustomInput: () => void,
     addCustomAddress: (value: UserAddress[]) => void,
 }
 
@@ -52,7 +52,7 @@ export const useUserStore = create<useStore>((set) => ({
             description: "Successfully added shipping information",
         })
     },
-    useCustomInput: () => {
+    CustomInput: () => {
         set({
             userAdress: []
         })

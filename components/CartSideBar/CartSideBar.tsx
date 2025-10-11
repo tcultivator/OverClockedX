@@ -26,7 +26,7 @@ const CartSideBar = () => {
     const clearCart = useCartStore((state) => state.clearCart)
     console.log(cartItems)
     return (
-        <div id='cartMenu' className={`${openCart ? '  bg-[#1a1a1a]  w-screen h-screen top-0 right-0 fixed z-50 text-white box-border md:w-[500px] shadow-[inset_3px_0_3px_rgba(255,255,255,0.4)] rounded-xl lg:w-[500px] shadow-[inset_3px_0_3px_rgba(255,255,255,0.4)] rounded-xl xl:w-[500px] shadow-[inset_3px_0_3px_rgba(255,255,255,0.4)] rounded-xl 2xl:w-[500px] shadow-[inset_3px_0_3px_rgba(255,255,255,0.4)] rounded-xl' : 'hidden'}`} >
+        <div id='cartMenu' className={`${openCart ? '  bg-[#1a1a1a]  w-screen h-screen top-0 right-0 fixed z-50 text-white box-border md:w-[500px] md:shadow-[inset_3px_0_3px_rgba(255,255,255,0.4)] md:rounded-xl lg:w-[500px] lg:shadow-[inset_3px_0_3px_rgba(255,255,255,0.4)] lg:rounded-xl xl:w-[500px] xl:shadow-[inset_3px_0_3px_rgba(255,255,255,0.4)] xl:rounded-xl 2xl:w-[500px] 2xl:shadow-[inset_3px_0_3px_rgba(255,255,255,0.4)] 2xl:rounded-xl' : 'hidden'}`} >
             <div className='relative w-full h-full box-border flex flex-col gap-2'>
                 <div className='fixed relative w-full border-b border-white/50  p-3 flex justify-between items-center'>
                     <label htmlFor="">Shopping Cart</label>

@@ -9,7 +9,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { Button } from '../ui/button';
-import { ProductsInCartTypes } from '@/types/ProductsInCartTypes';
+
 //zustand
 // shared state
 import { useCartStore } from '@/stores/cartStore';
@@ -109,7 +109,7 @@ const Dashboard = () => {
                                     <button disabled={toastState} onClick={() => {
                                         addToCart({
                                             id: featuredProducts[current].id,
-                                            email: user?.email!,
+                                            email: user?.email,
                                             product_id: featuredProducts[current].product_id,
                                             product_name: featuredProducts[current].product_name,
                                             product_image: featuredProducts[current].product_image,
