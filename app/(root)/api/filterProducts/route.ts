@@ -4,7 +4,7 @@ import db from "@/lib/db";
 import { ProductsType } from "@/types/ProductTypes";
 export async function POST(req: NextRequest) {
     const body = await req.json();
-    const query = body.category == 'allProducts' ? 'SELECT * FROM products WHERE id !=0' : 'SELECT * FROM products WHERE (category = ? OR parent = ?) ';
+    const query = body.category == 'allProducts' ? 'SELECT * FROM products WHERE id !=0 ' : 'SELECT * FROM products WHERE (category = ? OR parent = ?) ';
 
     console.log(query + 'ORDER BY price ' + body.SortBy)
     console.log(body)
@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
     console.log('eto ung laman ng price range value, ', PriceRangeValue)
 
     try {
-        const [rows] = body.category == 'allProducts' ? await db.query(query + availabilityValue + PriceRangeValue + SortByValue) : await db.query(query + availabilityValue + PriceRangeValue + SortByValue, [body.category, body.category])
+        const [rows] = body.category == 'allProducts' ? await db.query(query + availabilityValue + PriceRangeValue + SortByValue + ' LIMIT 10 OFFSET ?', [body.offset]) : await db.query(query + availabilityValue + PriceRangeValue + SortByValue + ' LIMIT 10 OFFSET ?', [body.category, body.category, body.offset])
         const result = rows as ProductsType[]
         return NextResponse.json({ result })
     } catch (err) {

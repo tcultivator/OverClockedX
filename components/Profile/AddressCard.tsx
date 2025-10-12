@@ -43,7 +43,7 @@ const AddressCard = ({ address, email }: Props) => {
         }, 1000);
     }
     return (
-        <div className='w-full bg-black p-10'>
+        <div className='w-full bg-black p-3 md:p-10'>
             <div className='pb-2 border-b border-white/30 mb-2 text-2xl'>
                 <h1>Address</h1>
             </div>

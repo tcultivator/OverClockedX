@@ -26,6 +26,10 @@ import {
     AccordionTrigger,
 } from "@/components/ui/accordion"
 
+import { RiErrorWarningFill } from "react-icons/ri";
+import { IoIosCheckmarkCircle } from "react-icons/io";
+
+
 type GcashCB = {
     referenceId: string;
     actions: {
@@ -193,19 +197,24 @@ const Checkout = () => {
 
                 <div className='flex flex-col'>
                     <label htmlFor="">Payment Method</label>
-                    <Select onValueChange={(value) => setPaymentOptions(value)}>
-                        <SelectTrigger>
-                            <SelectValue placeholder="Select payment method" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectGroup>
-                                <SelectLabel>Payment Methods</SelectLabel>
-                                <SelectItem value="Gcash">Gcash</SelectItem>
-                                <SelectItem value="Maya">Maya</SelectItem>
-                                <SelectItem value={CODorOTC}>{CODorOTC}</SelectItem>
-                            </SelectGroup>
-                        </SelectContent>
-                    </Select>
+                    <div className='flex gap-2 items-center'>
+                        <Select onValueChange={(value) => setPaymentOptions(value)}>
+                            <SelectTrigger>
+                                <SelectValue placeholder="Select payment method" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectGroup>
+                                    <SelectLabel>Payment Methods</SelectLabel>
+                                    <SelectItem value="Gcash">Gcash</SelectItem>
+                                    <SelectItem value="Maya">Maya</SelectItem>
+                                    <SelectItem value={CODorOTC}>{CODorOTC}</SelectItem>
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
+
+                        {paymentOptions != '' ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
+                    </div>
+
                 </div>
 
                 <Accordion
@@ -233,65 +242,95 @@ const Checkout = () => {
 
                                 <div className='flex flex-col'>
                                     <label htmlFor="">Fullname</label>
-                                    <Input required disabled={userAdress.length > 0} type="text" value={userAdress[0]?.rname ?? rName} onChange={(e) => setRName(e.target.value)} />
+                                    <div className='w-full flex gap-2 items-center'>
+                                        <Input required disabled={userAdress.length > 0} type="text" value={userAdress[0]?.rname ?? rName} onChange={(e) => setRName(e.target.value)} />
+                                        {rName != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
+                                    </div>
                                 </div>
 
                                 <div className='flex flex-col'>
                                     <label htmlFor="">Email Address</label>
-                                    <Input disabled={userAdress.length > 0} type="email" value={userAdress[0]?.email ?? email} onChange={(e) => setEmail(e.target.value)} />
+                                    <div className='w-full flex gap-2 items-center'>
+                                        <Input disabled={userAdress.length > 0} type="email" value={userAdress[0]?.email ?? email} onChange={(e) => setEmail(e.target.value)} />
+                                        {email != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
+                                    </div>
+
                                 </div>
 
                                 <div className='flex flex-col'>
                                     <label htmlFor="">Phone Number</label>
-                                    <Input disabled={userAdress.length > 0} type="number" value={userAdress[0]?.phone_number ?? phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
+                                    <div className='w-full flex gap-2 items-center'>
+                                        <Input disabled={userAdress.length > 0} type="number" value={userAdress[0]?.phone_number ?? phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
+                                        {phoneNumber != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
+                                    </div>
+
                                 </div >
 
                                 <div className='flex flex-col'>
                                     <label htmlFor="">Country</label>
-                                    <Input disabled={userAdress.length > 0} list="countries" name="countries" value={userAdress[0]?.country ?? country} onChange={(e) => setCountry(e.target.value)} />
-                                    <datalist id='countries' className='absolute bg-white text-black'>
-                                        {countries.map((data, index) => (
-                                            <option key={index} value={data}>{data}</option>
-                                        ))}
-                                    </datalist>
+                                    <div className='w-full flex gap-2 items-center'>
+                                        <Input disabled={userAdress.length > 0} list="countries" name="countries" value={userAdress[0]?.country ?? country} onChange={(e) => setCountry(e.target.value)} />
+                                        {country != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
+                                        <datalist id='countries' className='absolute bg-white text-black'>
+                                            {countries.map((data, index) => (
+                                                <option key={index} value={data}>{data}</option>
+                                            ))}
+                                        </datalist>
+                                    </div>
+
                                 </div>
                                 <div className='flex gap-1'>
 
                                     <div className='flex flex-col w-full'>
                                         <label htmlFor="">City/Municipality</label>
-                                        <Input disabled={userAdress.length > 0} list='city' name='city' value={userAdress[0]?.cityMunicipality ?? cityMunicipality} onChange={(e) => setCityMunicipality(e.target.value)} />
-                                        <datalist id='city'>
-                                            {luzonPlaces.map((data, index) => (
-                                                <option key={index} value={data}>{data}</option>
-                                            ))}
-                                        </datalist>
+                                        <div className='w-full flex gap-2 items-center'>
+                                            <Input disabled={userAdress.length > 0} list='city' name='city' value={userAdress[0]?.cityMunicipality ?? cityMunicipality} onChange={(e) => setCityMunicipality(e.target.value)} />
+                                            {cityMunicipality != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
+                                            <datalist id='city'>
+                                                {luzonPlaces.map((data, index) => (
+                                                    <option key={index} value={data}>{data}</option>
+                                                ))}
+                                            </datalist>
+                                        </div>
+
                                     </div>
 
                                     <div className='flex flex-col w-full'>
                                         <label htmlFor="">Barangay</label>
-                                        <Input disabled={userAdress.length > 0} list='barangay' name='barangay' value={userAdress[0]?.barangay ?? barangay} onChange={(e) => setBarangay(e.target.value)} />
-                                        <datalist id='barangay'>
-                                            {barangaysJaen.map((data, index) => (
-                                                <option key={index} value={data}>{data}</option>
-                                            ))}
-                                        </datalist>
+                                        <div className='w-full flex gap-2 items-center'>
+                                            <Input disabled={userAdress.length > 0} list='barangay' name='barangay' value={userAdress[0]?.barangay ?? barangay} onChange={(e) => setBarangay(e.target.value)} />
+                                            {barangay != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
+                                            <datalist id='barangay'>
+                                                {barangaysJaen.map((data, index) => (
+                                                    <option key={index} value={data}>{data}</option>
+                                                ))}
+                                            </datalist>
+                                        </div>
+
                                     </div>
 
                                     <div className='flex flex-col w-full'>
                                         <label htmlFor="">Province</label>
-                                        <Input disabled={userAdress.length > 0} list='province' name='province' value={userAdress[0]?.province ?? province} onChange={(e) => setProvince(e.target.value)} />
-                                        <datalist id='province'>
-                                            {luzonProvinces.map((data, index) => (
-                                                <option key={index} value={data}>{data}</option>
-                                            ))}
-                                        </datalist>
+                                        <div className='w-full flex gap-2 items-center'>
+                                            <Input disabled={userAdress.length > 0} list='province' name='province' value={userAdress[0]?.province ?? province} onChange={(e) => setProvince(e.target.value)} />
+                                            {province != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
+                                            <datalist id='province'>
+                                                {luzonProvinces.map((data, index) => (
+                                                    <option key={index} value={data}>{data}</option>
+                                                ))}
+                                            </datalist>
+                                        </div>
+
                                     </div>
 
                                 </div>
 
                                 <div className='flex flex-col'>
                                     <label htmlFor="">Trademark</label>
-                                    <Textarea disabled={userAdress.length > 0} value={userAdress[0]?.trademark ?? description} onChange={(e) => setDescription(e.target.value)} />
+                                    <div className='w-full flex gap-2 items-center'>
+                                        <Textarea disabled={userAdress.length > 0} value={userAdress[0]?.trademark ?? description} onChange={(e) => setDescription(e.target.value)} />
+                                        {description != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
+                                    </div>
                                 </div>
                                 {
                                     userAdress.length <= 0 && <Button onClick={() => {

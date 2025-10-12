@@ -95,7 +95,7 @@ const CartSideBar = () => {
                         ))
                     }
                 </div>
-                <div className='fixed bottom-0 border-t w-screen border-white/50 p-3 flex justify-between items-center md:w-[500px] lg:w-[500px] xl:w-[500px] 2xl:2-[500px]'>
+                <div className='fixed bottom-0 border-t w-screen border-white/50 bg-black p-3 flex justify-between items-center md:w-[500px] lg:w-[500px] xl:w-[500px] 2xl:2-[500px]'>
                     <div className='w-full flex gap-2'>
                         <button className={`${checkoutItems.length > 0 ? 'underline text-blue-400' : 'hidden'}`} onClick={() => {
                             clearSelectedItemsInCart()

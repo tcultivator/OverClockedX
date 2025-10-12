@@ -19,7 +19,7 @@ type PageProps = {
 const CategoryPage = async ({ params }: PageProps) => {
     const resolvedParams = await params;
     const { category } = resolvedParams;
-    const [rows] = category == 'allProducts' ? await db.query('SELECT * FROM products') : await db.query('SELECT * FROM products WHERE category = ? OR parent = ?', [category, category])
+    const [rows] = category == 'allProducts' ? await db.query('SELECT * FROM products LIMIT 10 OFFSET 0') : await db.query('SELECT * FROM products WHERE category = ? OR parent = ? LIMIT 10 OFFSET 0', [category, category])
     const products = rows as ProductsType[];
     return (
         <div className=' w-full h-[screen]'>
