@@ -19,12 +19,7 @@ import Image from 'next/image';
 import { toast } from 'sonner'
 import { voucherTypes } from '@/types/voucherTypes';
 
-import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
-} from "@/components/ui/accordion"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 
 import { RiErrorWarningFill } from "react-icons/ri";
 import { IoIosCheckmarkCircle } from "react-icons/io";
@@ -45,6 +40,10 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { useRouter } from 'next/navigation';
 import { ClipLoader } from 'react-spinners';
+
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
+
+
 const Checkout = () => {
     const finalCheckoutItems = useCartStore((state) => state.finalCheckoutItems)
     const [shippingOptions, setShippingOption] = useState('delivery');
@@ -487,21 +486,36 @@ const Checkout = () => {
                 </div>
 
                 <div>
-                    <Button onClick={() => {
-                        const totalPrice = finalCheckoutItems.reduce((sum, item) => sum + item.price * item.quantity, 0) + shippingCost;
-                        if (totalPrice > 100000) {
-                            alert('Order Price Maximum is 100000');
-                        } else {
-                            CheckoutProduct();
-                        }
-                    }} variant={'secondary'} className=' p-2 flex gap-2 items-center justify-center w-full' disabled={loading === true || finalCheckoutItems.length <= 0 || paymentOptions == '' || userAdress.length == 0}> {loading && (
-                        <ClipLoader
-
-                            color='black'
-                            size={20}
-                        />
-                    )}
-                        {loading ? "Please Wait..." : "Place Order"}</Button>
+                    <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                            <Button variant={'secondary'} className=' p-2 flex gap-2 items-center justify-center w-full' disabled={loading === true || finalCheckoutItems.length <= 0 || paymentOptions == '' || userAdress.length == 0}> {loading && (
+                                <ClipLoader
+                                    color='black'
+                                    size={20}
+                                />
+                            )}
+                                {loading ? "Please Wait..." : "Place Order"}</Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                            <AlertDialogHeader>
+                                <AlertDialogTitle>Ready to Place Your Order?</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                    By confirming, your order will be submitted for processing.
+                                </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction onClick={() => {
+                                    const totalPrice = finalCheckoutItems.reduce((sum, item) => sum + item.price * item.quantity, 0) + shippingCost;
+                                    if (totalPrice < 100000 && user != null) {
+                                        CheckoutProduct();
+                                    } else {
+                                        alert('Order Price Maximum is 100000');
+                                    }
+                                }}>Continue</AlertDialogAction>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialog>
                 </div>
 
 
