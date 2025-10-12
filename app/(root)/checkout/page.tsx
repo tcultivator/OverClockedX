@@ -410,23 +410,21 @@ const Checkout = () => {
                         </SheetHeader>
                         <div className='flex flex-col gap-2 items-center p-2'>
                             {vouchers.map((data, index) => (
-                                <div key={index} className='rounded-[10px] w-full inset-shadow-sm inset-shadow-white/50 p-2'>
-                                    <div className=' flex justify-between items-center'>
+                                <div key={index} className={`${data.is_used == true ? 'opacity-25' : 'opacity-100'} rounded flex justify-between w-full bg-[#1C6CFF]`}>
+                                    <div className=' flex flex-col items-center p-2'>
                                         <label className='' htmlFor="">{data.type}</label>
-                                        <label className={`${data.is_used == false ? 'text-green-400' : 'text-red-400'}`} htmlFor="">{data.is_used == false ? 'Available' : 'Already used'}</label>
+                                        <label htmlFor="" className='font-anton text-[25px]'>{new Intl.NumberFormat('en-PH', {
+                                            style: 'currency',
+                                            currency: 'PHP',
+                                        }).format(data.amount)}</label>
                                     </div>
-                                    <div className='flex justify-between '>
-                                        <div className='flex flex-col'>
-                                            <label className='text-xl' htmlFor="">{data.code}</label>
-                                            <label htmlFor="">{new Intl.NumberFormat('en-PH', {
-                                                style: 'currency',
-                                                currency: 'PHP',
-                                            }).format(data.amount)}</label>
-                                        </div>
+                                    <div className='w-max bg-red-400 h-full relative border-l border-white/40 flex items-center justify-center'>
+                                        <div className='w-[20px] bg-black absolute rounded-[50%] h-[20px] top-[-6px] left-[-10px]'></div>
+                                        <div className='w-[20px] bg-black absolute rounded-[50%] h-[20px] bottom-[-6px] left-[-10px]'></div>
                                         <SheetClose asChild>
-                                            <Button onClick={() => {
+                                            <button className='rotate-90 w-full  text-center items-center justify-center flex' onClick={() => {
                                                 applyVoucher(data)
-                                            }} variant={'secondary'} disabled={data.is_used == true}>Apply</Button>
+                                            }} disabled={data.is_used == true}>USE</button>
                                         </SheetClose>
 
                                     </div>
