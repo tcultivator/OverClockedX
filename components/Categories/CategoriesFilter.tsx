@@ -8,6 +8,7 @@ import { Button } from '../ui/button';
 import { useFilterStore } from '@/stores/filterStore';
 import { RiCloseLargeFill } from "react-icons/ri";
 import { brands } from '../../datasetAddress/brands';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select"
 const CategoriesFilter = () => {
     const searchParams = useSearchParams();
 
@@ -95,6 +96,13 @@ const CategoriesFilter = () => {
         window.history.pushState({}, '', `?${params.toString()}`);
 
     }
+
+    const clearBrandFilter = () => {
+        const params = new URLSearchParams(searchParams.toString());
+        params.delete('brands');
+        setSelectedBrands([])
+        window.history.pushState({}, '', `?${params.toString()}`);
+    }
     return (
         <div className=''>
             <div id="left" className={`w-full bg-black  ${displayFilter == false ? 'hidden' : 'block'} h-screen w-full box-border left-0 p-5  absolute top-0 md:relative   h-screen md:block lg:block xl:block font-thin md:w-[350px] md:inset-shadow-sm md:inset-shadow-white/50 z-50 md:rounded-[10px] md:p-5 md:z-10`}>
@@ -141,12 +149,19 @@ const CategoriesFilter = () => {
                     </div>
                     <div className='py-6 border-b border-gray-400 flex flex-col gap-2'>
                         <label className="text-white text-xl">Sort by</label>
-                        <select defaultValue={""} onChange={(e) => handleFilterChange("Sortby", e.target.value)} name="" id="sort-by">
-                            <option value="" disabled>Select</option>
-                            <option value="bestselling">Best Selling</option>
-                            <option value="ASC">Low to High</option>
-                            <option value="DESC">High to Low</option>
-                        </select>
+                        <Select onValueChange={(value) => handleFilterChange("Sortby", value)}>
+                            <SelectTrigger>
+                                <SelectValue className='text-white' placeholder="Select Sort by" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectGroup>
+                                    <SelectLabel>Sort by</SelectLabel>
+                                    <SelectItem value="bestselling">Best Selling</SelectItem>
+                                    <SelectItem value="ASC">Low to High</SelectItem>
+                                    <SelectItem value="DESC">High to Low</SelectItem>
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
                         {sortbyFilterState &&
                             <div>
                                 <button className='flex items-center justify-center gap-2' onClick={() => clearFilterSortby()}><BsFillXCircleFill className='text-red-400' /> Clear filter</button>
@@ -201,18 +216,17 @@ const CategoriesFilter = () => {
 
                     <div className='flex flex-col gap-2'>
                         <h1 className='text-xl'>Brands</h1>
-                        <div className='max-h-[300px] overflow-auto flex flex-col gap-2'>
+                        <div className='max-h-[250px] overflow-auto flex flex-col gap-2'>
                             <div className="flex flex-col gap-2 justify-start items-start">
                                 {brands.map((data, index) => (
                                     <div key={index} className='flex gap-2 items-center justify-start'>
-                                        <input type="checkbox" value={data} onChange={(e) => {
-                                            const alreadyCheck = selectedBrands.findIndex(item => item == data)
-                                            if (alreadyCheck == -1) {
-                                                setSelectedBrands(prev => [...prev, e.target.value])
+                                        <input type="checkbox" checked={selectedBrands.some(item => item === data)} onChange={(e) => {
+                                            if (e.target.checked) {
+                                                setSelectedBrands(prev => [...prev, data])
                                                 console.log(selectedBrands)
                                             }
                                             else {
-                                                selectedBrands.splice(alreadyCheck, 1)
+                                                setSelectedBrands(prev => prev.filter(item => item != data))
                                                 console.log(selectedBrands)
                                             }
 
@@ -223,7 +237,13 @@ const CategoriesFilter = () => {
                             </div>
                         </div>
                         <div className='flex justify-between items-center'>
-                            <label className='flex gap-2 items-center' htmlFor="">{selectedBrands.length}<span>Selected</span></label>
+                            <div className='flex gap-2 items-center'>
+                                {selectedBrands.length > 0 && <button onClick={() => {
+                                    clearBrandFilter()
+                                }} className='text-blue-400 underline text-[13px]'>clear</button>}
+                                <label className='flex gap-2 items-center' htmlFor="">{selectedBrands.length}<span>Selected</span></label>
+                            </div>
+
                             <Button onClick={() => handleBrandFilter()} className='flex items-center justify-center gap-3' variant={'secondary'}><FaCheckCircle />Apply</Button>
                         </div>
 

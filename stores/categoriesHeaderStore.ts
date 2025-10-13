@@ -8,21 +8,21 @@ type categDisplayType = {
     isList: boolean,
 }
 export const useCategoriesHeaderStore = create<categDisplayType>((set) => ({
-    productListDisplayOrientation: ['w-full  grid grid-cols-2  rounded-[10px] relative   p-5  gap-4 items-start sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5',
-        'bg-white/5 inset-shadow-sm inset-shadow-white/50 rounded-[10px]',
+    productListDisplayOrientation: ['w-full  grid grid-cols-2  rounded-[10px] relative   p-5  gap-4 items-start sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 ',
+        ' h-full inset-shadow-sm inset-shadow-white/50 rounded-[10px] relative pb-[23px]',
         'flex flex-col h-full justify-between gap-1 cursor-pointer p-4 rounded',
         'flex flex-col gap-1 cursor-pointer',
-        'w-full',
-        'w-full flex items-center gap-2 justify-center font-normal bg-white text-black py-2 px-3 md:text-[12px] py-2 px-3',
+        'w-full absolute bottom-0',
+        'w-full flex items-center gap-2 justify-center font-normal bg-white text-black py-2 px-3 md:text-[12px] py-2 px-3 rounded-b-[10px]',
         'w-full aspect-square'],
     setGridDisplay: () => {
         set({
-            productListDisplayOrientation: ['w-full  grid grid-cols-2  rounded-[10px] relative   p-5  gap-4 items-start sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5',
-                'bg-white/5 inset-shadow-sm inset-shadow-white/50 rounded-[10px]',
+            productListDisplayOrientation: ['w-full  grid grid-cols-2  rounded-[10px] relative   p-5  gap-4 items-start sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 ',
+                ' h-full inset-shadow-sm inset-shadow-white/50 rounded-[10px] relative pb-[23px]',
                 'flex flex-col h-full justify-between gap-1 cursor-pointer p-4 rounded',
                 'flex flex-col gap-1 cursor-pointer',
-                'w-full',
-                'w-full flex items-center gap-2 justify-center font-normal bg-white text-black py-2 px-3 md:text-[12px] py-2 px-3',
+                'w-full absolute bottom-0',
+                'w-full flex items-center gap-2 justify-center font-normal bg-white text-black py-2 px-3 md:text-[12px] py-2 px-3 rounded-b-[10px]',
                 'w-full aspect-square'],
             isList: false
         })

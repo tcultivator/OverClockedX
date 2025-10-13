@@ -157,7 +157,7 @@ const ProductList = ({ products, category }: Props) => {
         return () => listElement.removeEventListener('scroll', detectScroll);
     }, [])
     return (
-        <div className='flex flex-col max-h-[75vh] bg-black inset-shadow-sm inset-shadow-white/50 rounded-[10px]  justify-start w-full font-thin md:max-h-[88vh]'>
+        <div className='flex flex-col max-h-[75vh] bg-black inset-shadow-sm inset-shadow-white/50 rounded-[10px] justify-start w-full font-thin md:max-h-[88vh]'>
             <CategoriesHeader />
             <div ref={listRef} className='overflow-y-auto'>
                 <div id="right" className={`${loadingProducts ? 'opacity-25' : 'opacity-100'} ${productListDisplayOrientation[0]}`}>
@@ -203,7 +203,7 @@ const ProductList = ({ products, category }: Props) => {
                                             stocks: data.stocks,
                                             quantity: 1
                                         })
-                                    }} className={`${productListDisplayOrientation[5]}`}><TfiShoppingCart className='text-[15px]' /> Add to cart</button>
+                                    }} className={`${productListDisplayOrientation[5]}`}><TfiShoppingCart className='text-[15px] ' /> Add to cart</button>
                                 </div>
 
                             </div>
