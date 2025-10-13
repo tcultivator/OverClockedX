@@ -1,0 +1,35 @@
+export const brands = [
+  // Laptop brands
+  "APPLE",
+  "DELL",
+  "HP",
+  "LENOVO",
+  "ASUS",
+  "ACER",
+  "MSI",
+  "RAZER",
+  "MICROSOFT",
+
+  // Component brands
+  "INTEL",
+  "AMD",
+  "NVIDIA",
+  "GIGABYTE",
+  "ASROCK",
+  "ZOTAC",
+  "EVGA",
+  "CORSAIR",
+  "GSKILL",
+  "CRUCIAL",
+  "SAMSUNG",
+  "WESTERNDIGITAL",
+  "SEAGATE",
+  "KINGSTON",
+  "COOLERMASTER",
+  "NZXT",
+  "THERMALTAKE",
+  "BEQUIET",
+  "NOCTUA",
+  "ASUSROG",
+  "PALIT"
+];

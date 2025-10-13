@@ -45,11 +45,14 @@ const ProductList = ({ products, category }: Props) => {
         const Availability = searchParams.get('availability') || ''
         const low = searchParams.get('low') || ''
         const high = searchParams.get('high') || ''
+        const brands = searchParams.get('brands') || ''
         setOffset(0)
         offsetRef.current = 0;
         setNoProductMessage(false)
         noProductMessageRef.current = false;
         console.log('eto ung offset ', offsetRef.current)
+        const arrayBrands = brands.split(',')
+        console.log(arrayBrands)
 
         setLoadingProducts(true)
         const getFilter = async () => {
@@ -58,7 +61,7 @@ const ProductList = ({ products, category }: Props) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ category: category, SortBy: SortBy, Availability: Availability, low: low, high: high, offset: offsetRef.current }),
+                body: JSON.stringify({ category: category, SortBy: SortBy, Availability: Availability, low: low, high: high, offset: offsetRef.current, brands: arrayBrands }),
             })
             const response = await res.json()
             setFinalProducts(response.result)
@@ -115,6 +118,8 @@ const ProductList = ({ products, category }: Props) => {
                     const Availability = searchParams.get('availability') || ''
                     const low = searchParams.get('low') || ''
                     const high = searchParams.get('high') || ''
+                    const brands = searchParams.get('brands') || ''
+                    const arrayBrands = brands.split(',')
                     console.log('eto ung sa infinite scrolling')
                     const getFilter = async () => {
                         const res = await fetch('/api/filterProducts', {
@@ -122,7 +127,7 @@ const ProductList = ({ products, category }: Props) => {
                             headers: {
                                 'Content-Type': 'application/json',
                             },
-                            body: JSON.stringify({ category: category, SortBy: SortBy, Availability: Availability, low: low, high: high, offset: offsetRef.current }),
+                            body: JSON.stringify({ category: category, SortBy: SortBy, Availability: Availability, low: low, high: high, offset: offsetRef.current, brands: arrayBrands }),
                         })
                         const response = await res.json()
                         setFinalProducts(prev => [...prev, ...response.result])

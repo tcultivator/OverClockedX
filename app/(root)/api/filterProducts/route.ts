@@ -6,9 +6,6 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const query = body.category == 'allProducts' ? 'SELECT * FROM products WHERE id !=0 ' : 'SELECT * FROM products WHERE (category = ? OR parent = ?) ';
 
-    console.log(query + 'ORDER BY price ' + body.SortBy)
-    console.log(body)
-    console.log(body.Availability)
     const availability = () => {
         switch (body.Availability) {
             case 'In Stock':
@@ -45,9 +42,20 @@ export async function POST(req: NextRequest) {
     }
     const PriceRangeValue = PriceRange()
     console.log('eto ung laman ng price range value, ', PriceRangeValue)
+    console.log('eto laman ng body.brands, ', body.brands)  
+    const selectedBrands = () => {
+        if (body.brands[0] != '' && body.brands != undefined) {
+            return ` AND (${body.brands.map((item: string) => `brand = '${item}'`).join(" OR ")})`
+        }
+        return '';
+    };
+
+    const finalSelectedBrands = selectedBrands()
+    console.log('eto laman ng selected brands, ', finalSelectedBrands)
 
     try {
-        const [rows] = body.category == 'allProducts' ? await db.query(query + availabilityValue + PriceRangeValue + SortByValue + ' LIMIT 10 OFFSET ?', [body.offset]) : await db.query(query + availabilityValue + PriceRangeValue + SortByValue + ' LIMIT 10 OFFSET ?', [body.category, body.category, body.offset])
+        console.log(query + finalSelectedBrands + availabilityValue + PriceRangeValue + SortByValue + ' LIMIT 10 OFFSET ?')
+        const [rows] = body.category == 'allProducts' ? await db.query(query + finalSelectedBrands + availabilityValue + PriceRangeValue + SortByValue + ' LIMIT 10 OFFSET ?', [body.offset]) : await db.query(query + finalSelectedBrands + availabilityValue + PriceRangeValue + SortByValue + ' LIMIT 10 OFFSET ?', [body.category, body.category, body.offset])
         const result = rows as ProductsType[]
         return NextResponse.json({ result })
     } catch (err) {

@@ -7,7 +7,7 @@ import { Slider } from "@/components/ui/slider"
 import { Button } from '../ui/button';
 import { useFilterStore } from '@/stores/filterStore';
 import { RiCloseLargeFill } from "react-icons/ri";
-
+import { brands } from '../../datasetAddress/brands';
 const CategoriesFilter = () => {
     const searchParams = useSearchParams();
 
@@ -30,6 +30,7 @@ const CategoriesFilter = () => {
 
     };
 
+    const [selectedBrands, setSelectedBrands] = useState<string[]>([])
 
     const handleInputFilter = () => {
         setPriceRangeFilterState(true)
@@ -85,117 +86,152 @@ const CategoriesFilter = () => {
     const [value, setValue] = useState([0, 100000])
     const displayFilter = useFilterStore((state) => state.displayFilter)
     const setFilterDisplay = useFilterStore((state) => state.setFilterDisplay)
+
+
+
+    const handleBrandFilter = () => {
+        const params = new URLSearchParams(searchParams.toString());
+        params.set('brands', selectedBrands.toString());
+        window.history.pushState({}, '', `?${params.toString()}`);
+
+    }
     return (
-        <div id="left" className={`w-full bg-black  ${displayFilter == false ? 'hidden' : 'block'} h-screen w-full box-border left-0 p-5  absolute   top-0 h-screen md:block lg:block xl:block font-thin md:sticky md:relative md:w-[350px] md:inset-shadow-sm md:inset-shadow-white/50 z-50 md:rounded-[10px] md:p-5`}>
-            <div className="sticky top-0">
-                <div className='w-full flex justify-end'>
-                    <button className='block md:hidden ' onClick={() => {
-                        console.log(displayFilter)
-                        setFilterDisplay(false)
-                    }}><RiCloseLargeFill /></button>
-                </div>
-
-                <div className='py-6 border-b border-gray-400 flex flex-col gap-2'>
-                    <h1 className='text-xl'>Availability</h1>
-
-                    <div className='flex gap-1 items-center'>
-                        <input
-                            id='In Stock'
-                            type="radio"
-                            name="availability"
-                            value="In Stock"
-                            checked={availabilityState === "In Stock"}
-                            onChange={(e) => handleFilterChange("availability", e.target.value)}
-                        />
-                        <label htmlFor='In Stock' className='cursor-pointer'>In Stock</label>
+        <div className=''>
+            <div id="left" className={`w-full bg-black  ${displayFilter == false ? 'hidden' : 'block'} h-screen w-full box-border left-0 p-5  absolute top-0 md:relative   h-screen md:block lg:block xl:block font-thin md:w-[350px] md:inset-shadow-sm md:inset-shadow-white/50 z-50 md:rounded-[10px] md:p-5 md:z-10`}>
+                <div className="sticky top-0">
+                    <div className='w-full flex justify-end'>
+                        <button className='block md:hidden ' onClick={() => {
+                            console.log(displayFilter)
+                            setFilterDisplay(false)
+                        }}><RiCloseLargeFill /></button>
                     </div>
 
-                    <div className='flex gap-1 items-center'>
-                        <input
-                            id='Out of Stock'
-                            type="radio"
-                            name="availability"
-                            value="Out of Stock"
-                            checked={availabilityState === "Out of Stock"}
-                            onChange={(e) => handleFilterChange("availability", e.target.value)}
-                        />
-                        <label htmlFor="Out of Stock" className='cursor-pointer'>Out of Stock</label>
-                    </div>
-                    {availabilityFilterState &&
-                        <div>
-                            <button className='flex items-center justify-center gap-2' onClick={() => clearFilterAvailability()}><BsFillXCircleFill className='text-red-400' /> Clear filter</button>
-                        </div>
-                    }
+                    <div className='py-6 border-b border-gray-400 flex flex-col gap-2'>
+                        <h1 className='text-xl'>Availability</h1>
 
-                </div>
-                <div className='py-6 border-b border-gray-400 flex flex-col gap-2'>
-                    <label className="text-white text-xl">Sort by</label>
-                    <select defaultValue={""} onChange={(e) => handleFilterChange("Sortby", e.target.value)} name="" id="sort-by">
-                        <option value="" disabled>Select</option>
-                        <option value="bestselling">Best Selling</option>
-                        <option value="ASC">Low to High</option>
-                        <option value="DESC">High to Low</option>
-                    </select>
-                    {sortbyFilterState &&
-                        <div>
-                            <button className='flex items-center justify-center gap-2' onClick={() => clearFilterSortby()}><BsFillXCircleFill className='text-red-400' /> Clear filter</button>
-                        </div>
-                    }
-                </div>
-                <div className='py-6 border-b border-gray-400 flex flex-col gap-4'>
-                    <h1 className='text-xl '>Price</h1>
-                    <div className='flex box-border  gap-2 items-center relative'>
-                        <div className='box-border flex items-center'>
-                            <input className='w-full p-2 pl-5 border border-gray-400 rounded-[25px]' type="number" placeholder="0"
-                                value={value[0]}
-                                onChange={(e) => {
-                                    const newValue = Number(e.target.value);
-                                    setValue([newValue, value[1]]);
-                                }}
+                        <div className='flex gap-1 items-center'>
+                            <input
+                                id='In Stock'
+                                type="radio"
+                                name="availability"
+                                value="In Stock"
+                                checked={availabilityState === "In Stock"}
+                                onChange={(e) => handleFilterChange("availability", e.target.value)}
                             />
-                            <label className='absolute ml-3' htmlFor="">₱</label>
+                            <label htmlFor='In Stock' className='cursor-pointer'>In Stock</label>
                         </div>
-                        -
-                        <div className='box-border flex items-center relative'>
-                            <input className='w-full p-2 pl-5 border border-gray-400 rounded-[25px]' type="number" placeholder="100000"
-                                value={value[1]}
-                                onChange={(e) => {
-                                    const newValue = Number(e.target.value);
-                                    setValue([value[0], newValue]);
-                                }}
+
+                        <div className='flex gap-1 items-center'>
+                            <input
+                                id='Out of Stock'
+                                type="radio"
+                                name="availability"
+                                value="Out of Stock"
+                                checked={availabilityState === "Out of Stock"}
+                                onChange={(e) => handleFilterChange("availability", e.target.value)}
                             />
-                            <label className='absolute ml-3' htmlFor="">₱</label>
+                            <label htmlFor="Out of Stock" className='cursor-pointer'>Out of Stock</label>
                         </div>
+                        {availabilityFilterState &&
+                            <div>
+                                <button className='flex items-center justify-center gap-2' onClick={() => clearFilterAvailability()}><BsFillXCircleFill className='text-red-400' /> Clear filter</button>
+                            </div>
+                        }
 
                     </div>
-                    <Slider
-                        value={value}
-                        onValueChange={setValue}
-                        max={100000}
-                        min={0}
-                        step={10}
-                        className="mt-2 w-full"
-                        aria-label="Price Range"
-                    />
-                    <div >
-                        <Button onClick={() => handleInputFilter()} className='w-full flex items-center justify-center gap-3' variant={'secondary'}><FaCheckCircle />Apply</Button>
+                    <div className='py-6 border-b border-gray-400 flex flex-col gap-2'>
+                        <label className="text-white text-xl">Sort by</label>
+                        <select defaultValue={""} onChange={(e) => handleFilterChange("Sortby", e.target.value)} name="" id="sort-by">
+                            <option value="" disabled>Select</option>
+                            <option value="bestselling">Best Selling</option>
+                            <option value="ASC">Low to High</option>
+                            <option value="DESC">High to Low</option>
+                        </select>
+                        {sortbyFilterState &&
+                            <div>
+                                <button className='flex items-center justify-center gap-2' onClick={() => clearFilterSortby()}><BsFillXCircleFill className='text-red-400' /> Clear filter</button>
+                            </div>
+                        }
                     </div>
-                    {
-                        priceRangeFilterState &&
-                        <div>
-                            <button className='flex items-center justify-center gap-2' onClick={() => clearFilterPriceRange()}><BsFillXCircleFill className='text-red-400' /> Clear filter</button>
-                        </div>
-                    }
-                </div>
+                    <div className='py-6 border-b border-gray-400 flex flex-col gap-4'>
+                        <h1 className='text-xl '>Price</h1>
+                        <div className='flex box-border  gap-2 items-center relative'>
+                            <div className='box-border flex items-center'>
+                                <input className='w-full p-2 pl-5 border border-gray-400 rounded-[25px]' type="number" placeholder="0"
+                                    value={value[0]}
+                                    onChange={(e) => {
+                                        const newValue = Number(e.target.value);
+                                        setValue([newValue, value[1]]);
+                                    }}
+                                />
+                                <label className='absolute ml-3' htmlFor="">₱</label>
+                            </div>
+                            -
+                            <div className='box-border flex items-center relative'>
+                                <input className='w-full p-2 pl-5 border border-gray-400 rounded-[25px]' type="number" placeholder="100000"
+                                    value={value[1]}
+                                    onChange={(e) => {
+                                        const newValue = Number(e.target.value);
+                                        setValue([value[0], newValue]);
+                                    }}
+                                />
+                                <label className='absolute ml-3' htmlFor="">₱</label>
+                            </div>
 
-                <div>
-                    <h1 className='text-xl'>Brands</h1>
-                    <div className="flex flex-col justify-start items-start">
+                        </div>
+                        <Slider
+                            value={value}
+                            onValueChange={setValue}
+                            max={100000}
+                            min={0}
+                            step={10}
+                            className="mt-2 w-full"
+                            aria-label="Price Range"
+                        />
+                        <div >
+                            <Button onClick={() => handleInputFilter()} className='w-full flex items-center justify-center gap-3' variant={'secondary'}><FaCheckCircle />Apply</Button>
+                        </div>
+                        {
+                            priceRangeFilterState &&
+                            <div>
+                                <button className='flex items-center justify-center gap-2' onClick={() => clearFilterPriceRange()}><BsFillXCircleFill className='text-red-400' /> Clear filter</button>
+                            </div>
+                        }
+                    </div>
+
+                    <div className='flex flex-col gap-2'>
+                        <h1 className='text-xl'>Brands</h1>
+                        <div className='max-h-[300px] overflow-auto flex flex-col gap-2'>
+                            <div className="flex flex-col gap-2 justify-start items-start">
+                                {brands.map((data, index) => (
+                                    <div key={index} className='flex gap-2 items-center justify-start'>
+                                        <input type="checkbox" value={data} onChange={(e) => {
+                                            const alreadyCheck = selectedBrands.findIndex(item => item == data)
+                                            if (alreadyCheck == -1) {
+                                                setSelectedBrands(prev => [...prev, e.target.value])
+                                                console.log(selectedBrands)
+                                            }
+                                            else {
+                                                selectedBrands.splice(alreadyCheck, 1)
+                                                console.log(selectedBrands)
+                                            }
+
+                                        }} />
+                                        <label htmlFor="">{data}</label>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                        <div className='flex justify-between items-center'>
+                            <label className='flex gap-2 items-center' htmlFor="">{selectedBrands.length}<span>Selected</span></label>
+                            <Button onClick={() => handleBrandFilter()} className='flex items-center justify-center gap-3' variant={'secondary'}><FaCheckCircle />Apply</Button>
+                        </div>
 
                     </div>
                 </div>
             </div>
         </div>
+
     )
 }
 
