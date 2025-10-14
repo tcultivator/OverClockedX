@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { doCredentialsSignin } from '../../actions/doCredentialsSignin';
 import { ClipLoader } from 'react-spinners';
+import Link from 'next/link';
 const CredentialsForm = () => {
     const [error, setError] = useState(false)
     const [message, setMessage] = useState('')
@@ -53,6 +54,9 @@ const CredentialsForm = () => {
                 <div className="w-full">
                     <Label htmlFor="">Password</Label>
                     <Input type="password" required placeholder="Password" name='password' className='bg-[#161616]' />
+                </div>
+                <div className='w-full flex justify-end '>
+                    <Link className='underline text-blue-400 text-[13px]' href={'/forgotpassword'}>forgot password</Link>
                 </div>
                 <Button type='submit' variant={'secondary'} className="">{loading && (
                     <ClipLoader
