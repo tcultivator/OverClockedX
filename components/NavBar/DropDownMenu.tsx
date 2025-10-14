@@ -1,9 +1,15 @@
 "use client";
 import React from 'react'
 import { useState } from 'react';
-import {NavigationMenu,NavigationMenuContent,NavigationMenuItem,NavigationMenuLink,NavigationMenuList,NavigationMenuTrigger} from "@/components/ui/navigation-menu"
+import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from "@/components/ui/navigation-menu"
 import { useRouter } from 'next/navigation';
-const DropDownMenu = () => {
+import dynamic from 'next/dynamic'
+
+export const DropDownMenu = dynamic(() => import('@/components/NavBar/DropDownMenu'), {
+    ssr: false,
+})
+
+const HeaderDropDown = () => {
     const router = useRouter();
     const Computer = ['Desktop', 'Laptop']
     const Components = ['PcCase', 'CPU', 'Motherboard', 'Memory', 'Storage', 'GPU', 'PowerSupply']
@@ -76,7 +82,7 @@ const DropDownMenu = () => {
             <div onClick={() => {
                 setSideBar(prev => !prev)
                 console.log('eto ung sidebar')
-            }} className={`flex flex-col gap-1 cursor-pointer ${sideBar? 'absolute px-5':'px-0'} lg:hidden z-50 `}>
+            }} className={`flex flex-col gap-1 cursor-pointer ${sideBar ? 'absolute px-5' : 'px-0'} lg:hidden z-50 `}>
                 <div
 
                     className={`bg-white rounded w-[15px] h-[2px] transition duration-200 ${sideBar ? 'absolute rotate-45' : 'relative rotate-0'}`}></div>
@@ -92,4 +98,4 @@ const DropDownMenu = () => {
     )
 }
 
-export default DropDownMenu
+export default HeaderDropDown

@@ -8,4 +8,6 @@ export interface Accounts {
     gender: string;
     role: string;
     login_method: string;
+    firstTime_signin: boolean;
+
 }

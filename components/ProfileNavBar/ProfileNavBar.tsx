@@ -19,7 +19,7 @@ const ProfileNavBar = async () => {
     const user = result[0] as Accounts[]
     return (
         <div className="flex flex-col bg-black/100 rounded-t-xl inset-shadow-sm inset-shadow-white/50 lg:inset-shadow-none lg:shadow-none box-border w-full lg:w-[200px] lg:bg-black/0">
-            <div className='flex gap-3 p-10 lg:p-2'>
+            <div className='flex gap-3 p-10 items-center lg:p-2'>
                 <Image src={user[0].profile_Image} alt="" className='w-[50px] rounded-[50%]' width={50} height={50} />
                 <div className='flex flex-col gap-0 justify-start text-start'>
                     <label htmlFor="">{user[0].username}</label>

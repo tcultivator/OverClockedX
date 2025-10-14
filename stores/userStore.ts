@@ -64,4 +64,5 @@ export const useUserStore = create<useStore>((set) => ({
             description: "Successfully added shipping information",
         })
     },
+    
 }))
