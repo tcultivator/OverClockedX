@@ -29,7 +29,8 @@ const SetNewPassword = ({ firstTimeSignin }: props) => {
 
     const submitNewPassword = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setLoading('Setting up new password...')
+        setLoading("Setting up new password...");
+
         try {
             const response = await fetch('/api/setUpNewPassword', {
                 method: 'PUT',
@@ -56,7 +57,7 @@ const SetNewPassword = ({ firstTimeSignin }: props) => {
                     <AlertDialogHeader>
                         <AlertDialogTitle>Setup New secure password</AlertDialogTitle>
                         <AlertDialogDescription>
-                            You're first time signin please setup new secure password!
+                            You&apos;re first time signin please setup new secure password!
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>

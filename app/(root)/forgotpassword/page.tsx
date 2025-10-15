@@ -9,7 +9,7 @@ import { ClipLoader } from 'react-spinners';
 import { useLoading } from '@/stores/loadingStore';
 import { useAlertNotification } from '@/stores/alertNotificationStore';
 import { alertClasses } from '@/utils/alertNotificationTypes';
-const page = () => {
+const ForgotPassword = () => {
     const [email, setEmail] = useState('')
 
     //zustand state for loading in button
@@ -75,4 +75,4 @@ const page = () => {
     )
 }
 
-export default page
+export default ForgotPassword
