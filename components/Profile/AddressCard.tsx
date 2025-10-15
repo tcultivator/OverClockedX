@@ -10,12 +10,15 @@ import { barangaysJaen } from '@/datasetAddress/barangay'
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { UserAddress } from '@/types/UserAddressTypes'
+import { useLoading } from '@/stores/loadingStore';
 interface Props {
     address?: UserAddress;
     email?: string | null | undefined
 }
 const AddressCard = ({ address, email }: Props) => {
-    const [loading, setLoading] = useState(false)
+    //zustand state for loading in button
+    const buttonLoading = useLoading((state) => state.buttonLoading)
+    const setButtonLoading = useLoading((state) => state.setButtonLoading)
     const [rName, setRName] = useState<string>(address?.rname ?? '');
     const [country, setCountry] = useState<string>(address?.country ?? '');
     const [cityMunicipality, setCityMunicipality] = useState<string>(address?.cityMunicipality ?? '');
@@ -28,7 +31,7 @@ const AddressCard = ({ address, email }: Props) => {
             console.log('testing to')
             return
         }
-        setLoading(true)
+        setButtonLoading(true)
         const res = await fetch('/api/addressRoute', {
             method: 'POST',
             headers: {
@@ -38,7 +41,7 @@ const AddressCard = ({ address, email }: Props) => {
         })
         const result = await res.json()
         setTimeout(() => {
-            setLoading(false)
+            setButtonLoading(false)
             console.log('the request is done ', result)
         }, 1000);
     }
@@ -106,17 +109,17 @@ const AddressCard = ({ address, email }: Props) => {
 
                         <button
                             type="submit"
-                            disabled={loading === true}
+                            disabled={buttonLoading === true}
                             className="bg-green-400 w-max px-6 py-2 text-center flex justify-center items-center gap-2"
                         >
-                            {loading && (
+                            {buttonLoading && (
                                 <ClipLoader
 
                                     color='white'
                                     size={20}
                                 />
                             )}
-                            {loading ? "Saving..." : "Save"}
+                            {buttonLoading ? "Saving..." : "Save"}
                         </button>
 
                     </form>

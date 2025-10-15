@@ -13,12 +13,15 @@ export async function POST(req: NextRequest) {
         const checkQuery = 'SELECT * FROM reset_logs WHERE reset_token = ? AND expired_at > NOW()'
         const [rows] = await db.query(checkQuery, [body.token])
         const result = rows as reset_logs[]
-        if (result.length === 0) return NextResponse.json({ status: 500 })
+        if (result.length === 0) return NextResponse.json({ status: 401 })
+
         const hashedPassword = await bcrypt.hash(body.newpassword, 10)
         const updateQuery = 'UPDATE accounts SET password = ? WHERE email = ?'
         await db.query(updateQuery, [hashedPassword, body.email])
+
         const deleteQuery = 'DELETE FROM reset_logs WHERE email = ? AND reset_token = ?'
         await db.query(deleteQuery, [body.email, body.token])
+        
         return NextResponse.json({ status: 200 })
     } catch (err) {
         console.log(err)

@@ -1,13 +1,8 @@
 import db from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
-import nodemailer from 'nodemailer'
 import { Accounts } from "@/types/AccountsType";
 import { RandomPassword } from "@/PasswordGenerator/RandomPassword";
-type sendMailProps = {
-    to: string;
-    sub: string;
-    message: string;
-}
+import { sendMail } from "@/lib/nodemailer";
 export async function POST(req: NextRequest) {
     const body = await req.json()
     try {
@@ -32,22 +27,3 @@ export async function POST(req: NextRequest) {
 }
 
 
-const transporter = nodemailer.createTransport({
-    secure: true,
-    host: process.env.NODEMAILER_HOST,
-    port: 465,
-    auth: {
-        user: process.env.NODEMAILER_USER,
-        pass: process.env.NODEMAILER_PASS
-    }
-})
-
-
-function sendMail({ to, sub, message }: sendMailProps) {
-    transporter.sendMail({
-        to: to,
-        subject: sub,
-        html: message
-    })
-    console.log('message Sent')
-}

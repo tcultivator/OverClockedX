@@ -24,7 +24,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { RiErrorWarningFill } from "react-icons/ri";
 import { IoIosCheckmarkCircle } from "react-icons/io";
 
-
+import { useLoading } from '@/stores/loadingStore';
 type GcashCB = {
     referenceId: string;
     actions: {
@@ -53,14 +53,20 @@ const Checkout = () => {
     const [paymentOptions, setPaymentOptions] = useState('');
     const user = useUserStore((state) => state.user)
     const router = useRouter();
-    const [loading, setLoading] = useState(false)
 
+    //zustand state for loading in button
+    const buttonLoading = useLoading((state) => state.buttonLoading)
+    const setButtonLoading = useLoading((state) => state.setButtonLoading)
+
+    //zustand state for updating items from checkout
     const updateQuantityOfFinalCheckoutItem = useCartStore((state) => state.updateQuantityOfFinalCheckoutItem)
     const removeItemFromFinalCheckoutItems = useCartStore((state) => state.removeItemFromFinalCheckoutItems)
 
     const addToUserAdress = useUserStore((state) => state.addToUserAdress)
     const userAdress = useUserStore((state) => state.userAdress)
 
+
+    //make this as single state
     const [rName, setRName] = useState<string>('');
     const [country, setCountry] = useState<string>('');
     const [cityMunicipality, setCityMunicipality] = useState<string>('');
@@ -70,13 +76,16 @@ const Checkout = () => {
     const [email, setEmail] = useState<string>('');
     const [phoneNumber, setPhoneNumber] = useState<string | number>('');
 
-
+    //zustand state for updating shipping information
     const CustomInput = useUserStore((state) => state.CustomInput)
     const addCustomAddress = useUserStore((state) => state.addCustomAddress)
 
+    //zustand state for getting the voucher of that user
     const getAllVouchers = useVoucherStore((state) => state.getAllVouchers)
     const vouchers = useVoucherStore((state) => state.vouchers)
     const [voucherAmount, setVoucherAmount] = useState(0)
+
+    // this is the configuration for shipping options, if user select delivery, the shipping cost will increase while if pickup no shipping cost
     useEffect(() => {
         switch (shippingOptions) {
             case 'delivery':
@@ -96,9 +105,9 @@ const Checkout = () => {
 
 
 
-
+    //checkout the selected items,
     const CheckoutProduct = async () => {
-        setLoading(true)
+        setButtonLoading(true)
         switch (paymentOptions) {
             case 'Gcash':
                 const res = await fetch('/api/create-gcash-payment', {
@@ -131,7 +140,7 @@ const Checkout = () => {
                 console.log("eto laman ng inser orderr ", insertOrdersDone)
                 if (insertOrdersDone.status == 200) {
                     router.push(data.actions[0].url);
-                    setLoading(false)
+
                 }
 
                 break;
@@ -146,11 +155,13 @@ const Checkout = () => {
                 alert('please select payment options to continue!')
                 break;
         }
+        setButtonLoading(false)
 
     }
-
+    //this apply voucher, this reduce the cost based on voucher type, if shipping voucher the shipping cost is reduce
     const applyVoucher = (voucher: voucherTypes) => {
         setVoucherAmount(voucher.amount)
+        //added a toast that can undo the selected voucher
         toast("Event has been created", {
             description: "Discount Voucher is added successfully",
             action: {
@@ -486,13 +497,13 @@ const Checkout = () => {
                 <div>
                     <AlertDialog>
                         <AlertDialogTrigger asChild>
-                            <Button variant={'secondary'} className=' p-2 flex gap-2 items-center justify-center w-full' disabled={loading === true || finalCheckoutItems.length <= 0 || paymentOptions == '' || userAdress.length == 0}> {loading && (
+                            <Button variant={'secondary'} className=' p-2 flex gap-2 items-center justify-center w-full' disabled={buttonLoading === true || finalCheckoutItems.length <= 0 || paymentOptions == '' || userAdress.length == 0}> {buttonLoading && (
                                 <ClipLoader
                                     color='black'
                                     size={20}
                                 />
                             )}
-                                {loading ? "Please Wait..." : "Place Order"}</Button>
+                                {buttonLoading ? "Please Wait..." : "Place Order"}</Button>
                         </AlertDialogTrigger>
                         <AlertDialogContent>
                             <AlertDialogHeader>

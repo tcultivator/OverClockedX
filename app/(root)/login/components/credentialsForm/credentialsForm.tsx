@@ -8,45 +8,45 @@ import { useRouter } from 'next/navigation';
 import { doCredentialsSignin } from '../../actions/doCredentialsSignin';
 import { ClipLoader } from 'react-spinners';
 import Link from 'next/link';
+import { useAlertNotification } from '@/stores/alertNotificationStore';
+import { alertClasses } from '@/utils/alertNotificationTypes';
+import { useLoading } from '@/stores/loadingStore';
 const CredentialsForm = () => {
-    const [error, setError] = useState(false)
-    const [message, setMessage] = useState('')
-    const [loading, setLoading] = useState(false)
     const navigate = useRouter()
+
+    //zustand state for loading in button
+    const buttonLoading = useLoading((state) => state.buttonLoading)
+    const setButtonLoading = useLoading((state) => state.setButtonLoading)
+    //zustand state for alert notification in forms
+    const alertNotif = useAlertNotification((state) => state.alertNotif)
+    const setAlertNotif = useAlertNotification((state) => state.setAlertNotif)
+
     async function submitCredentialsSignin(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         const formdata = new FormData(e.currentTarget)
-        setLoading(true)
+        setButtonLoading(true)
         try {
             const result = await doCredentialsSignin(formdata)
             if (result.error) {
-                setError(true)
-                setMessage(result.error)
-                setTimeout(() => {
-                    setMessage('')
-                }, 2000);
+                setAlertNotif({ display: true, message: 'Failed to sign in with credentials, please try again!', alertType: 'error' })
             }
-            setMessage('success signin')
-            setError(false)
-            setLoading(false)
+            setAlertNotif({ display: true, message: 'Signin success full, Redirecting to signin', alertType: 'success' })
+            setButtonLoading(false)
             setTimeout(() => {
                 navigate.push('/profile')
-                setMessage('')
             }, 1000);
         } catch (err) {
-            setMessage('Something went wrong. Please try again.')
-            setLoading(false)
-            setError(true)
-            setTimeout(() => {
-                setMessage('')
-            }, 2000);
+            setAlertNotif({ display: true, message: 'Something went wrong, please try again!', alertType: 'error' })
+            setButtonLoading(false)
         }
     }
     return (
 
         <div>
             <form onSubmit={submitCredentialsSignin} className="flex flex-col gap-3 text-white">
-                {message != '' && <div className={`${error == false ? 'text-[#30B467] text-[13px] p-2 bg-[#A9F0AC] border border-[#30B467] rounded-[10px] text-center flex item-center justify-center' : 'text-[#EF3F3F] text-[13px] p-2 bg-[#FAC0C5] border border-[#EF3F3F] rounded-[10px] text-center flex item-center justify-center'}`}>{message}</div>}
+                {alertNotif.display &&
+                    <div className={`${alertClasses[alertNotif.alertType]}`}>{alertNotif.message}</div>
+                }
                 <div className="w-full ">
                     <Label htmlFor="">Email</Label>
                     <Input type="email" required placeholder="Email" name='email' className='bg-[#161616]' />
@@ -58,13 +58,13 @@ const CredentialsForm = () => {
                 <div className='w-full flex justify-end '>
                     <Link className='underline text-blue-400 text-[13px]' href={'/forgotpassword'}>forgot password</Link>
                 </div>
-                <Button type='submit' variant={'secondary'} className="">{loading && (
+                <Button type='submit' variant={'secondary'} className="">{buttonLoading && (
                     <ClipLoader
                         color='black'
                         size={20}
                     />
                 )}
-                    {loading ? "Please Wait..." : "Signin"}</Button>
+                    {buttonLoading ? "Please Wait..." : "Signin"}</Button>
             </form>
 
         </div>

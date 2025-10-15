@@ -8,6 +8,9 @@ import { Label } from '@/components/ui/label'
 import { LiaTimesSolid } from "react-icons/lia";
 import { Button } from '@/components/ui/button'
 import { ClipLoader } from 'react-spinners';
+import { useLoading } from '@/stores/loadingStore';
+import { useAlertNotification } from '@/stores/alertNotificationStore';
+import { alertClasses } from '@/utils/alertNotificationTypes';
 type reset_logs = {
     id: number;
     email: string;
@@ -20,8 +23,15 @@ const ResetPage = () => {
     const router = useRouter()
     const [user, setUser] = useState<reset_logs>()
     const [newpass, setNewpass] = useState('')
-    const [message, setMessage] = useState(false)
-    const [loading, setLoading] = useState(false)
+
+
+    //zustand state for loading in button
+    const buttonLoading = useLoading((state) => state.buttonLoading)
+    const setButtonLoading = useLoading((state) => state.setButtonLoading)
+    //zustand state for alert notification in forms
+    const alertNotif = useAlertNotification((state) => state.alertNotif)
+    const setAlertNotif = useAlertNotification((state) => state.setAlertNotif)
+
     useEffect(() => {
         const verifyToken = async () => {
             const checkToken = await fetch('/api/forgotpassword/checkToken', {
@@ -46,7 +56,7 @@ const ResetPage = () => {
 
     const submitNewPassword = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        setLoading(true)
+        setButtonLoading(true)
         const submitNew = await fetch('/api/forgotpassword/submitNewPassword', {
             method: 'POST',
             headers: {
@@ -55,15 +65,24 @@ const ResetPage = () => {
             body: JSON.stringify({ email: user?.email, newpassword: newpass, token: user?.reset_token, expired: user?.expired_at })
         })
         const result = await submitNew.json()
-        if (result.status == 500) {
-            setLoading(false)
-        } else {
-            setMessage(true)
-            setLoading(false)
-            setTimeout(()=>{
-                router.push('/login')
-            },1000)
+        switch (result.status) {
+            case 401:
+                setAlertNotif({ display: true, message: 'Invalid Token', alertType: 'warning' })
+                break;
+
+            case 200:
+                setAlertNotif({ display: true, message: 'Your new password is set! Redirecting to signin', alertType: 'success' })
+                setTimeout(() => {
+                    router.push('/login')
+                }, 1000)
+                break;
+
+            default:
+                setAlertNotif({ display: true, message: 'Something went wrong please try again', alertType: 'error' })
+                break;
         }
+        setButtonLoading(false)
+        
     }
     return (
         <div className='w-screen h-[70vh] flex'>
@@ -72,7 +91,11 @@ const ResetPage = () => {
                     <Label className='text-white text-[18px] text-center w-full  flex justify-center py-1' htmlFor="">RESET PASSWORD</Label>
                     <button className='absolute top-0 right-0'><LiaTimesSolid /></button>
                     <form onSubmit={submitNewPassword} className="flex flex-col gap-3 text-white">
-                        {message && <div className='text-[#30B467] text-[13px] p-2 bg-[#A9F0AC] border border-[#30B467] rounded-[10px] text-center flex item-center justify-center'>Your new password is set!</div>}
+
+                        {alertNotif.display &&
+                            <div className={`${alertClasses[alertNotif.alertType]}`}>{alertNotif.message}</div>
+                        }
+
                         <div className="w-full flex flex-col gap-1">
                             <Label htmlFor="">Email</Label>
                             <Input value={user?.email ?? ""} disabled type="email" required placeholder="Email" name='email' className='bg-[#161616]' />
@@ -82,7 +105,7 @@ const ResetPage = () => {
                             <Input onChange={(e) => setNewpass(e.target.value)} type="password" required placeholder="New Password" name='password' className='bg-[#161616]' />
                         </div>
                         <div className="w-full flex flex-col gap-1">
-                            <Button type='submit' variant={'secondary'}>{loading && <ClipLoader color='black'
+                            <Button type='submit' variant={'secondary'}>{buttonLoading && <ClipLoader color='black'
                                 size={20} />}Submit</Button>
                         </div>
                     </form>

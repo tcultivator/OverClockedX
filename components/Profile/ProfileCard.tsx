@@ -6,9 +6,9 @@ import { ClipLoader } from 'react-spinners'
 import { useEdgeStore } from '@/lib/edgestore';
 import { Input } from "@/components/ui/input"
 import { user } from '@/types/UserType'
-
+import { useLoading } from '@/stores/loadingStore';
 const ProfileCard = ({ user }: user) => {
-    const [loading, setLoading] = useState(false)
+    
 
     const [phoneNumber, setPhoneNumber] = useState(user.phone_number || '');
     const [username, setUsername] = useState(user.username || '')
@@ -16,12 +16,18 @@ const ProfileCard = ({ user }: user) => {
     const [profileImage, setProfileImage] = useState(user.profile_Image || '')
     const [imageTemp, setImageTemp] = useState<File | undefined>();
 
+    //progress state for updating profile pic
     const [progress, setProgress] = useState<number>(0)
 
+    //edgestore for updating the profile pic
     const { edgestore } = useEdgeStore();
+
+    //zustand state for loading in button
+    const buttonLoading = useLoading((state) => state.buttonLoading)
+    const setButtonLoading = useLoading((state) => state.setButtonLoading)
     const UpdateProfile = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setLoading(true)
+        setButtonLoading(true)
         console.log('na click ung btn')
         const res = await fetch('/api/profile', {
             method: 'POST',
@@ -32,7 +38,7 @@ const ProfileCard = ({ user }: user) => {
         })
         const result = await res.json()
         setTimeout(() => {
-            setLoading(false)
+            setButtonLoading(false)
             console.log('the request is done ', result)
         }, 1000);
 
@@ -105,17 +111,17 @@ const ProfileCard = ({ user }: user) => {
 
                         <button
                             type="submit"
-                            disabled={loading === true}
+                            disabled={buttonLoading === true}
                             className="bg-green-400 w-max px-6 py-2 text-center flex justify-center items-center gap-2"
                         >
-                            {loading && (
+                            {buttonLoading && (
                                 <ClipLoader
 
                                     color='white'
                                     size={20}
                                 />
                             )}
-                            {loading ? "Saving..." : "Save"}
+                            {buttonLoading ? "Saving..." : "Save"}
                         </button>
 
                     </form>
@@ -153,20 +159,20 @@ const ProfileCard = ({ user }: user) => {
                             </div>
                             <button
                                 type="button"
-                                disabled={loading === true}
+                                disabled={buttonLoading === true}
                                 className="bg-green-400 w-full px-6 py-2 text-center flex justify-center items-center gap-2"
                                 onClick={() => {
                                     SaveNewProfilePic()
                                 }}
                             >
-                                {loading && (
+                                {buttonLoading && (
                                     <ClipLoader
 
                                         color='white'
                                         size={20}
                                     />
                                 )}
-                                {loading ? "Saving..." : "Save"}
+                                {buttonLoading ? "Saving..." : "Save"}
                             </button>
                         </div>
 
