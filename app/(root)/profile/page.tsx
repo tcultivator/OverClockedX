@@ -10,6 +10,7 @@ const Profile = async () => {
     const session = await auth();
     if (!session) {
         redirect('/')
+        
     }
 
     const result = await db.query('SELECT id,email,username,profile_Image,gender,phone_number,firstTime_signin FROM accounts WHERE email = ?', [session.user?.email])

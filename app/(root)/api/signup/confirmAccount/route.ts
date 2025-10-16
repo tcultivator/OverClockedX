@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
         const splitData = result[0].email.split('@')
         const username = splitData[0]
 
-        await db.query(insertQuery, [result[0].email, result[0].password, username, result[0].image, 'client', true])
+        await db.query(insertQuery, [result[0].email, result[0].password, username, result[0].image, 'client', false])
 
         await db.query(deleteQuery, [body.token])
         

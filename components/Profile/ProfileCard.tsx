@@ -1,14 +1,16 @@
 "use client";
 import React from 'react'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { ClipLoader } from 'react-spinners'
 import { useEdgeStore } from '@/lib/edgestore';
 import { Input } from "@/components/ui/input"
 import { user } from '@/types/UserType'
 import { useLoading } from '@/stores/loadingStore';
+
+import { useUserStore } from '@/stores/userStore';
 const ProfileCard = ({ user }: user) => {
-    
+
 
     const [phoneNumber, setPhoneNumber] = useState(user.phone_number || '');
     const [username, setUsername] = useState(user.username || '')
@@ -25,6 +27,8 @@ const ProfileCard = ({ user }: user) => {
     //zustand state for loading in button
     const buttonLoading = useLoading((state) => state.buttonLoading)
     const setButtonLoading = useLoading((state) => state.setButtonLoading)
+
+
     const UpdateProfile = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setButtonLoading(true)
@@ -76,6 +80,22 @@ const ProfileCard = ({ user }: user) => {
             setProfileImage(res.url)
         }
     }
+
+
+    const setUser = useUserStore((state) => state.setUser)
+    useEffect(() => {
+        if (user) {
+            console.log('dapat gagana to')
+            setUser({
+                email: user.email,
+                name: user.username,
+                image: user.profile_Image ?? null
+            })
+        } else {
+            console.log('dapat eto naman gagana kapag naglogout')
+
+        }
+    }, [])
 
 
 
