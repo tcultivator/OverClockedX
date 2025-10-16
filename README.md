@@ -1,36 +1,69 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# OverClockedX
 
-## Getting Started
+**OverClockedX** is a modern e-commerce platform designed specifically for computer and hardware retail. It allows users to browse, search, and purchase components and peripherals from a streamlined and responsive web interface.
 
-First, run the development server:
+---
 
-```bash
+## Features
+
+### Authentication
+- Sign in using Google or email credentials  
+- Sign up with Google or email credentials  
+- Email verification sent during credential-based signup  
+- Account activation required via email confirmation  
+- Forgot password and reset password via email  
+
+### Shopping Experience
+- Browse and search computer components  
+- Filter products in the product list (e.g., by category, price, or brand)  
+- Click on products to view a preview with detailed information  
+- View suggested products related to the one currently being previewed  
+- View featured products (best-selling items) on the dashboard  
+- View recently added promotions and discounts on the dashboard  
+- Add, update, and remove items from shopping cart  
+- Checkout all selected items in the cart or directly from the product preview  
+- Apply vouchers during checkout, with discounts reflected based on voucher type (e.g., shipping vouchers)  
+- View order history and tracking details  
+
+### User Profile
+- View and update profile information (username, contact number, address, and profile picture)  
+- View purchase history  
+
+### UX & Design
+- Fully responsive design for desktop, tablet, and mobile  
+- Modern and clean UI for seamless shopping experience  
+
+---
+
+## Tech Stack
+
+- **Framework:** [Next.js](https://nextjs.org/) (built on [React](https://reactjs.org/)) with TypeScript  
+- **Authentication:** [Auth.js](https://authjs.dev/) (Google and Credentials providers)  
+- **State Management:** [Zustand](https://zustand-demo.pmnd.rs/)  
+- **Payments:** [Xendit](https://www.xendit.co/) (GCash integration)  
+- **Email Service:** [Nodemailer](https://nodemailer.com/)  
+- **File Uploads:** [Edge Store](https://edgestore.dev/)  
+- **UI Components:** [shadcn/ui](https://ui.shadcn.dev/)  
+- **Styling:** [Tailwind CSS](https://tailwindcss.com/)  
+- **Animations:** [Framer Motion](https://www.framer.com/motion/)  
+
+---
+
+## Installation
+
+# Clone the repository
+git clone https://github.com/your-username/overclockedx.git
+
+# Change into the project directory (update folder name if different)
+cd overclockedx
+
+# Install dependencies
+npm install
+
+# Copy the example environment variables file to .env.local
+cp .env.example .env.local
+
+# Start the development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
