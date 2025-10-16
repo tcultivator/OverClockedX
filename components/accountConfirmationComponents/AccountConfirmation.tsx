@@ -14,32 +14,35 @@ const AccountConfirmationComponent = ({
     const [error, setError] = useState(false)
     const token = params.token
     useEffect(() => {
-        console.log('eto ung laman ng token, ',token)
-        if (token) {
-            const confirmAccountCreation = async () => {
-                const confirmAccount = await fetch('api/signup/confirmAccount', {
-                    method: 'POST',
-                    headers: {
-                        'Content-type': 'application/json'
-                    },
-                    body: JSON.stringify({ token: token })
+        setTimeout(() => {
+            console.log('eto ung laman ng token, ', token)
+            if (token) {
+                const confirmAccountCreation = async () => {
+                    const confirmAccount = await fetch('api/signup/confirmAccount', {
+                        method: 'POST',
+                        headers: {
+                            'Content-type': 'application/json'
+                        },
+                        body: JSON.stringify({ token: token })
 
-                })
-                const result = await confirmAccount.json()
-                if (result.status == 200) {
-                    setLoading(false)
-                } else {
-                    setLoading(false)
-                    setError(true)
-                    console.log('something went wrong')
+                    })
+                    const result = await confirmAccount.json()
+                    if (result.status == 200) {
+                        setLoading(false)
+                    } else {
+                        setLoading(false)
+                        setError(true)
+                        console.log('something went wrong')
+                    }
                 }
+                confirmAccountCreation()
+            } else {
+                setLoading(false)
+                setError(true)
+                console.log('invalid token')
             }
-            confirmAccountCreation()
-        } else {
-            setLoading(false)
-            setError(true)
-            console.log('invalid token')
-        }
+        }, 1000);
+
 
     }, [])
     return (
