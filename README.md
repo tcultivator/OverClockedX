@@ -51,6 +51,7 @@
 
 ## Installation
 
+```bash
 # Clone the repository
 git clone https://github.com/your-username/overclockedx.git
 
@@ -65,5 +66,6 @@ cp .env.example .env.local
 
 # Start the development server
 npm run dev
+
 
 
