@@ -7,7 +7,7 @@ import db from "./lib/db";
 // the expected types of a value get from database
 import { Accounts } from "./types/AccountsType";
 import bcrypt from "bcryptjs";
-import { RandomPassword } from "./PasswordGenerator/RandomPassword";
+import { RandomString } from "./utils/randomStringGenerator/RandomString";
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [Google,
     Credentials({
@@ -46,7 +46,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       const [rows] = await db.query('SELECT * FROM accounts WHERE email = ?', [email]);
       const accounts = rows as Accounts[];
       if (account?.provider == 'google') {
-        const randomPassword = RandomPassword()
+        const randomPassword = RandomString()
         console.log(randomPassword)
         const hashedPassword = await bcrypt.hash(randomPassword, 10)
         if (accounts.length === 0) {

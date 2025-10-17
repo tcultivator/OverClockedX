@@ -8,10 +8,10 @@ import { Button } from '@/components/ui/button';
 import { RiDeleteBack2Fill } from 'react-icons/ri';
 import { FaPlus, FaMinus } from "react-icons/fa6";
 //import of dataset for address
-import { countries } from '@/datasetAddress/country'
-import { luzonProvinces } from '@/datasetAddress/province'
-import { luzonPlaces } from '@/datasetAddress/citiesAndMunicipality'
-import { barangaysJaen } from '@/datasetAddress/barangay'
+import { countries } from '@/utils/datasetAddress/country'
+import { luzonProvinces } from '@/utils/datasetAddress/province'
+import { luzonPlaces } from '@/utils/datasetAddress/citiesAndMunicipality'
+import { barangaysJaen } from '@/utils/datasetAddress/barangay'
 import { useUserStore } from '@/stores/userStore';
 
 import { useVoucherStore } from '@/stores/voucherStore';

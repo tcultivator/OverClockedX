@@ -3,6 +3,7 @@ import React from 'react'
 import { CiShoppingCart } from "react-icons/ci";
 import { useCartStore } from '@/stores/cartStore';
 import { useEffect } from 'react';
+
 type session = {
     user?: {
         email?: string | null;
@@ -19,6 +20,7 @@ const CartButtonAction = ({ session }: Props) => {
     const clearUserCartInSignout = useCartStore((state) => state.clearUserCartInSignout)
 
     const openCartToggle = useCartStore((state) => state.openCartToggle)
+    
 
     useEffect(() => {
         if (session) {
@@ -29,7 +31,7 @@ const CartButtonAction = ({ session }: Props) => {
             console.log('try kung gagana to kapag nabago laman ng session')
             clearUserCartInSignout()
         }
-    }, [session,clearUserCartInSignout])
+    }, [session, clearUserCartInSignout])
 
     return (
         <div className="relative cursor-pointer ">

@@ -3,7 +3,7 @@ import React from 'react'
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { useState } from 'react';
+
 import { useRouter } from 'next/navigation';
 import { doCredentialsSignin } from '../../actions/doCredentialsSignin';
 import { ClipLoader } from 'react-spinners';
@@ -11,6 +11,7 @@ import Link from 'next/link';
 import { useAlertNotification } from '@/stores/alertNotificationStore';
 import { alertClasses } from '@/utils/alertNotificationTypes';
 import { useLoading } from '@/stores/loadingStore';
+import { redirect } from 'next/navigation';
 const CredentialsForm = () => {
     const navigate = useRouter()
 
@@ -33,7 +34,7 @@ const CredentialsForm = () => {
             setAlertNotif({ display: true, message: 'Signin success full, Redirecting to signin', alertType: 'success' })
             setButtonLoading(false)
             setTimeout(() => {
-                navigate.push('/profile')
+                redirect('/profile')
             }, 1000);
         } catch (err) {
             setAlertNotif({ display: true, message: 'Something went wrong, please try again!', alertType: 'error' })

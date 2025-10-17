@@ -3,10 +3,10 @@ import React from 'react'
 import { useState } from 'react';
 import { ClipLoader } from 'react-spinners'
 
-import { countries } from '@/datasetAddress/country'
-import { luzonProvinces } from '@/datasetAddress/province'
-import { luzonPlaces } from '@/datasetAddress/citiesAndMunicipality'
-import { barangaysJaen } from '@/datasetAddress/barangay'
+import { countries } from '@/utils/datasetAddress/country'
+import { luzonProvinces } from '@/utils/datasetAddress/province'
+import { luzonPlaces } from '@/utils/datasetAddress/citiesAndMunicipality'
+import { barangaysJaen } from '@/utils/datasetAddress/barangay'
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { UserAddress } from '@/types/UserAddressTypes'

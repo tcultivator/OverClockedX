@@ -1,7 +1,7 @@
 import db from '@/lib/db'
 import { NextRequest, NextResponse } from 'next/server'
 import { Accounts } from '@/types/AccountsType'
-import { RandomPassword } from '@/PasswordGenerator/RandomPassword'
+import { RandomString } from '@/utils/randomStringGenerator/RandomString'
 import { sendMail } from '@/lib/nodemailer'
 import bcrypt from "bcryptjs";
 export async function POST(req: NextRequest) {
@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
         const checkQuery = 'SELECT * FROM accounts WHERE email = ?'
         const insertQuery = 'INSERT INTO pending_signup_users (email,password,image,token,expired_at) VALUES (?,?,?,?,DATE_ADD(NOW(), INTERVAL 15 MINUTE))'
         //generated token
-        const token = RandomPassword()
+        const token = RandomString()
         //default image for signup users
         const defaultProfile = 'https://res.cloudinary.com/djjg39yja/image/upload/v1760539730/image_pyzrpr.jpg'
 

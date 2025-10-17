@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useUserStore } from '@/stores/userStore';
 import { useCartStore } from '@/stores/cartStore';
 import { useEffect } from 'react';
+
 type Props = {
     session: session | null
 }
@@ -21,6 +22,7 @@ const ProfileButtonAction = ({ session }: Props) => {
     const navigate = useRouter()
     const setUser = useUserStore((state) => state.setUser)
     const clearUserCartInSignout = useCartStore((state) => state.clearUserCartInSignout)
+    const clearUser = useUserStore((state) => state.clearUser)
     function viewProfile() {
         console.log('display the user info')
         if (!session) {
@@ -44,8 +46,9 @@ const ProfileButtonAction = ({ session }: Props) => {
         } else {
             console.log('dapat eto naman gagana kapag naglogout')
             clearUserCartInSignout()
+            clearUser()
         }
-    }, [session, setUser,clearUserCartInSignout])
+    }, [session, setUser, clearUserCartInSignout])
 
 
     return (
