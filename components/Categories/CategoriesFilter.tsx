@@ -7,7 +7,7 @@ import { Slider } from "@/components/ui/slider"
 import { Button } from '../ui/button';
 import { useFilterStore } from '@/stores/filterStore';
 import { RiCloseLargeFill } from "react-icons/ri";
-import { brands } from '../../datasetAddress/brands';
+import {brands} from '@/utils/datasetAddress/brands'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select"
 const CategoriesFilter = () => {
     const searchParams = useSearchParams();

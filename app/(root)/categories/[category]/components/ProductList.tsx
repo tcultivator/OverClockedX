@@ -15,7 +15,7 @@ import { useCartStore } from '@/stores/cartStore';
 import { useUserStore } from '@/stores/userStore';
 import { useToast } from '@/stores/toastStore';
 import { useCategoriesHeaderStore } from '@/stores/categoriesHeaderStore';
-
+import { Label } from '@/components/ui/label';
 
 type Props = {
     products: ProductsType[]
@@ -172,7 +172,7 @@ const ProductList = ({ products, category }: Props) => {
                             </div >
                         ))
                     ) : (
-                        finalProducts && finalProducts.map((data, index) => (
+                        finalProducts.length > 0 ? finalProducts.map((data, index) => (
                             <div key={index} className={`${productListDisplayOrientation[1]}`}>
                                 <div className={`${productListDisplayOrientation[2]}`} onClick={() => router.push(`/product/${data.product_id}`)} >
                                     <div className={`${productListDisplayOrientation[3]}`}>
@@ -208,7 +208,10 @@ const ProductList = ({ products, category }: Props) => {
 
                             </div>
 
-                        ))
+                        )) :
+                            <div className='flex w-full h-full justify-center items-items'>
+                                <Label>No Products Found</Label>
+                            </div>
                     )
 
                     }
