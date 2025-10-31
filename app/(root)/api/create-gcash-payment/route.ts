@@ -16,8 +16,8 @@ export async function POST(req: NextRequest) {
             paymentMethod: {
                 ewallet: {
                     channelProperties: {
-                        successReturnUrl: "https://eruptional-deposable-alejandro.ngrok-free.dev/success",
-                        failureReturnUrl: "https://eruptional-deposable-alejandro.ngrok-free.dev/profile"
+                        successReturnUrl: "http://localhost:3000//success",
+                        failureReturnUrl: "http://localhost:3000//profile"
                     },
                     channelCode: "GCASH"
                 },
