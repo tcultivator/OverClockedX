@@ -133,7 +133,8 @@ const Checkout = () => {
                         email: user?.email,
                         referenceId: data.referenceId,
                         total_amount: finalCheckoutItems.reduce((sum, item) => sum + item.price * item.quantity, 0) + shippingCost,
-                        checkoutItems: finalCheckoutItems
+                        checkoutItems: finalCheckoutItems,
+                        payment_method: paymentOptions
                     }),
                 })
                 const insertOrdersDone = await insertOrders.json()
