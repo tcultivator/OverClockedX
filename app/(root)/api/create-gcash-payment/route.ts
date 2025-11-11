@@ -16,8 +16,8 @@ export async function POST(req: NextRequest) {
             paymentMethod: {
                 ewallet: {
                     channelProperties: {
-                        successReturnUrl: "http://localhost:3000//success",
-                        failureReturnUrl: "http://localhost:3000//profile"
+                        successReturnUrl: "https://overclockedx.onrender.com/success",
+                        failureReturnUrl: "https://overclockedx.onrender.com/profile"
                     },
                     channelCode: "GCASH"
                 },
