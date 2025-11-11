@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Orbitron, Anton } from "next/font/google";
-
+import Head from 'next/head'
 import NavBar from "@/components/NavBar/NavBar";
 import Footer from "@/components/Footer/Footer";
 import CartSideBar from "@/components/CartSideBar/CartSideBar";
@@ -43,15 +43,18 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable} ${orbitron.variable} ${anton.variable}`}>
+      <Head>
+        <title>OverClockedX</title>
+      </Head>
       <body className="antialiased overflow-x-hidden">
         <NavBar />
-         <Toaster />
+        <Toaster />
         {children}
         <Toast />
         <CartSideBar />
         <Footer />
         <Loading />
-        
+
       </body>
     </html>
   );
