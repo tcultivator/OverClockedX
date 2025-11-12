@@ -9,6 +9,7 @@ const Purchase = async () => {
             orders.total_amount,
             orders.reference_id,
             orders.payment_status,
+            orders.payment_method,
             orders.order_status,
             orders.created_at,
             order_items.quantity,
@@ -29,6 +30,7 @@ const Purchase = async () => {
         reference_id: string;
         total_amount: number;
         payment_status: string;
+        payment_method:string;
         order_status: string;
         created_at: string;
         quantity: number;
@@ -44,6 +46,7 @@ const Purchase = async () => {
         reference_id: string;
         total_amount: number;
         payment_status: string;
+        payment_method:string;
         order_status: string;
         created_at: string;
         items: {
@@ -67,6 +70,7 @@ const Purchase = async () => {
                 reference_id: products.reference_id,
                 total_amount: products.total_amount,
                 payment_status: products.payment_status,
+                payment_method:products.payment_method,
                 order_status: products.order_status,
                 created_at: products.created_at,
                 items: [{

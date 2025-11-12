@@ -10,6 +10,8 @@ import Image from 'next/image';
 import { Label } from '../ui/label';
 import { ProductsType } from '@/types/ProductTypes';
 import { useRouter } from 'next/navigation';
+import { IoFilterOutline } from "react-icons/io5";
+
 const CategoriesHeader = () => {
     const setFilterDisplay = useFilterStore((state) => state.setFilterDisplay)
     const router = useRouter();
@@ -53,15 +55,15 @@ const CategoriesHeader = () => {
         }
     }
     return (
-        <div className="flex justify-between sticky top-0 z-50 p-2 px-5 w-full font-Abyssinica font-thin h-max border-b border-white/20 md:justify-end">
-            <button className='block md:hidden' onClick={() => setFilterDisplay(true)}>Filter</button>
+        <div className="flex justify-between sticky gap-1 items-center top-0 z-30  p-2 md:px-5 w-full font-Abyssinica font-thin h-max border-b border-white/20 md:justify-end">
+            <button className='block md:hidden bg-white text-black text-[14px] rounded p-1' onClick={() => setFilterDisplay(true)}><IoFilterOutline /></button>
             <div className='flex items-center gap-5'>
                 <div className='relative'>
                     <div className='flex gap-2 items-center'>
-                        <Input type='text' placeholder='Search here...' onChange={(e) => searchProducts(e.target.value)} />
+                        <Input className='md:w-[350px]' type='text' placeholder='Search here...' onChange={(e) => searchProducts(e.target.value)} />
                         <Button onClick={() => searchFunction(searchValu)} variant={'secondary'}><CiSearch /></Button>
                     </div>
-                    <div className={` bg-white  max-h-[50vh] overflow-auto mt-1 rounded w-full absolute z-50 flex flex-col gap-2 ${searchResults.length != 0 && 'p-1'}`}>
+                    <div className={` bg-white  max-h-[50vh] overflow-auto mt-1 rounded w-full absolute flex flex-col gap-2 ${searchResults.length != 0 && 'p-1'}`}>
                         {searchResults.map((data, index) => (
                             <div key={index} onClick={() => router.push(`/product/${data.product_id}`)} className='flex items-center gap-2 rounded bg-black/70 text-white cursor-pointer p-1'>
                                 <Image src={data.product_image} width={100} height={100} alt='' className='w-[50px]' />

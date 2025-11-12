@@ -7,7 +7,7 @@ import { Slider } from "@/components/ui/slider"
 import { Button } from '../ui/button';
 import { useFilterStore } from '@/stores/filterStore';
 import { RiCloseLargeFill } from "react-icons/ri";
-import {brands} from '@/utils/datasetAddress/brands'
+import { brands } from '@/utils/datasetAddress/brands'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select"
 const CategoriesFilter = () => {
     const searchParams = useSearchParams();
@@ -28,7 +28,7 @@ const CategoriesFilter = () => {
             params.delete(filterName);
         }
         window.history.pushState({}, '', `?${params.toString()}`);
-
+        setFilterDisplay(false)
     };
 
     const [selectedBrands, setSelectedBrands] = useState<string[]>([])
@@ -39,7 +39,7 @@ const CategoriesFilter = () => {
         params.set('low', value[0].toString() || '0');
         params.set('high', value[1].toString() || '100000')
         window.history.pushState({}, '', `?${params.toString()}`);
-
+        setFilterDisplay(false)
     }
 
 
@@ -94,7 +94,7 @@ const CategoriesFilter = () => {
         const params = new URLSearchParams(searchParams.toString());
         params.set('brands', selectedBrands.toString());
         window.history.pushState({}, '', `?${params.toString()}`);
-
+        setFilterDisplay(false)
     }
 
     const clearBrandFilter = () => {
@@ -104,8 +104,8 @@ const CategoriesFilter = () => {
         window.history.pushState({}, '', `?${params.toString()}`);
     }
     return (
-        <div className=''>
-            <div id="left" className={`w-full bg-black  ${displayFilter == false ? 'hidden' : 'block'} h-screen w-full box-border left-0 p-5  absolute top-0 md:relative   h-screen md:block lg:block xl:block font-thin md:w-[350px] md:inset-shadow-sm md:inset-shadow-white/50 z-50 md:rounded-[10px] md:p-5 md:z-10`}>
+        <div className='bg-black'>
+            <div id="left" className={`w-full bg-black  ${displayFilter == false ? 'hidden' : 'block'} h-screen w-full box-border left-0 p-5  absolute top-0 md:relative  md:block lg:block xl:block font-thin md:w-[350px] md:inset-shadow-sm md:inset-shadow-white/50 z-50 md:rounded-[10px] md:p-5 md:z-10`}>
                 <div className="sticky top-0">
                     <div className='w-full flex justify-end'>
                         <button className='block md:hidden ' onClick={() => {
@@ -214,9 +214,9 @@ const CategoriesFilter = () => {
                         }
                     </div>
 
-                    <div className='flex flex-col gap-2'>
+                    <div className='flex flex-col gap-2 bg-black'>
                         <h1 className='text-xl'>Brands</h1>
-                        <div className='max-h-[250px] overflow-auto flex flex-col gap-2'>
+                        <div className='max-h-[100px] md:max-h-[250px] overflow-auto flex flex-col gap-2 '>
                             <div className="flex flex-col gap-2 justify-start items-start">
                                 {brands.map((data, index) => (
                                     <div key={index} className='flex gap-2 items-center justify-start'>

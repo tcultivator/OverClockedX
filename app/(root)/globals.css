@@ -150,6 +150,31 @@ input[type="number"] {
 
 
 
+/* global.css or component CSS module */
+
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+  position: absolute;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #ffffff94, #00000075);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #ffffff94, #00000075);
+}
+
+::-webkit-scrollbar-track {
+  background: #111;
+  border-radius: 10px;
+}
+
+
+
+
 
 :root {
   --radius: 0.625rem;
