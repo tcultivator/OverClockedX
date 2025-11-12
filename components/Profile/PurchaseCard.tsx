@@ -175,7 +175,7 @@ const PurchaseCard = ({ groupData }: Props) => {
                                                     <Label>Order Summary</Label>
                                                     <Label className='font-thin flex items-center justify-center p-1 rounded bg-green-400/30 text-green-400 w-max'>Payment {selectedGroup.payment_status}</Label>
                                                 </div>
-                                                <Label className="text-[12px] md:text-sm text-start text-white/40">A summary of the customer's order details.</Label>
+                                                <Label className="text-[12px] md:text-sm text-start text-white/40">A summary of the customers order details.</Label>
                                                 <div className='flex flex-col gap-2'>
                                                     <div className='flex items-center justify-between'>
                                                         <Label className='font-thin'>Payment</Label>
