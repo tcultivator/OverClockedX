@@ -189,31 +189,15 @@ const PurchaseCard = ({ groupData }: Props) => {
                                                     <Label className='font-thin'>Payment</Label>
                                                     <Label className='font-thin'>{selectedGroup.payment_method}</Label>
                                                 </div>
-                                                <Label className="text-[12px] md:text-sm text-start text-white/40">A summary of the customers order details.</Label>
-                                                <div className='flex flex-col gap-2'>
-                                                    <div className='flex items-center justify-between'>
-                                                        <Label className='font-thin'>Payment</Label>
-                                                        <Label className='font-thin'>{selectedGroup.payment_method}</Label>
-                                                    </div>
-                                                    <div className='flex items-center justify-between '>
-                                                        <Label className='font-thin'>Subtotal</Label>
-                                                        <div className='flex items-center gap-5'>
-                                                            <Label className='font-thin'>{selectedGroup.items.length} items</Label>
-                                                            <Label className='font-thin'>{new Intl.NumberFormat('en-PH', {
-                                                                style: 'currency',
-                                                                currency: 'PHP',
-                                                            }).format(selectedGroup.items.reduce((sum, item) => sum + item.sub_total * item.quantity, 0))}</Label>
-                                                        </div>
-
-                                                    </div>
-                                                    <div className='flex items-center justify-between '>
-                                                        <Label className='font-thin'>Shipping</Label>
+                                                <div className='flex items-center justify-between '>
+                                                    <Label className='font-thin'>Subtotal</Label>
+                                                    <div className='flex items-center gap-5'>
+                                                        <Label className='font-thin'>{selectedGroup.items.length} items</Label>
                                                         <Label className='font-thin'>{new Intl.NumberFormat('en-PH', {
                                                             style: 'currency',
                                                             currency: 'PHP',
                                                         }).format(selectedGroup.items.reduce((sum, item) => sum + item.sub_total * item.quantity, 0))}</Label>
                                                     </div>
-
                                                 </div>
                                                 <div className='flex items-center justify-between '>
                                                     <Label className='font-thin'>Shipping</Label>
