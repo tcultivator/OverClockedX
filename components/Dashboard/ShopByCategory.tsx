@@ -36,7 +36,7 @@ const ShopByCategory = () => {
         router.push(`/categories/${category}`);
     }
     return (
-        <div className=" flex flex-col gap-5 items-center justify-center py-2 px-[5%]">
+        <div className=" flex flex-col gap-2 items-center justify-center py-2 px-[2px] md:px-[5%] md:gap-5">
             <div className="w-full">
                 <h2 className="text-2xl font-anton text-[40px] text-left  w-max p-2 text-white rounded-t-md">Shop by Category</h2>
             </div>

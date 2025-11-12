@@ -4,6 +4,7 @@ export type GroupedOrder = {
     reference_id: string;
     total_amount: number;
     payment_status: string;
+    payment_method: string;
     order_status: string;
     created_at: string;
     items: {

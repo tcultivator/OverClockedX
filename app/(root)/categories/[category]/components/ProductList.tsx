@@ -50,10 +50,7 @@ const ProductList = ({ products, category }: Props) => {
         offsetRef.current = 0;
         setNoProductMessage(false)
         noProductMessageRef.current = false;
-        console.log('eto ung offset ', offsetRef.current)
         const arrayBrands = brands.split(',')
-        console.log(arrayBrands)
-
         setLoadingProducts(true)
         const getFilter = async () => {
             const res = await fetch('/api/filterProducts', {
@@ -80,16 +77,8 @@ const ProductList = ({ products, category }: Props) => {
 
     }, [searchParams, category])
 
-
-
-
     const productListDisplayOrientation = useCategoriesHeaderStore((state) => state.productListDisplayOrientation)
     const listRef = useRef<HTMLDivElement | null>(null);
-
-
-
-
-
 
     useEffect(() => {
         loadingRef.current = loading;
@@ -110,17 +99,14 @@ const ProductList = ({ products, category }: Props) => {
             if (isAtBottom && !loadingRef.current && !noProductMessageRef.current) {
                 loadingRef.current = true; // prevent double fetches
                 setLoading(true);
-                console.log('Trigger fetch');
                 setTimeout(() => {
-                    console.log('gagana lang to kapag nag loloading or nag fefetch na ng data')
-                    console.log('eto ung offset ', offsetRef.current)
                     const SortBy = searchParams.get('Sortby') || ''
                     const Availability = searchParams.get('availability') || ''
                     const low = searchParams.get('low') || ''
                     const high = searchParams.get('high') || ''
                     const brands = searchParams.get('brands') || ''
                     const arrayBrands = brands.split(',')
-                    console.log('eto ung sa infinite scrolling')
+                    
                     const getFilter = async () => {
                         const res = await fetch('/api/filterProducts', {
                             method: 'POST',
@@ -143,12 +129,12 @@ const ProductList = ({ products, category }: Props) => {
                         if (response.result.length === 0) {
                             setNoProductMessage(true);
                             noProductMessageRef.current = true;
-                            console.log('No more products.');
+                            
                         }
 
                     }
                     getFilter()
-                    console.log('nasababa na ung scroll')
+                    
                 }, 3000);
 
             }
@@ -157,14 +143,14 @@ const ProductList = ({ products, category }: Props) => {
         return () => listElement.removeEventListener('scroll', detectScroll);
     }, [])
     return (
-        <div className='flex flex-col max-h-[75vh] bg-black inset-shadow-sm inset-shadow-white/50 rounded-[10px] justify-start w-full font-thin md:max-h-[88vh]'>
+        <div className='flex flex-col max-h-[75vh] bg-black inset-shadow-sm inset-shadow-white/50 rounded-[10px] justify-start w-full font-thin md:max-h-[80vh]'>
             <CategoriesHeader />
-            <div ref={listRef} className='overflow-y-auto'>
+            <div ref={listRef} className='overflow-y-auto z-0'>
                 <div id="right" className={`${loadingProducts ? 'opacity-25' : 'opacity-100'} ${productListDisplayOrientation[0]}`}>
                     {loadingProducts ? (
                         finalProducts && finalProducts.map((data, index) => (
                             < div className="flex flex-col gap-3 space-y-3" key={index}>
-                                <Skeleton className="h-[125px] w-full rounded-xl" />
+                                <Skeleton className="h-50 w-full rounded-xl" />
                                 <div className="space-y-2">
                                     <Skeleton className="h-4 w-[90%]" />
                                     <Skeleton className="h-4 w-[60%]" />
@@ -177,7 +163,7 @@ const ProductList = ({ products, category }: Props) => {
                                 <div className={`${productListDisplayOrientation[2]}`} onClick={() => router.push(`/product/${data.product_id}`)} >
                                     <div className={`${productListDisplayOrientation[3]}`}>
                                         <div className={`${productListDisplayOrientation[6]}`}>
-                                            <Image src={data.product_image} alt='' className='w-full h-full max-w-xs' width={400} height={400} />
+                                            <Image src={data.product_image} alt='' className='w-full h-full max-w-xs z-0' width={400} height={400} />
                                         </div>
                                         <div className='flex flex-col'>
                                             <label className='text-xs'>{data.product_name}</label>

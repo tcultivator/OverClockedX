@@ -32,7 +32,7 @@ const ProfileCard = ({ user }: user) => {
     const UpdateProfile = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setButtonLoading(true)
-        console.log('na click ung btn')
+        
         const res = await fetch('/api/profile', {
             method: 'POST',
             headers: {
@@ -43,7 +43,7 @@ const ProfileCard = ({ user }: user) => {
         const result = await res.json()
         setTimeout(() => {
             setButtonLoading(false)
-            console.log('the request is done ', result)
+            
         }, 1000);
 
     }
@@ -62,8 +62,6 @@ const ProfileCard = ({ user }: user) => {
             const res = await edgestore.publicFiles.upload({
                 file: imageTemp,
                 onProgressChange: (progress: number) => {
-                    // you can use this to show a progress bar
-                    console.log(progress);
                     setProgress(progress)
                 },
             });
@@ -75,8 +73,6 @@ const ProfileCard = ({ user }: user) => {
                 body: JSON.stringify({ profileImage: res.url, email: user.email }),
             })
             const result = await uploadNewImage.json()
-            console.log(res);
-            console.log(result)
             setProfileImage(res.url)
         }
     }
@@ -85,7 +81,6 @@ const ProfileCard = ({ user }: user) => {
     const setUser = useUserStore((state) => state.setUser)
     useEffect(() => {
         if (user) {
-            console.log('dapat gagana to')
             setUser({
                 email: user.email,
                 name: user.username,

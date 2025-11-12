@@ -10,7 +10,7 @@ const TrendingProducts = () => {
     ];
 
     return (
-        <section className="p-4 m-auto px-[5%]">
+        <section className="p-4 m-auto px-[2px] md:px-[5%]">
             <div className="w-full">
                 <h2 className="text-2xl font-anton text-[40px] text-left  w-max p-2 text-white rounded-t-md">Promotions</h2>
             </div>
