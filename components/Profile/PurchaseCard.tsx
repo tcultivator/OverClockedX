@@ -10,22 +10,30 @@ import {
     AlertDialogDescription,
     AlertDialogFooter,
     AlertDialogHeader,
+    AlertDialogTrigger,
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import { Label } from '@/components/ui/label'
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { Button } from '../ui/button';
+import { ClipLoader } from 'react-spinners';
 type Props = {
     groupData: GroupedOrder[]
 }
 import { useState, useEffect } from 'react';
 import { usePurchaseStore } from '@/stores/purchaseStore';
+import { useLoading } from '@/stores/loadingStore';
 const PurchaseCard = ({ groupData }: Props) => {
     const [expandedGroups, setExpandedGroups] = useState<Record<number, boolean>>({});
-    const [selectedGroup, setSelectedGroup] = useState<GroupedOrder | null>(null)
+
     const [openDialog, setOpenDialog] = useState(false)
 
     const purchaseData = usePurchaseStore((state) => state.purchaseData)
+    const selectedGroup = usePurchaseStore((state) => state.selectedGroup)
+    const setSelectedGroup = usePurchaseStore((state) => state.setSelectedGroup)
     const setPurchaseData = usePurchaseStore((state) => state.setPurchaseData)
+    const cancelOrder = usePurchaseStore((state) => state.cancelOrder)
+    const buttonLoading = useLoading((state) => state.buttonLoading)
     useEffect(() => {
         setPurchaseData(groupData)
     }, [])
@@ -131,49 +139,55 @@ const PurchaseCard = ({ groupData }: Props) => {
                 <AlertDialogContent className="bg-[#1E1E1E] text-white border border-gray-700">
                     <AlertDialogHeader>
                         <AlertDialogTitle>Purchase Details</AlertDialogTitle>
-                        <AlertDialogDescription>
-                            {selectedGroup ? (
-                                <>
-                                    <div className='flex flex-col'>
-                                        <Label className='text-white/60 text-md'>Order Id:{selectedGroup.order_id}</Label>
-                                        <Label className='text-white/60 text-sm'>{new Date(selectedGroup.created_at).toLocaleString("en-US", { month: "long", day: 'numeric', year: "numeric" })}</Label>
-                                    </div>
-                                    <div className='flex gap-2 text-white'>
-                                        <div className=' flex flex-col gap-2 w-full'>
-                                            <div className='p-3 border rounded-[10px] border-black/15 flex flex-col gap-2'>
-                                                <div className='flex items-center gap-3'>
-                                                    <Label>Purchase Item</Label>
-                                                    <Label className='font-thin flex items-center justify-center p-1 rounded bg-red-400/30 text-red-400 w-max px-2'>Order {selectedGroup.order_status}</Label>
-                                                </div>
-                                                <Label className="text-sm text-white/40">These are the products in the order.</Label>
 
-                                                <ScrollArea className='flex flex-col gap-1 max-h-[150px] md:max-h-[200px]'>
-                                                    {
-                                                        selectedGroup.items.map((data, index) => (
-                                                            <div key={index} className='flex gap-1 items-center border-b border-white/15'>
-                                                                <Image src={data.product_image} alt='' width={100} height={100} className='w-20 rounded' />
-                                                                <div className='flex flex-col gap-1 justify-start'>
-                                                                    <Label className='text-[12px] md:text-[14px] text-start'>{data.product_name}</Label>
-                                                                    <Label>{new Intl.NumberFormat('en-PH', {
-                                                                        style: 'currency',
-                                                                        currency: 'PHP',
-                                                                    }).format(data.price)}</Label>
-                                                                    <Label className='text-[11px]'>x{data.quantity}</Label>
-                                                                </div>
+                        {selectedGroup ? (
+                            <>
+                                <div className='flex flex-col'>
+                                    <Label className='text-white/60 text-md'>Order Id:{selectedGroup.order_id}</Label>
+                                    <Label className='text-white/60 text-sm'>{new Date(selectedGroup.created_at).toLocaleString("en-US", { month: "long", day: 'numeric', year: "numeric" })}</Label>
+                                </div>
+                                <div className='flex gap-2 text-white'>
+                                    <div className=' flex flex-col gap-2 w-full'>
+                                        <div className='p-3 border rounded-[10px] border-black/15 flex flex-col gap-2'>
+                                            <div className='flex items-center gap-3'>
+                                                <Label>Purchase Item</Label>
+                                                <Label className='font-thin flex items-center justify-center p-1 rounded bg-red-400/30 text-red-400 w-max px-2'>Order {selectedGroup.order_status}</Label>
+                                            </div>
+                                            <Label className="text-sm text-white/40">These are the products in the order.</Label>
 
+                                            <ScrollArea className='flex flex-col gap-1 max-h-[150px] md:max-h-[200px]'>
+                                                {
+                                                    selectedGroup.items.map((data, index) => (
+                                                        <div key={index} className='flex gap-1 items-center border-b border-white/15'>
+                                                            <Image src={data.product_image} alt='' width={100} height={100} className='w-20 rounded' />
+                                                            <div className='flex flex-col gap-1 justify-start'>
+                                                                <Label className='text-[12px] md:text-[14px] text-start'>{data.product_name}</Label>
+                                                                <Label>{new Intl.NumberFormat('en-PH', {
+                                                                    style: 'currency',
+                                                                    currency: 'PHP',
+                                                                }).format(data.price)}</Label>
+                                                                <Label className='text-[11px]'>x{data.quantity}</Label>
                                                             </div>
 
-                                                        ))
-                                                    }
+                                                        </div>
+
+                                                    ))
+                                                }
 
 
 
-                                                </ScrollArea >
+                                            </ScrollArea >
+                                        </div>
+                                        <div className='p-3 border rounded-[10px] border-black/15 flex flex-col gap-2'>
+                                            <div className='flex items-center gap-3'>
+                                                <Label>Order Summary</Label>
+                                                <Label className='font-thin flex items-center justify-center p-1 rounded bg-green-400/30 text-green-400 w-max'>Payment {selectedGroup.payment_status}</Label>
                                             </div>
-                                            <div className='p-3 border rounded-[10px] border-black/15 flex flex-col gap-2'>
-                                                <div className='flex items-center gap-3'>
-                                                    <Label>Order Summary</Label>
-                                                    <Label className='font-thin flex items-center justify-center p-1 rounded bg-green-400/30 text-green-400 w-max'>Payment {selectedGroup.payment_status}</Label>
+                                            <Label className="text-[12px] md:text-sm text-start text-white/40">A summary of the customers order details.</Label>
+                                            <div className='flex flex-col gap-2'>
+                                                <div className='flex items-center justify-between'>
+                                                    <Label className='font-thin'>Payment</Label>
+                                                    <Label className='font-thin'>{selectedGroup.payment_method}</Label>
                                                 </div>
                                                 <Label className="text-[12px] md:text-sm text-start text-white/40">A summary of the customers order details.</Label>
                                                 <div className='flex flex-col gap-2'>
@@ -197,30 +211,68 @@ const PurchaseCard = ({ groupData }: Props) => {
                                                         <Label className='font-thin'>{new Intl.NumberFormat('en-PH', {
                                                             style: 'currency',
                                                             currency: 'PHP',
-                                                        }).format(selectedGroup.total_amount - selectedGroup.items.reduce((sum, item) => sum + item.sub_total * item.quantity, 0))}</Label>
-                                                    </div>
-                                                    <div className='flex items-center justify-between'>
-                                                        <Label>Total</Label>
-                                                        <Label>{new Intl.NumberFormat('en-PH', {
-                                                            style: 'currency',
-                                                            currency: 'PHP',
-                                                        }).format(selectedGroup.total_amount)}</Label>
+                                                        }).format(selectedGroup.items.reduce((sum, item) => sum + item.sub_total * item.quantity, 0))}</Label>
                                                     </div>
 
                                                 </div>
+                                                <div className='flex items-center justify-between '>
+                                                    <Label className='font-thin'>Shipping</Label>
+                                                    <Label className='font-thin'>{new Intl.NumberFormat('en-PH', {
+                                                        style: 'currency',
+                                                        currency: 'PHP',
+                                                    }).format(selectedGroup.total_amount - selectedGroup.items.reduce((sum, item) => sum + item.sub_total * item.quantity, 0))}</Label>
+                                                </div>
+                                                <div className='flex items-center justify-between'>
+                                                    <Label>Total</Label>
+                                                    <Label>{new Intl.NumberFormat('en-PH', {
+                                                        style: 'currency',
+                                                        currency: 'PHP',
+                                                    }).format(selectedGroup.total_amount)}</Label>
+                                                </div>
+
                                             </div>
                                         </div>
-
                                     </div>
-                                </>
-                            ) : (
+
+                                </div>
+                            </>
+                        ) : (
+                            <>
                                 <p>No order selected.</p>
-                            )}
-                        </AlertDialogDescription>
+                            </>
+                        )}
+
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                         <AlertDialogCancel className="bg-gray-800 text-white hover:bg-gray-700">Close</AlertDialogCancel>
-                        <AlertDialogAction disabled={!selectedGroup || selectedGroup.order_status !== 'pending'} className="bg-blue-500 hover:bg-blue-600 text-white">Cancel Order</AlertDialogAction>
+                        <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                                <Button disabled={!selectedGroup || selectedGroup.order_status !== 'pending'} variant={'secondary'}>{buttonLoading && (
+                                    <ClipLoader
+
+                                        color='black'
+                                        size={17}
+                                    />
+                                )}
+                                    {buttonLoading ? "Loading..." : "Cancel Order"}</Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                                <AlertDialogHeader>
+                                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                        This action cannot be undone. This will mean you agree to cancel your order.
+                                    </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                    <AlertDialogAction onClick={() => {
+                                        if (!selectedGroup) return
+                                        cancelOrder(selectedGroup.order_id)
+                                    }} >Continue</AlertDialogAction>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
+
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
