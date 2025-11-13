@@ -3,12 +3,24 @@ import React from 'react'
 import { useCartStore } from '@/stores/cartStore';
 import { LiaTimesSolid } from "react-icons/lia";
 import { RiDeleteBack2Fill } from "react-icons/ri";
-
+import { CiShoppingCart } from "react-icons/ci";
 import Image from 'next/image';
 import { Button } from '../ui/button';
 import { useRouter } from 'next/navigation';
+import {
+    Sheet,
+    SheetClose,
+    SheetContent,
+    SheetDescription,
+    SheetFooter,
+    SheetHeader,
+    SheetTitle,
+    SheetTrigger,
+} from "@/components/ui/sheet"
 
-import {AlertDialog,AlertDialogAction,AlertDialogCancel,AlertDialogContent,AlertDialogDescription,AlertDialogFooter,AlertDialogHeader,AlertDialogTitle,AlertDialogTrigger} from "@/components/ui/alert-dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
 
 const CartSideBar = () => {
     const router = useRouter();
@@ -26,103 +38,116 @@ const CartSideBar = () => {
     const clearCart = useCartStore((state) => state.clearCart)
     console.log(cartItems)
     return (
-        <div id='cartMenu' className={`${openCart ? '  bg-[#1a1a1a]  w-screen h-screen top-0 right-0 fixed z-50 text-white box-border md:w-[500px] md:shadow-[inset_3px_0_3px_rgba(255,255,255,0.4)] md:rounded-xl lg:w-[500px] lg:shadow-[inset_3px_0_3px_rgba(255,255,255,0.4)] lg:rounded-xl xl:w-[500px] xl:shadow-[inset_3px_0_3px_rgba(255,255,255,0.4)] xl:rounded-xl 2xl:w-[500px] 2xl:shadow-[inset_3px_0_3px_rgba(255,255,255,0.4)] 2xl:rounded-xl' : 'hidden'}`} >
-            <div className='relative w-full h-full box-border flex flex-col gap-2'>
-                <div className='fixed relative w-full border-b border-white/50  p-3 flex justify-between items-center'>
-                    <label htmlFor="">Shopping Cart</label>
-                    <button onClick={openCartToggle}><LiaTimesSolid /></button>
+        <Sheet open={openCart}>
+            <SheetTrigger asChild>
+                <CiShoppingCart onClick={() => openCartToggle()} className="text-2xl text-white" />
+            </SheetTrigger>
+            <SheetContent>
+                <div className='border-b border-white/30 flex items-center p-3 justify-between'>
+                    <SheetTitle>Shopping Cart</SheetTitle>
+                    <LiaTimesSolid onClick={() => openCartToggle()} className="text-md cursor-pointer text-white" />
                 </div>
-                {cartItems.length > 0 && <div className='px-4 underline text-blue-400 flex justify-end items-end'>
-                    <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                            <button className='underline'>Clear Cart</button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                            <AlertDialogHeader>
-                                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                                <AlertDialogDescription>
-                                    This action cannot be undone. This will permanently delete all products in the cart.
-                                </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                <AlertDialogAction onClick={clearCart}>Continue</AlertDialogAction>
-                            </AlertDialogFooter>
-                        </AlertDialogContent>
-                    </AlertDialog>
 
-                </div>}
-                <div className='overflow-y-auto max-h-[84vh] flex flex-col gap-2 rounded-[10px] px-4'>
-                    {
-                        cartItems.map((src, index) => (
-                            <div key={index} className='flex gap-1 items-center justify-center bg-black rounded p-3 relative'>
-                                <input disabled={src.stocks <= 0} type="checkbox" className='cursor-pointer' checked={checkoutItems.some(item => item.id == src.id)} onChange={(e) => {
-                                    if (e.target.checked) {
-                                        addToCheckout(src)
-                                    } else {
-                                        removeItemFromCheckoutItems(src)
-                                    }
-                                    // console.log(e.target.checked)
-                                    // e.target.checked ? addToCheckout(src) : removeItemFromCheckoutItems(src)
-                                    // // addToCheckout(src)
-                                }} />
-                                <div onClick={() => router.push(`/product/${src.product_id}`)} className='w-[25%]'>
-                                    <Image
-                                        src={src.product_image}
-                                        alt=''
-                                        width={500}
-                                        height={500} />
-                                </div>
-                                <div onClick={() => router.push(`/product/${src.product_id}`)} className='w-[60%] flex flex-col gap-1'>
-                                    <div className='flex flex-col'>
-                                        <label htmlFor="">{src.product_name}</label>
-                                        <label htmlFor=""> {new Intl.NumberFormat('en-PH', {
-                                            style: 'currency',
-                                            currency: 'PHP',
-                                        }).format(src.price)}
-                                        </label>
-                                        <label htmlFor="">Stocks: {src.stocks > 0 ? <span>{src.stocks}</span> : <span className='text-red-500'>Out of stocks</span>}</label>
+                <div className='relative w-full h-full box-border flex flex-col gap-2'>
+                    {cartItems.length > 0 && <div className='px-4 underline text-blue-400 flex justify-end items-end'>
+                        <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                                <button className='underline'>Clear Cart</button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                                <AlertDialogHeader>
+                                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                        This action cannot be undone. This will permanently delete all products in the cart.
+                                    </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                    <AlertDialogAction onClick={clearCart}>Continue</AlertDialogAction>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
+
+                    </div>}
+                    <div className='overflow-y-auto max-h-[84vh] flex flex-col gap-2 px-1'>
+                        {
+                            cartItems.map((src, index) => (
+                                <div key={index} className='flex gap-1 items-center justify-center bg-black border-b border-white/15 p-1 relative'>
+                                    <input disabled={src.stocks <= 0} type="checkbox" className='cursor-pointer' checked={checkoutItems.some(item => item.id == src.id)} onChange={(e) => {
+                                        if (e.target.checked) {
+                                            addToCheckout(src)
+                                        } else {
+                                            removeItemFromCheckoutItems(src)
+                                        }
+                                    }} />
+                                    <div onClick={() => {
+                                        openCartToggle()
+                                        router.push(`/product/${src.product_id}`)
+                                    }} className='w-[25%]'>
+                                        <Image
+                                            src={src.product_image}
+                                            alt=''
+                                            width={500}
+                                            height={500} />
                                     </div>
+                                    <div onClick={() => {
+                                        openCartToggle()
+                                        router.push(`/product/${src.product_id}`)
+                                    }} className='w-[60%] flex flex-col gap-1'>
+                                        <div className='flex flex-col'>
+                                            <Label htmlFor="">{src.product_name}</Label>
+                                            <Label htmlFor=""> {new Intl.NumberFormat('en-PH', {
+                                                style: 'currency',
+                                                currency: 'PHP',
+                                            }).format(src.price)}
+                                            </Label>
+                                            <Label htmlFor="">Stocks: {src.stocks > 0 ? <span>{src.stocks}</span> : <span className='text-red-500'>Out of stocks</span>}</Label>
+                                        </div>
 
+                                    </div>
+                                    <div className="flex gap-2 bg-black w-max p-1 px-2 rounded text-[10px]">
+
+                                        <input disabled type="number" className=" text-white px-1 w-[20px] bg-white/30 text-center outline-none rounded p-1" value={src.quantity} />
+
+                                    </div>
+                                    <button onClick={() => removeItemInCart(src)} className='absolute top-0 right-0 text-[25px] text-red-400'><RiDeleteBack2Fill /></button>
                                 </div>
-                                <div className="flex gap-2 bg-black w-max p-1 px-2 rounded text-[10px]">
-
-                                    <input disabled type="number" className=" text-white px-1 w-[20px] bg-white/30 text-center outline-none rounded p-1" value={src.quantity} />
-
-                                </div>
-                                <button onClick={() => removeItemInCart(src)} className='absolute top-0 right-0 text-[25px] text-red-400'><RiDeleteBack2Fill /></button>
-                            </div>
-                        ))
-                    }
-                </div>
-                <div className='fixed bottom-0 border-t w-screen border-white/50 bg-black p-3 flex justify-between items-center md:w-[500px] lg:w-[500px] xl:w-[500px] 2xl:2-[500px]'>
-                    <div className='w-full flex gap-2'>
-                        <button className={`${checkoutItems.length > 0 ? 'underline text-blue-400' : 'hidden'}`} onClick={() => {
-                            clearSelectedItemsInCart()
-                        }}>
-                            clear
-                        </button>
-                        <label htmlFor=""><span>{checkoutItems.length}</span> selected</label>
+                            ))
+                        }
                     </div>
-                    <div className='flex flex-col gap-1 w-full'>
-                        <label htmlFor="">SubTotal: <span>{checkoutItems.length > 0 ? new Intl.NumberFormat('en-PH', {
+                </div>
+                <SheetFooter>
+                    <div className='flex items-center gap-2'>
+                        <div className='w-[49%] flex gap-2'>
+                            <button className={`${checkoutItems.length > 0 ? 'underline text-blue-400 cursor-pointer' : 'hidden'}`} onClick={() => {
+                                clearSelectedItemsInCart()
+                            }}>
+                                <Label>Clear</Label>
+                            </button>
+                            <Label htmlFor=""><span>{checkoutItems.length}</span> selected</Label>
+                        </div>
+                        <Label className='w-[49%] text-end flex justify-end' htmlFor="">SubTotal: <span>{checkoutItems.length > 0 ? new Intl.NumberFormat('en-PH', {
                             style: 'currency',
                             currency: 'PHP',
                         }).format(checkoutItems.reduce((sum, item) => sum + item.price * 1, 0)) : new Intl.NumberFormat('en-PH', {
                             style: 'currency',
                             currency: 'PHP',
-                        }).format(0)}</span></label>
+                        }).format(0)}</span></Label>
+                    </div>
+                    <div className='flex items-center gap-2'>
+
+                        <Button onClick={() => openCartToggle()} variant={'secondary'} className='w-[49%]'>Close</Button>
+
+
                         <Button disabled={checkoutItems.length <= 0} onClick={() => {
                             addToFinalCheckout()
-                            router.push('/checkout')
                             openCartToggle()
-                            console.log('eto ung laman ng checkout items, ', checkoutItems)
-                        }} variant={'secondary'}>Checkout</Button>
-
+                            router.push('/checkout')
+                        }} variant={'secondary'} className='w-[49%]'>Checkout</Button>
                     </div>
-                </div>
-            </div>
-        </div >
+                </SheetFooter>
+            </SheetContent>
+        </Sheet>
     )
 }
 
