@@ -5,14 +5,13 @@ import { Button } from '../ui/button';
 import { FaPlus, FaMinus } from "react-icons/fa6";
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { LuCircleChevronLeft } from "react-icons/lu";
-import { LuCircleChevronRight } from "react-icons/lu";
 import { useCartStore } from '@/stores/cartStore';
 import { useUserStore } from '@/stores/userStore';
 import { TfiShoppingCart } from "react-icons/tfi";
 import { MdShoppingCartCheckout } from "react-icons/md";
 import { Props } from '@/types/CheckoutPageProps'
-
+import { useToast } from '@/stores/toastStore';
+import { FaArrowLeft } from "react-icons/fa6";
 
 const CheckoutProduct = ({ id, product_id, product_image,
     description,
@@ -22,13 +21,15 @@ const CheckoutProduct = ({ id, product_id, product_image,
     stocks }: Props) => {
     const router = useRouter();
     const addToSeperateItem = useCartStore((state) => state.addToSeperateItem)
+    const addToCart = useCartStore((state) => state.addToCart)
     const user = useUserStore((state) => state.user)
     const [quantity, setQuantity] = useState(1)
-
+    const toastState = useToast((state) => state.toastState)
     return (
-        <div className='px-2'>
+        <div className='px-[2px] md:px-2'>
             <div className=" w-full flex-column gap-2 sm:flex flex-row">
                 <div className="w-full text-white  h-full p-2 bg-black rounded-t-[10px] sm:w-[50%] sm:p-10 sm:inset-shadow-sm inset-shadow-white/50 sm:rounded-[10px]">
+                    <Button onClick={() => window.history.back()}><FaArrowLeft /></Button>
                     <div className=' rounded-[10px] relative'>
                         <Image
                             src={product_image}
@@ -37,10 +38,7 @@ const CheckoutProduct = ({ id, product_id, product_image,
                             alt=''
                             className="w-full m-auto sm:w-[90%]"
                         />
-                        <div className="w-full flex p-3 justify-between text-4xl absolute top-[50%] transform -translate-y-1/2 text-white">
-                            <button><LuCircleChevronLeft /></button>
-                            <button ><LuCircleChevronRight /></button>
-                        </div>
+
                     </div>
                 </div>
                 <div className="w-full text-white  flex flex-col gap-3 p-2 bg-black rounded-b-[10px] sm:w-[50%] sm:p-10 sm:inset-shadow-sm inset-shadow-white/50 sm:rounded-[10px] ">
@@ -66,7 +64,18 @@ const CheckoutProduct = ({ id, product_id, product_image,
                         </div>
                     </div>
                     <div className='w-full flex flex-col gap-2'>
-                        <Button className='p-5 flex items-center justify-center gap-3' onClick={() => console.log('eto ung selected payment options, ')} ><TfiShoppingCart />Add to Cart</Button>
+                        <Button disabled={toastState} className='p-5 flex items-center justify-center gap-3' onClick={() => {
+                            addToCart({
+                                id: id,
+                                email: user?.email,
+                                product_id: product_id,
+                                product_name: product_name,
+                                product_image: product_image,
+                                price: price,
+                                stocks: stocks,
+                                quantity: 1
+                            })
+                        }} ><TfiShoppingCart />Add to Cart</Button>
                         <Button className='p-5 flex items-center justify-center gap-3' onClick={() => {
                             addToSeperateItem({
                                 id: id,
