@@ -63,7 +63,7 @@ const ProductList = ({ products, category }: Props) => {
             const response = await res.json()
             setFinalProducts(response.result)
             setOffset(prev => {
-                const newOffset = prev + 10;
+                const newOffset = prev + 15;
                 offsetRef.current = newOffset;
                 return newOffset;
             });
@@ -95,8 +95,8 @@ const ProductList = ({ products, category }: Props) => {
         const detectScroll = () => {
             const { scrollTop, clientHeight, scrollHeight } = listElement;
 
-            const isAtBottom = scrollTop + clientHeight >= scrollHeight;
-            if (isAtBottom && !loadingRef.current && !noProductMessageRef.current) {
+            const isAtBottom = scrollTop + clientHeight >= scrollHeight - 5;
+            if (isAtBottom && !loadingRef.current && !noProductMessageRef.current && !loadingProducts) {
                 loadingRef.current = true; // prevent double fetches
                 setLoading(true);
                 setTimeout(() => {
@@ -106,7 +106,7 @@ const ProductList = ({ products, category }: Props) => {
                     const high = searchParams.get('high') || ''
                     const brands = searchParams.get('brands') || ''
                     const arrayBrands = brands.split(',')
-                    
+
                     const getFilter = async () => {
                         const res = await fetch('/api/filterProducts', {
                             method: 'POST',
@@ -118,7 +118,7 @@ const ProductList = ({ products, category }: Props) => {
                         const response = await res.json()
                         setFinalProducts(prev => [...prev, ...response.result])
                         setOffset(prev => {
-                            const newOffset = prev + 10;
+                            const newOffset = prev + 15;
                             offsetRef.current = newOffset;
                             return newOffset;
                         });
@@ -129,12 +129,12 @@ const ProductList = ({ products, category }: Props) => {
                         if (response.result.length === 0) {
                             setNoProductMessage(true);
                             noProductMessageRef.current = true;
-                            
+
                         }
 
                     }
                     getFilter()
-                    
+
                 }, 3000);
 
             }
@@ -143,7 +143,7 @@ const ProductList = ({ products, category }: Props) => {
         return () => listElement.removeEventListener('scroll', detectScroll);
     }, [])
     return (
-        <div className='flex flex-col max-h-[75vh] bg-black inset-shadow-sm inset-shadow-white/50 rounded-[10px] justify-start w-full font-thin md:max-h-[80vh]'>
+        <div className='flex flex-col max-h-[75vh] bg-black inset-shadow-sm inset-shadow-white/50 rounded-[10px] justify-start w-full font-thin md:max-h-[92vh]'>
             <CategoriesHeader />
             <div ref={listRef} className='overflow-y-auto z-0'>
                 <div id="right" className={`${loadingProducts ? 'opacity-25' : 'opacity-100'} ${productListDisplayOrientation[0]}`}>

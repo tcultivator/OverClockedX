@@ -84,13 +84,13 @@ const Dashboard = () => {
                         <p >Plug In</p>
                         <p >Power On</p>
                     </div>
-                    <label htmlFor="" className='font-normal md:text-[12px] lg:text-[15px] xl:text-[16px] 2xl:text-[18px]'>OverClockedX - upgrade yours now</label>
+                    <label htmlFor="" id='typewriter' className='font-normal md:text-[12px] max-w-max lg:text-[15px] xl:text-[16px] 2xl:text-[18px]'>OverClockedX - Upgrade yours now!</label>
                     <Button onClick={()=>SelectCategories('allProducts')} variant={'secondary'} className='p-5'>SHOP NOW</Button>
                 </div>
                 <div className='text-white w-full gap-1 flex flex-col items-center bg-black inset-shadow-sm inset-shadow-white/50 py-7 rounded-[10px] w-[60%] px-[3%] relative sm:py-3 md:w-[70%] py-3 flex-row 2xl:ww-[65%] py-3'>
                     <AnimatePresence mode='wait'>
                         {featuredProducts.length > 0 ?
-                            (<motion.div className='flex flex-col w-full lg:w-[30%]'
+                            (<motion.div className='flex flex-col w-full lg:w-[40%]'
                                 key={featuredProducts[current].id}
                                 initial={{ opacity: 0, y: -100, animationDuration: .5 }}
                                 animate={{ opacity: 1, y: 0, animationDuration: .5 }}
@@ -104,7 +104,7 @@ const Dashboard = () => {
                                         currency: 'PHP',
                                     }).format(featuredProducts[current].price)}
                                 </label>
-                                <div className="mt-4 flex flex-col gap-1 sm:flex-row">
+                                <div className="mt-4 flex flex-col md:w-[90%] gap-1 sm:flex-row">
                                     <button onClick={() => router.push(`/product/${featuredProducts[current].product_id}`)} className='bg-white text-[10px] py-2 w-full text-black   rounded-[10px] md:text-[12px]  rounded-[5px]'>BUY</button>
                                     <button disabled={toastState} onClick={() => {
                                         addToCart({
@@ -122,7 +122,7 @@ const Dashboard = () => {
 
                             </motion.div>) :
                             (
-                                <div className='flex flex-col gap-2 w-full lg:w-[30%]'>
+                                <div className='flex flex-col gap-2 w-full lg:w-[40%]'>
                                     <Skeleton className=' bg-white/10 text-[15px] h-[100px] w-full rounded-xl font-anton md:text-[20px] lg:text-[30px] xl:text-[40px] 2xl:text-[50px]' />
                                     <Skeleton className='bg-white/10 font-thin h-[70px] w-full text-[11px] md:text-[12px] lg:text-[15px] xl:text-[16px] 2xl:text-[18px]' />
                                     <Skeleton className=' bg-white/10 text-[15px] h-[50px] w-full font-anton md:text-[15px] lg:text-[20px] xl:text-[25px] 2xl:text-[30px]' />
@@ -138,7 +138,7 @@ const Dashboard = () => {
 
                     {featuredProducts.length > 0 ? (
 
-                        <div className="relative overflow-hidden w-full lg:w-[70%]">
+                        <div className="relative overflow-hidden w-full lg:w-[60%]">
                             <div className="flex relative w-full transition-transform duration-700 ease-in-out " style={{ transform: `translateX(-${current * 100}%)` }}>
 
                                 {featuredProducts.map((src, idx) => (
@@ -159,7 +159,7 @@ const Dashboard = () => {
                         </div>
 
                     ) : (
-                        <div className="relative overflow-hidden w-full lg:w-[70%]">
+                        <div className="relative overflow-hidden w-full lg:w-[60%]">
                             {/* Skeleton slide */}
                             <div className="w-full min-w-full h-[400px] flex items-center justify-center">
                                 <Skeleton className="w-full h-full rounded-lg bg-white/10" />
