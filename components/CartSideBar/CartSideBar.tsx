@@ -66,14 +66,14 @@ const CartSideBar = () => {
                                     // e.target.checked ? addToCheckout(src) : removeItemFromCheckoutItems(src)
                                     // // addToCheckout(src)
                                 }} />
-                                <div className='w-[25%]'>
+                                <div onClick={() => router.push(`/product/${src.product_id}`)} className='w-[25%]'>
                                     <Image
                                         src={src.product_image}
                                         alt=''
                                         width={500}
                                         height={500} />
                                 </div>
-                                <div className='w-[60%] flex flex-col gap-1'>
+                                <div onClick={() => router.push(`/product/${src.product_id}`)} className='w-[60%] flex flex-col gap-1'>
                                     <div className='flex flex-col'>
                                         <label htmlFor="">{src.product_name}</label>
                                         <label htmlFor=""> {new Intl.NumberFormat('en-PH', {
