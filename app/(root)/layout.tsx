@@ -48,7 +48,6 @@ export default function RootLayout({
         <Toaster />
         {children}
         <Toast />
-        <CartSideBar />
         <Footer />
         <Loading />
 
