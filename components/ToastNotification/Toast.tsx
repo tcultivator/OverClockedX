@@ -53,7 +53,7 @@ const Toast = () => {
 
 
     return (
-        <div className={`${toastState ? `absolute fixed w-[500px] h-[50px] ${toastStatus == 'failed' ? 'bg-red-400' : `${toastStatus=='success'?'bg-green-400':'bg-amber-400'}`} top-20 right-2 z-50 rounded-[10px]` : 'hidden'} `}>
+        <div className={`${toastState ? `absolute fixed w-[70%] md:w-[500px] h-[50px] ${toastStatus == 'failed' ? 'bg-red-400' : `${toastStatus=='success'?'bg-green-400':'bg-amber-400'}`} top-11 md:top-20 right-[2px] md:right-2 z-50 rounded-[10px]` : 'hidden'} `}>
             <div className='relative flex justify-around items-center h-full text-white'>
                 <ToastStatus />
 
