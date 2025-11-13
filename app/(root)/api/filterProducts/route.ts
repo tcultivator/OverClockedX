@@ -54,8 +54,8 @@ export async function POST(req: NextRequest) {
     console.log('eto laman ng selected brands, ', finalSelectedBrands)
 
     try {
-        console.log(query + finalSelectedBrands + availabilityValue + PriceRangeValue + SortByValue + ' LIMIT 10 OFFSET ?')
-        const [rows] = body.category == 'allProducts' ? await db.query(query + finalSelectedBrands + availabilityValue + PriceRangeValue + SortByValue + ' LIMIT 10 OFFSET ?', [body.offset]) : await db.query(query + finalSelectedBrands + availabilityValue + PriceRangeValue + SortByValue + ' LIMIT 10 OFFSET ?', [body.category, body.category, body.offset])
+        console.log(query + finalSelectedBrands + availabilityValue + PriceRangeValue + SortByValue + ' LIMIT 15 OFFSET ?')
+        const [rows] = body.category == 'allProducts' ? await db.query(query + finalSelectedBrands + availabilityValue + PriceRangeValue + SortByValue + ' LIMIT 15 OFFSET ?', [body.offset]) : await db.query(query + finalSelectedBrands + availabilityValue + PriceRangeValue + SortByValue + ' LIMIT 15 OFFSET ?', [body.category, body.category, body.offset])
         const result = rows as ProductsType[]
         return NextResponse.json({ result })
     } catch (err) {
