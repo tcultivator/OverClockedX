@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
     user_address.cityMunicipality,
     user_address.barangay,
     user_address.province,
-    user_address.trademark, 
+    user_address.trademark 
     FROM user_address 
     JOIN accounts ON accounts.email = user_address.email 
     WHERE user_address.email = ?
