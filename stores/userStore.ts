@@ -4,7 +4,6 @@ import { toast } from "sonner"
 interface UserAddress {
     email: string;
     rname: string;
-    phone_number: string;
     country: string;
     cityMunicipality: string;
     barangay: string;

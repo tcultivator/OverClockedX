@@ -267,16 +267,6 @@ const Checkout = () => {
                                     </div>
 
                                 </div>
-
-                                <div className='flex flex-col'>
-                                    <label htmlFor="">Phone Number</label>
-                                    <div className='w-full flex gap-2 items-center'>
-                                        <Input disabled={userAdress.length > 0} type="number" value={userAdress[0]?.phone_number ?? phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
-                                        {phoneNumber != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
-                                    </div>
-
-                                </div >
-
                                 <div className='flex flex-col'>
                                     <label htmlFor="">Country</label>
                                     <div className='w-full flex gap-2 items-center'>
@@ -350,7 +340,6 @@ const Checkout = () => {
 
                                                 email: email,
                                                 rname: rName,
-                                                phone_number: phoneNumber.toString(),
                                                 country: country,
                                                 cityMunicipality: cityMunicipality,
                                                 barangay: barangay,
