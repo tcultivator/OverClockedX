@@ -7,10 +7,9 @@ type sendMailProps = {
 };
 
 const transporter = nodemailer.createTransport({
-    host: process.env.NODEMAILER_HOST,  
+    host: process.env.NODEMAILER_HOST, 
     port: 587,
     secure: false,                       
-    requireTLS: true,
     auth: {
         user: process.env.NODEMAILER_USER,
         pass: process.env.NODEMAILER_PASS
@@ -26,8 +25,8 @@ export async function sendMail({ to, sub, message }: sendMailProps) {
             html: message
         });
 
-        console.log("Email sent:", info.messageId);
+        console.log('Email sent:', info.messageId);
     } catch (err) {
-        console.error("Email send error:", err);
+        console.error('Email send error:', err);
     }
 }
