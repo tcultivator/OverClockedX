@@ -15,7 +15,7 @@ const ProfileNavBar = async () => {
         redirect('/')
     }
 
-    const result = await db.query('SELECT id,email,username,profile_Image,gender,phone_number FROM accounts WHERE email = ?', [session.user?.email])
+    const result = await db.query('SELECT id,email,username,profile_Image FROM accounts WHERE email = ?', [session.user?.email])
     const user = result[0] as Accounts[]
     return (
         <div className="flex flex-col bg-black/100 rounded-t-xl inset-shadow-sm inset-shadow-white/50 lg:inset-shadow-none lg:shadow-none box-border w-full lg:w-[200px] lg:bg-black/0">
