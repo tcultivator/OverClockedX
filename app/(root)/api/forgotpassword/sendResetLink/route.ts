@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
         sendMail({
             to: body.email, sub: 'Reset Password', message: `<div>
                     <label htmlFor="">Note:this link will expired 15 minutes</label>
-                    <a href="http://localhost:3000/reset?token=${token}">go to reset page</a>
+                    <a href="https://overclockedx.onrender.com/reset?token=${token}">go to reset page</a>
                 </div>` })
         return NextResponse.json({ status: 200 })
     } catch (err) {

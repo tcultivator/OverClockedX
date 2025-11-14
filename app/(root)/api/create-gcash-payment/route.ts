@@ -10,7 +10,7 @@ const paymentRequest = xendit.PaymentRequest;
 
 export async function POST(req: NextRequest) {
     try {
-        const { amount, referenceId, phoneNumber } = await req.json();
+        const { amount, referenceId, phoneNumber, email } = await req.json();
         const data: PaymentRequestParameters = {
             amount: amount,
             paymentMethod: {
@@ -27,8 +27,9 @@ export async function POST(req: NextRequest) {
             currency: "PHP",
             referenceId: referenceId,
             metadata: {
-                customer_phone: phoneNumber
-                
+                customer_phone: phoneNumber,
+                email: email
+
             }
         }
         const payment = await paymentRequest.createPaymentRequest({ data });

@@ -117,6 +117,7 @@ const Checkout = () => {
                         amount: finalCheckoutItems.reduce((sum, item) => sum + item.price * item.quantity, 0) + shippingCost,
                         referenceId: 'txn-' + Date.now(),
                         phoneNumber: '09171234567',
+                        email: user?.email,
                     }),
                 });
 

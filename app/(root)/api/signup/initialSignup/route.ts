@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
                         Thank you for signing up. To complete your account setup, please confirm your email address by clicking the button below.
                         </p>
 
-                        <a href="http://localhost:3000/accountConfirmation?token=${token}"
+                        <a href="https://overclockedx.onrender.com/accountConfirmation?token=${token}"
                         style="display: inline-block; background-color: #2563eb; color: #ffffff; text-decoration: none; padding: 15px 25px; border-radius: 6px; font-weight: bold; font-size: 16px;">
                         Confirm My Account
                         </a>
