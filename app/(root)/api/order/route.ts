@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
         for (const item of body.checkoutItems) {
             console.log('eto ung quantity',item.quantity)
             await db.query('INSERT INTO order_items (order_id, product_id, quantity, price, sub_total)VALUES(?,?,?,?,?)', [resultData.insertId, item.product_id, item.quantity, item.price, item.price * item.quantity])
-            await db.query('UPDATE products SET stocks = stocks - ?, sales_count = sales_count + ? WHERE product_id = ?', [item.quantity, item.quantity, item.product_id])
+            // await db.query('UPDATE products SET stocks = stocks - ?, sales_count = sales_count + ? WHERE product_id = ?', [item.quantity, item.quantity, item.product_id])
         }
         sendMail({
             to: body.email,
