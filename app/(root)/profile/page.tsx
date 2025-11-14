@@ -13,7 +13,7 @@ const Profile = async () => {
         
     }
 
-    const result = await db.query('SELECT id,email,username,profile_Image,gender,phone_number,firstTime_signin FROM accounts WHERE email = ?', [session.user?.email])
+    const result = await db.query('SELECT id,email,username,profile_Image,firstTime_signin FROM accounts WHERE email = ?', [session.user?.email])
     const user = result[0] as Accounts[]
     return (
         <>
