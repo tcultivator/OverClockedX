@@ -5,9 +5,9 @@ type sendMailProps = {
     message: string;
 }
 const transporter = nodemailer.createTransport({
-    secure: true,
+    secure: false,
     host: process.env.NODEMAILER_HOST,
-    port: 465,
+    port: 587,
     auth: {
         user: process.env.NODEMAILER_USER,
         pass: process.env.NODEMAILER_PASS
