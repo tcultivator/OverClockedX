@@ -7,12 +7,13 @@ type sendMailProps = {
 };
 
 const transporter = nodemailer.createTransport({
-  secure: true,
-  host: process.env.NODEMAILER_HOST,
-  port: 465,
+  service: 'gmail',
   auth: {
+    type: 'OAuth2',
     user: process.env.NODEMAILER_USER,
-    pass: process.env.NODEMAILER_PASS,
+    clientId: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    refreshToken: process.env.GOOGLE_REFRESH_TOKEN,
   },
 });
 
