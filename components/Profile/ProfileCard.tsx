@@ -10,11 +10,7 @@ import { useLoading } from '@/stores/loadingStore';
 
 import { useUserStore } from '@/stores/userStore';
 const ProfileCard = ({ user }: user) => {
-
-
-    const [phoneNumber, setPhoneNumber] = useState(user.phone_number || '');
     const [username, setUsername] = useState(user.username || '')
-    const [gender, setGender] = useState(user.gender || '');
     const [profileImage, setProfileImage] = useState(user.profile_Image || '')
     const [imageTemp, setImageTemp] = useState<File | undefined>();
 
@@ -38,7 +34,7 @@ const ProfileCard = ({ user }: user) => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ username: username, phoneNumber: phoneNumber, gender: gender, email: user.email }),
+            body: JSON.stringify({ username: username, email: user.email }),
         })
         const result = await res.json()
         setTimeout(() => {
@@ -106,24 +102,7 @@ const ProfileCard = ({ user }: user) => {
                             <label htmlFor="">Username</label>
                             <Input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
                         </div>
-                        <div className='flex flex-col gap-2'>
-                            <label className='w-max' htmlFor="">Contact Number</label>
-                            <Input type="number" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
-                        </div>
-                        <div>
-                            <label>Gender</label>
-                            <div className="flex gap-4">
-                                <div className="flex gap-2 items-center">
-                                    <Input type="radio" id="male" name="gender" value="male" checked={gender === 'male'} onChange={(e) => setGender(e.target.value)} />
-                                    <label htmlFor="male">Male</label>
-                                </div>
-                                <div className="flex gap-2 items-center">
-                                    <Input type="radio" id="female" name="gender" value="female" checked={gender === 'female'} onChange={(e) => setGender(e.target.value)} />
-                                    <label htmlFor="female">Female</label>
-                                </div>
-                            </div>
-                        </div>
-
+                        
                         <button
                             type="submit"
                             disabled={buttonLoading === true}
