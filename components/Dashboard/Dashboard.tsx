@@ -79,7 +79,7 @@ const Dashboard = () => {
         <div className="flex flex-col gap-5">
             <div className='flex flex-col px-[2px] gap-[2px] sm:px-2 sm:gap-2 md:flex-row lg:flex-row '>
                 <div className='text-white w-full flex flex-col rounded-t-xl bg-black inset-shadow-sm inset-shadow-white/50 justify-center items-start px-[3%] py-[5%] rounded-[10px] w-[40%] md:w-[30%] 2xl:w-[35%]'>
-                    <div className='flex flex-col text-[70px] font-anton md:text-[30px] lg:text-[50px] xl:text-[70px] 2xl:text-[90px]'>
+                    <div id='test' className='flex flex-col text-[70px] font-anton md:text-[30px] lg:text-[50px] xl:text-[70px] 2xl:text-[90px]'>
                         <p >Gear Up</p>
                         <p >Plug In</p>
                         <p >Power On</p>
