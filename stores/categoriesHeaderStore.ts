@@ -34,7 +34,7 @@ export const useCategoriesHeaderStore = create<categDisplayType>((set) => ({
                 'flex flex-row justify-between cursor-pointer p-3 rounded items-center',
                 'flex justify-between gap-1 cursor-pointer items-center',
                 'w-full flex justify-end px-2',
-                'w-max flex items-center text-[12px] gap-2 justify-center font-normal bg-white text-black md:py-2 md:px-3 md:text-[12px] py-2 px-3',
+                'w-max flex items-center text-[12px] gap-2 rounded-[10px] justify-center font-normal bg-white text-black md:py-2 md:px-3 md:text-[12px] py-2 px-3',
                 'w-full h-full max-w-[150px] max-h-[150px] aspect-square bg-red'],
             isList: true
         })

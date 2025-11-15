@@ -84,7 +84,7 @@ const Dashboard = () => {
                         <p >Plug In</p>
                         <p >Power On</p>
                     </div>
-                    <label htmlFor="" id='typewriter' className='font-normal md:text-[12px] max-w-max lg:text-[15px] xl:text-[16px] 2xl:text-[18px]'>OverClockedX - Upgrade yours now!</label>
+                    <label htmlFor="" id='typewriter' className='font-normal text-[12px] max-w-max lg:text-[15px] xl:text-[16px] 2xl:text-[18px]'>OverClockedX - Upgrade yours now!</label>
                     <Button onClick={()=>SelectCategories('allProducts')} variant={'secondary'} className='p-5'>SHOP NOW</Button>
                 </div>
                 <div className='text-white w-full gap-1 flex flex-col items-center bg-black inset-shadow-sm inset-shadow-white/50 py-7 rounded-[10px] w-[60%] px-[3%] relative sm:py-3 md:w-[70%] py-3 flex-row 2xl:ww-[65%] py-3'>
