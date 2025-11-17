@@ -1,7 +1,7 @@
 // app/api/chat/route.ts
 import { NextResponse, NextRequest } from 'next/server';
 import OpenAI from 'openai';
-
+import { queryPinecone } from '@/lib/queryPinecone'
 
 const token = process.env.OPENAI_API_KEY;
 
@@ -13,29 +13,30 @@ export async function POST(req: NextRequest) {
         apiKey: token
     });
 
+    const relevantChunks = (await queryPinecone(message, 5)) || [];
+    const contextText = relevantChunks.map(c => c.chunk).join("\n\n");
+
+    const prompt = `
+            You are a helpful AI assistant for a computer retail store.
+            Use the following product information to answer the customer question:
+
+            ${contextText}
+
+            - Use the database info where available.
+            - If some details are missing, fill them in based on your general knowledge of computer products.
+            - Keep answers short, friendly, and easy to understand.
+            - Always ask helpful follow-up questions if needed.
+
+            Customer Question: ${message}
+`;
+
+
     const result = await client.chat.completions.create({
         model: "openai/gpt-4o",
         messages: [
             {
                 role: "system",
-                content: `
-               You are a helpful AI assistant for a computer retail store. 
-                Your job is to help customers with:
-                - recommending PC parts (CPU, GPU, RAM, SSD, PSU, motherboard)
-                - helping them choose laptops, desktops, accessories
-                - explaining specifications in simple terms
-                - comparing products and giving pros/cons
-                - suggesting alternatives based on budget
-                - answering store-related questions (availability, compatibility, performance)
-                - keeping responses short, friendly, and easy to understand
-                - avoiding overly technical jargon unless the customer asks for it
-
-                Always ask helpful follow-up questions such as:
-                "What's your budget?"
-                "What will you use the computer for?"
-                "Do you prefer Intel or AMD?"
-
-                `
+                content: prompt
             },
             {
                 role: "user",
