@@ -7,4 +7,5 @@ export type Props = {
     product_name: string;
     price: number;
     stocks: number;
+    value?: number | null;
 }

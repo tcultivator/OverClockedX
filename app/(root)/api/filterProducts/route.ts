@@ -4,7 +4,27 @@ import db from "@/lib/db";
 import { ProductsType } from "@/types/ProductTypes";
 export async function POST(req: NextRequest) {
     const body = await req.json();
-    const query = body.category == 'allProducts' ? 'SELECT * FROM products WHERE id !=0 ' : 'SELECT * FROM products WHERE (category = ? OR parent = ?) ';
+    const query = body.category == 'allProducts' ? `
+    SELECT 
+      p.*,
+      promo.value
+    FROM products p
+    LEFT JOIN product_promotion_list promo
+      ON promo.product_id = p.product_id
+      AND promo.isActive = 1
+      AND promo.end_date > NOW()
+    WHERE 1=1
+    ` : `
+    SELECT 
+      p.*,
+      promo.value
+    FROM products p
+    LEFT JOIN product_promotion_list promo
+      ON promo.product_id = p.product_id
+      AND promo.isActive = 1
+      AND promo.end_date > NOW()
+    WHERE (p.category = ? OR p.parent = ?) 
+    `;
 
     const availability = () => {
         switch (body.Availability) {

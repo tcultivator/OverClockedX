@@ -2,7 +2,13 @@ import db from "@/lib/db";
 import { NextResponse } from "next/server";
 import { ProductsType } from "@/types/ProductTypes";
 export async function POST() {
-    const query = 'SELECT * FROM products ORDER BY sales_count DESC LIMIT 5'
+    const query = `SELECT p.*,
+      promo.value
+    FROM products p
+    LEFT JOIN product_promotion_list promo
+      ON promo.product_id = p.product_id 
+      AND promo.isActive = 1
+      AND promo.end_date > NOW() ORDER BY p.sales_count DESC LIMIT 5`
     try {
         const [rows] = await db.query(query)
         const result = rows as ProductsType[]
