@@ -7,4 +7,5 @@ export interface ProductsInCartTypes {
     price: number
     stocks: number
     quantity: number
+    value?: number | null;
 }

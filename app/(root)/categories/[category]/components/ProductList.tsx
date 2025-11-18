@@ -159,9 +159,16 @@ const ProductList = ({ products, category }: Props) => {
                             </div >
                         ))
                     ) : (
+
                         finalProducts.length > 0 ? finalProducts.map((data, index) => (
                             <div key={index} className={`${productListDisplayOrientation[1]}`}>
                                 <div className={`${productListDisplayOrientation[2]}`} onClick={() => router.push(`/product/${data.product_id}`)} >
+                                    {data.value != null && <Label className='absolute top-2 right-2 p-1 bg-red-400 flex items-center gap-1'>{new Intl.NumberFormat('en-PH', {
+                                        style: 'currency',
+                                        currency: 'PHP',
+                                        minimumFractionDigits: 0,
+                                        maximumFractionDigits: 0
+                                    }).format(data.value)}<span>OFF</span></Label>}
                                     <div className={`${productListDisplayOrientation[3]}`}>
                                         <div className={`${productListDisplayOrientation[6]}`}>
                                             <Image src={data.product_image} alt='' className='w-full h-full max-w-xs z-0' width={400} height={400} />
@@ -212,7 +219,7 @@ const ProductList = ({ products, category }: Props) => {
             </div>
 
 
-        </div>
+        </div >
 
 
     )

@@ -6,4 +6,5 @@ export interface ProductsInCheckoutTypes {
     price: number
     stocks: number
     quantity: number
+    value?: number | null;
 }

@@ -18,6 +18,7 @@ import { useToast } from '@/stores/toastStore';
 
 //this is the framer motion import, this allow to have an animation
 import { motion, AnimatePresence } from 'framer-motion'
+import { Label } from '../ui/label';
 
 
 const Dashboard = () => {
@@ -29,7 +30,7 @@ const Dashboard = () => {
     const user = useUserStore((state) => state.user)
     const toastState = useToast((state) => state.toastState)
 
-    
+
 
     useEffect(() => {
         const getFeaturedProductsFunc = async () => {
@@ -40,13 +41,11 @@ const Dashboard = () => {
                 }
             })
             const response = await getFeaturedProducts.json()
-            console.log(response)
-            console.log(current)
             setFeaturedProducts(response)
 
         }
         getFeaturedProductsFunc()
-        
+
     }, [])
 
 
@@ -72,7 +71,7 @@ const Dashboard = () => {
         return () => clearInterval(interval);
     });
 
-     function SelectCategories(category: string): void {
+    function SelectCategories(category: string): void {
         router.push(`/categories/${category}`);
     }
     return (
@@ -85,7 +84,7 @@ const Dashboard = () => {
                         <p >Power On</p>
                     </div>
                     <label htmlFor="" id='typewriter' className='font-normal text-[12px] max-w-max lg:text-[15px] xl:text-[16px] 2xl:text-[18px]'>OverClockedX - Upgrade yours now!</label>
-                    <Button onClick={()=>SelectCategories('allProducts')} variant={'secondary'} className='p-5'>SHOP NOW</Button>
+                    <Button onClick={() => SelectCategories('allProducts')} variant={'secondary'} className='p-5'>SHOP NOW</Button>
                 </div>
                 <div className='text-white w-full gap-1 flex flex-col items-center bg-black inset-shadow-sm inset-shadow-white/50 py-7 rounded-[10px] w-[60%] px-[3%] relative sm:py-3 md:w-[70%] py-3 flex-row 2xl:ww-[65%] py-3'>
                     <AnimatePresence mode='wait'>
@@ -142,13 +141,22 @@ const Dashboard = () => {
                             <div className="flex relative w-full transition-transform duration-700 ease-in-out " style={{ transform: `translateX(-${current * 100}%)` }}>
 
                                 {featuredProducts.map((src, idx) => (
-                                    <Image
-                                        key={idx}
-                                        src={src.product_image}
-                                        alt=''
-                                        width={1000}
-                                        height={1000}
-                                        className='w-full max-w-full flex-shrink-0 object-contain' />
+                                    <div className='w-full max-w-full flex-shrink-0 object-contain' key={idx}>
+                                        <Image
+                                            key={idx}
+                                            src={src.product_image}
+                                            alt=''
+                                            width={1000}
+                                            height={1000}
+                                            className='w-full max-w-full flex-shrink-0 object-contain' />
+                                        {src.value != null && <Label className=' absolute top-3 right-3  rounded text-[15px] font-anton md:text-[10px] lg:text-[30px] xl:text-[40px] 2xl:text-[50px] p-1 bg-red-400 flex items-center gap-1'>{new Intl.NumberFormat('en-PH', {
+                                            style: 'currency',
+                                            currency: 'PHP',
+                                            minimumFractionDigits: 0,
+                                            maximumFractionDigits: 0
+                                        }).format(Number(src.value))}<span>OFF</span></Label>}
+                                    </div>
+
                                 ))}
 
                             </div>

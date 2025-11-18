@@ -43,7 +43,7 @@ import { ClipLoader } from 'react-spinners';
 
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
 
-
+import { Label } from '@/components/ui/label';
 const Checkout = () => {
     const finalCheckoutItems = useCartStore((state) => state.finalCheckoutItems)
     const [shippingOptions, setShippingOption] = useState('delivery');
@@ -114,7 +114,7 @@ const Checkout = () => {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        amount: finalCheckoutItems.reduce((sum, item) => sum + item.price * item.quantity, 0) + shippingCost,
+                        amount: finalCheckoutItems.reduce((sum, item) => sum + (item.price - (item.value != null ? item.value : 0)) * item.quantity, 0) + shippingCost,
                         referenceId: 'txn-' + Date.now(),
                         phoneNumber: '09171234567',
                         email: user?.email,
@@ -133,7 +133,7 @@ const Checkout = () => {
                     body: JSON.stringify({
                         email: user?.email,
                         referenceId: data.referenceId,
-                        total_amount: finalCheckoutItems.reduce((sum, item) => sum + item.price * item.quantity, 0) + shippingCost,
+                        total_amount: finalCheckoutItems.reduce((sum, item) => sum + (item.price - (item.value != null ? item.value : 0)) * item.quantity, 0) + shippingCost,
                         checkoutItems: finalCheckoutItems,
                         payment_method: paymentOptions
                     }),
@@ -368,7 +368,14 @@ const Checkout = () => {
                                 <Image src={data.product_image} alt="" className='w-20 border border-white/50' width={100} height={100} />
                                 <div className='flex flex-col'>
                                     <label htmlFor="">{data.product_name}</label>
-                                    <label htmlFor="">{data.price}</label>
+                                    <div className='flex items-center gap-2'>
+                                        <label htmlFor="" className={`${data.value != null && 'line-through text-white/30'}`}>{data.price}</label>
+                                        {data.value != null && <Label>{new Intl.NumberFormat('en-PH', {
+                                            style: 'currency',
+                                            currency: 'PHP',
+                                        }).format(data.price - Number(data.value))}</Label>}
+                                    </div>
+
                                 </div>
                             </div>
                             <div className="flex gap-2 bg-black w-max p-1 px-2 rounded text-[10px]">
@@ -442,7 +449,7 @@ const Checkout = () => {
                         <label htmlFor="">{finalCheckoutItems.length > 0 ? new Intl.NumberFormat('en-PH', {
                             style: 'currency',
                             currency: 'PHP',
-                        }).format(finalCheckoutItems.reduce((sum, item) => sum + item.price * item.quantity, 0)) : new Intl.NumberFormat('en-PH', {
+                        }).format(finalCheckoutItems.reduce((sum, item) => sum + (item.price - (item.value != null ? item.value : 0)) * item.quantity, 0)) : new Intl.NumberFormat('en-PH', {
                             style: 'currency',
                             currency: 'PHP',
                         }).format(0)}</label>
@@ -477,7 +484,7 @@ const Checkout = () => {
                         <label htmlFor="">{finalCheckoutItems.length > 0 ? new Intl.NumberFormat('en-PH', {
                             style: 'currency',
                             currency: 'PHP',
-                        }).format(finalCheckoutItems.reduce((sum, item) => sum + item.price * item.quantity, 0) + (shippingCost - voucherAmount)) : new Intl.NumberFormat('en-PH', {
+                        }).format(finalCheckoutItems.reduce((sum, item) => sum + (item.price - (item.value != null ? item.value : 0)) * item.quantity, 0) + (shippingCost - voucherAmount)) : new Intl.NumberFormat('en-PH', {
                             style: 'currency',
                             currency: 'PHP',
                         }).format(0)}</label>

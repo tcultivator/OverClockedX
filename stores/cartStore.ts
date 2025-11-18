@@ -87,11 +87,9 @@ export const useCartStore = create<cart>((set) => ({
 
 
         useToast.getState().displayToast(true)
-        console.log(useCartStore.getState().cartItems)
+
         try {
-            console.log('eto ung laman sa kapag add to cart')
-            console.log(products?.email)
-            console.log(products)
+
             const addtocart = await fetch('/api/addToCart', {
                 method: 'POST',
                 headers: {
@@ -121,7 +119,7 @@ export const useCartStore = create<cart>((set) => ({
                 toastTimeout = setTimeout((): void => {
                     useToast.getState().displayToast(false)
                 }, 1000);
-                console.log(toastTimeout)
+
 
             }
             else if (response.status == 500 && !products?.email) {
@@ -132,7 +130,7 @@ export const useCartStore = create<cart>((set) => ({
                 toastTimeout = setTimeout(() => {
                     useToast.getState().displayToast(false)
                 }, 5000);
-                console.log(toastTimeout)
+
             } else if (response.status == 200) {
                 useToast.getState().setToastStatus('success')
                 const updatedCartItems = useCartStore.getState().cartItems.map(item =>
@@ -154,7 +152,7 @@ export const useCartStore = create<cart>((set) => ({
             toastTimeout = setTimeout((): void => {
                 useToast.getState().displayToast(false)
             }, 5000);
-            console.log(toastTimeout)
+
 
         }
     },
@@ -176,7 +174,7 @@ export const useCartStore = create<cart>((set) => ({
             set({
                 cartItems: []
             })
-            console.log(useCartStore.getState().cartItems)
+
         }
 
     },
@@ -196,7 +194,7 @@ export const useCartStore = create<cart>((set) => ({
             const email = useUserStore.getState().user?.email
 
             const newCartItems = useCartStore.getState().cartItems.filter(products => products.product_id !== ItemFromCartNeedToRemove.product_id)
-            console.log(newCartItems)
+
 
             //this remove the item from cart, this run first before fetch call that remove that item in database
             set({
@@ -221,7 +219,7 @@ export const useCartStore = create<cart>((set) => ({
             })
             const response = await removeitemfromcart.json()
             if (response.status == 200) {
-                console.log('success')
+
             } else {
                 //this is a rollback, if remove item from cart fails
                 set({
@@ -264,7 +262,7 @@ export const useCartStore = create<cart>((set) => ({
     },
     checkoutItems: [],
     addToCheckout: (products: ProductsInCartTypes | null | undefined) => {
-        console.log('gumana ung add')
+
         const newChecoutItems = {
             id: products?.id!,
             product_id: products?.product_id!,
@@ -279,7 +277,7 @@ export const useCartStore = create<cart>((set) => ({
         }))
     },
     removeItemFromCheckoutItems: (products: ProductsInCartTypes | null | undefined) => {
-        console.log('gumana remove')
+
         const newChecoutItemss = {
             id: products?.id!,
             product_id: products?.product_id!,
@@ -301,19 +299,19 @@ export const useCartStore = create<cart>((set) => ({
     },
     finalCheckoutItems: [],
     addToFinalCheckout: () => {
-        console.log('gumana ung add')
+
         const newSeperatedItem = useCartStore.getState().seperateItem
         const finalCheckouts = useCartStore.getState().checkoutItems
-        console.log('eto laman ng seperated items', newSeperatedItem)
+
         if (newSeperatedItem.length < 1) {
-            console.log('eto naman kapag ung sa cart check gumana')
+
             set({
                 finalCheckoutItems: finalCheckouts,
             })
 
 
         } else {
-            console.log('eto pag meron ng laman ung seperated checkout')
+
             set({
                 finalCheckoutItems: newSeperatedItem,
             })
@@ -333,6 +331,7 @@ export const useCartStore = create<cart>((set) => ({
             price: products?.price!,
             stocks: products?.stocks!,
             quantity: products?.quantity!,
+            value: products?.value!
         };
         set({
             seperateItem: [newChecoutItems]

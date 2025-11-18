@@ -13,9 +13,29 @@ type PageProps = {
 const ProductOverview = async ({ params }: PageProps) => {
     const resolvedParams = await params;
     const { productId } = resolvedParams;
-    const [rows] = await db.query('SELECT * FROM products WHERE product_id = ?', [productId])
+    const [rows] = await db.query(`
+    SELECT 
+      p.*,
+      promo.value
+    FROM products p
+    LEFT JOIN product_promotion_list promo
+      ON promo.product_id = p.product_id
+      AND promo.isActive = 1
+      AND promo.end_date > NOW()
+    WHERE p.product_id = ?
+    `, [productId])
     const productResult = rows as ProductsType[];
-    const result = await db.query('SELECT * FROM products WHERE category = ? AND product_id != ? LIMIT 5', [productResult[0].category, productResult[0].product_id])
+    const result = await db.query(`
+    SELECT 
+      p.*,
+      promo.value
+    FROM products p
+    LEFT JOIN product_promotion_list promo
+      ON promo.product_id = p.product_id
+      AND promo.isActive = 1
+      AND promo.end_date > NOW()
+    WHERE p.category = ? AND p.product_id != ? LIMIT 5
+    `, [productResult[0].category, productResult[0].product_id])
     const relatedProducts = result[0] as ProductsType[];
 
     return (
@@ -29,6 +49,7 @@ const ProductOverview = async ({ params }: PageProps) => {
                 product_name={productResult[0].product_name}
                 price={productResult[0].price}
                 stocks={productResult[0].stocks}
+                value={productResult[0].value}
 
             />
             <SuggestedProducts

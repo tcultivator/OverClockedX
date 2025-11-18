@@ -20,7 +20,8 @@ export async function POST(req: NextRequest) {
         //this update query should be move in admin/ if admin accept order then update the stocks// only the update should be move, the insert remain the same!
         for (const item of body.checkoutItems) {
             console.log('eto ung quantity',item.quantity)
-            await db.query('INSERT INTO order_items (order_id, product_id, quantity, price, sub_total)VALUES(?,?,?,?,?)', [resultData.insertId, item.product_id, item.quantity, item.price, item.price * item.quantity])
+            const finalPriceOfItem = item.price - (item.value != null ? item.value : 0)
+            await db.query('INSERT INTO order_items (order_id, product_id, quantity, price, sub_total)VALUES(?,?,?,?,?)', [resultData.insertId, item.product_id, item.quantity, finalPriceOfItem, finalPriceOfItem * item.quantity])
             // await db.query('UPDATE products SET stocks = stocks - ?, sales_count = sales_count + ? WHERE product_id = ?', [item.quantity, item.quantity, item.product_id])
         }
         sendMail({
