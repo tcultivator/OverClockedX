@@ -351,24 +351,25 @@ input[type="number"] {
 
 
 #test {
-    color: transparent;
-    background-image: url('https://res.cloudinary.com/djjg39yja/image/upload/v1763186522/Group_272_exrllj.png'); 
-    background-size: 200%;
-    background-position: 0 50%;
-    
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    
-    /* Removed 'alternate' so it only moves in one direction */
-    animation: animate-background 5s linear infinite;
+  color: transparent;
+  background-image: url('https://res.cloudinary.com/djjg39yja/image/upload/v1763186522/Group_272_exrllj.png');
+  background-size: 200%;
+  background-position: 0 50%;
+
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  /* Removed 'alternate' so it only moves in one direction */
+  animation: animate-background 5s linear infinite;
 }
 
 @keyframes animate-background {
-    0% {
-        background-position: 0 50%;
-    }
-    100% {
-        background-position: 100% 50%;
-    }
+  0% {
+    background-position: 0 50%;
+  }
+
+  100% {
+    background-position: 100% 50%;
+  }
 }
+
