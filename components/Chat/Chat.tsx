@@ -8,7 +8,8 @@ import { RiRobot2Fill } from "react-icons/ri";
 import { FaUserAlt } from "react-icons/fa";
 import { PulseLoader } from 'react-spinners';
 import { useChatBotStore } from '@/stores/chatBotStore';
-
+import { Textarea } from '../ui/textarea';
+import Image from 'next/image';
 type Props = {
     setOpenChat: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -52,11 +53,11 @@ export default function Chat({ setOpenChat }: Props) {
     };
 
     return (
-        <div className="bg-white text-black w-[320px] h-[450px] rounded-xl shadow-xl flex flex-col overflow-hidden">
+        <div className="bg-white text-black w-[320px] h-[450px] lg:w-[330px] lg:h-[470px] xl:w-[350px] xl:h-[500px] 2xl:w-[400px] 2xl:h-[550px] rounded-xl shadow-xl flex flex-col overflow-hidden z-50">
 
             {/* HEADER */}
             <div className="flex justify-between items-center p-3 border-b border-gray-300 bg-gray-100">
-                <Label className="font-semibold text-lg">AI ChatBot</Label>
+                <Label className="font-semibold text-sm">AI assistant</Label>
                 <Button
                     onClick={() => setOpenChat(false)}
                     variant="ghost"
@@ -65,9 +66,24 @@ export default function Chat({ setOpenChat }: Props) {
                     <LiaTimesSolid className="text-xl" />
                 </Button>
             </div>
+            {messages.length === 0 && (
+                <div className='w-full p-5 text-center flex flex-col items-center justify-center bg-white gap-4 my-auto relative'>
+                    <Label className=' text-md text-black/50 absolute top-5'>
+                        How can I help you today?
+                    </Label>
+                    <Image
+                        src={'https://res.cloudinary.com/djjg39yja/image/upload/v1763668639/robotGIF_corvb0.gif'}
+                        alt='Friendly robot'
+                        width={300}
+                        height={300}
+                        className='w-[60%] max-w-xs  h-auto object-contain rounded-md'
+                    />
+                </div>
+            )}
+
 
             {/* MESSAGES */}
-            <div className="flex-1 p-3 overflow-y-auto flex flex-col gap-4 bg-gray-50">
+            <div className="flex-1 p-3 overflow-y-auto flex flex-col gap-4 bg-white">
                 {messages.map((msg, i) => (
                     <div key={i} className="flex flex-col gap-2">
 
@@ -106,9 +122,10 @@ export default function Chat({ setOpenChat }: Props) {
             </div>
 
             {/* INPUT BAR */}
-            <div className="p-3 border-t border-gray-300 bg-white flex gap-2">
-                <Input
-                    className="flex-1 border-gray-300 rounded-lg px-3 py-2"
+            <div className="grid w-full gap-1 p-1">
+                <Textarea
+
+                    className="flex-1 border-gray-300 rounded-lg px-3 py-2 "
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     placeholder="Type a message..."
@@ -116,11 +133,12 @@ export default function Chat({ setOpenChat }: Props) {
                 />
                 <Button
                     onClick={sendMessage}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-4"
+                    className="bg-black hover:bg-black/70 text-white px-4"
                 >
-                    Send
+                    Send Message
                 </Button>
             </div>
+
 
         </div>
     );
