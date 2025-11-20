@@ -25,6 +25,7 @@ const TrendingProducts = () => {
 
         const interval = setInterval(() => {
             if (promotionProducts.length > 0) {
+                console.log('dapat gumagana ung shuffle')
                 setPromotionProducts(prev => shuffleArray(prev));
             }
         }, 8000);

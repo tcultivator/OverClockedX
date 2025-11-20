@@ -137,55 +137,72 @@ const Dashboard = () => {
                             )
                         }
                     </AnimatePresence>
+                    <AnimatePresence mode='wait'>
+                        {featuredProducts.length > 0 ? (
 
-                    {featuredProducts.length > 0 ? (
-
-                        <div className="relative overflow-hidden w-full lg:w-[60%]">
-                            <div className="flex relative w-full transition-transform duration-700 ease-in-out " style={{ transform: `translateX(-${current * 100}%)` }}>
-
-                                {featuredProducts.map((src, idx) => (
-                                    <div className='w-full max-w-full flex-shrink-0 object-contain' key={idx}>
+                            <motion.div
+                                key={featuredProducts[current].id}
+                                initial={{ opacity: 0, animationDuration: .5 }}
+                                animate={{ opacity: 1, animationDuration: .5 }}
+                                exit={{ opacity: 0, animationDuration: .5 }}
+                                className="relative overflow-hidden w-full lg:w-[60%]">
+                                <div className="flex relative w-full transition-transform duration-700 ease-in-out ">
+                                    <div className='w-full max-w-full flex-shrink-0 object-contain relative aspect-square' >
                                         <Image
-                                            key={idx}
-                                            src={src.product_image}
+
+                                            src={featuredProducts[current].product_image}
                                             alt=''
                                             width={1000}
                                             height={1000}
-                                            className='w-full max-w-full flex-shrink-0 object-contain' />
-                                        {src.value != null && <Label className=' absolute top-3 right-3  rounded text-[15px] font-anton md:text-[10px] lg:text-[30px] xl:text-[40px] 2xl:text-[50px] p-1 bg-red-400 flex items-center gap-1'>{new Intl.NumberFormat('en-PH', {
-                                            style: 'currency',
-                                            currency: 'PHP',
-                                            minimumFractionDigits: 0,
-                                            maximumFractionDigits: 0
-                                        }).format(Number(src.value))}<span>OFF</span></Label>}
+                                            className='w-full max-w-full flex-shrink-0 object-contain ' />
+                                        {featuredProducts[current].value != null &&
+                                            <div className="absolute top-8 right-1 rotate-[45deg]">
+                                                <div className={`${featuredProducts[current].promotion_type == 'FlashSale' ? 'bg-[#FFD477]':'bg-[#FF7777]'} rounded-tl-[45%] rounded-bl-[45%] rounded-tr-xl rounded-br-xl shadow-md`}>
+                                                    <div className="relative pl-8 pr-5 py-3 flex items-center">
+                                                        <Label className="text-white font-semibold flex items-center gap-1 text-sm tracking-wide">
+                                                            {new Intl.NumberFormat("en-PH", {
+                                                                style: "currency",
+                                                                currency: "PHP",
+                                                                minimumFractionDigits: 0,
+                                                                maximumFractionDigits: 0,
+                                                            }).format(Number(featuredProducts[current].value))}
+                                                            <span className="uppercase text-xs font-bold opacity-90">OFF</span>
+                                                        </Label>
+
+                                                        {/* small circle */}
+                                                        <div className="absolute left-2 top-1/2 -translate-y-1/2 w-3 h-3 bg-black rounded-full shadow-inner"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
                                     </div>
 
-                                ))}
 
+
+                                </div>
+                                <div className="w-full flex justify-between p-3 text-4xl absolute top-[50%] transform -translate-y-1/2 text-white">
+                                    <button onClick={prevSlide}><LuCircleChevronLeft /></button>
+                                    <button onClick={nextSlide}><LuCircleChevronRight /></button>
+                                </div>
+                            </motion.div>
+
+                        ) : (
+                            <div className="relative overflow-hidden w-full lg:w-[60%]">
+                                {/* Skeleton slide */}
+                                <div className="w-full min-w-full h-[400px] flex items-center justify-center">
+                                    <Skeleton className="w-full h-full rounded-lg bg-white/10" />
+                                </div>
+
+                                {/* Skeleton nav arrows */}
+                                <div className="w-full flex justify-between p-3 text-4xl absolute top-1/2 transform -translate-y-1/2 text-white opacity-30">
+                                    <Skeleton className="h-10 w-10 rounded-full bg-white/12" />
+                                    <Skeleton className="h-10 w-10 rounded-full bg-white/12" />
+                                </div>
                             </div>
-                            <div className="w-full flex justify-between p-3 text-4xl absolute top-[50%] transform -translate-y-1/2 text-white">
-                                <button onClick={prevSlide}><LuCircleChevronLeft /></button>
-                                <button onClick={nextSlide}><LuCircleChevronRight /></button>
-                            </div>
-                        </div>
+                        )
 
-                    ) : (
-                        <div className="relative overflow-hidden w-full lg:w-[60%]">
-                            {/* Skeleton slide */}
-                            <div className="w-full min-w-full h-[400px] flex items-center justify-center">
-                                <Skeleton className="w-full h-full rounded-lg bg-white/10" />
-                            </div>
-
-                            {/* Skeleton nav arrows */}
-                            <div className="w-full flex justify-between p-3 text-4xl absolute top-1/2 transform -translate-y-1/2 text-white opacity-30">
-                                <Skeleton className="h-10 w-10 rounded-full bg-white/12" />
-                                <Skeleton className="h-10 w-10 rounded-full bg-white/12" />
-                            </div>
-                        </div>
-                    )
-
-                    }
-
+                        }
+                    </AnimatePresence>
 
                 </div>
             </div>
