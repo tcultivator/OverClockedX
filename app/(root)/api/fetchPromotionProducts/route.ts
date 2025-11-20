@@ -13,6 +13,7 @@ type promotion_products = {
 }
 export async function GET() {
     try {
+        await db.query('UPDATE product_promotion_list SET isActive = false WHERE end_date < Now()')
         const query = `SELECT products.product_id,
         products.product_name,
         products.product_image,

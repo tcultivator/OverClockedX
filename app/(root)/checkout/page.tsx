@@ -120,11 +120,9 @@ const Checkout = () => {
                         email: user?.email,
                     }),
                 });
-
-
                 const result = await res.json()
                 const data = result as GcashCB
-                console.log(data)
+                
                 const insertOrders = await fetch('/api/order', {
                     method: 'POST',
                     headers: {
