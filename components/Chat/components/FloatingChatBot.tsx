@@ -8,7 +8,7 @@ import { useState } from 'react';
 const FloatingChatBot = () => {
     const [openChat, setOpenChat] = useState<boolean>(false)
     return (
-        <div className='fixed bottom-5 right-5 flex flex-col justify-end items-end gap-3'>
+        <div className='fixed bottom-5 right-5 flex flex-col justify-end items-end gap-3 z-50'>
             {
                 openChat && <Chat setOpenChat={setOpenChat} />
             }
