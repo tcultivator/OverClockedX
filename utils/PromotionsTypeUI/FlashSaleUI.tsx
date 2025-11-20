@@ -16,7 +16,7 @@ const FlashSaleUI = ({ promotionProducts }: props) => {
     return (
         <div
             style={{
-                backgroundImage: `url("/discountedProductsbg.jpg")`,
+                backgroundImage: `url("/flashsalebg.jpg")`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 backgroundRepeat: "no-repeat",
@@ -86,11 +86,11 @@ const FlashSaleUI = ({ promotionProducts }: props) => {
                 />
 
                 <div className="absolute w-full flex flex-col justify-center items-center mt-[-10%] @sm:mt-[-15%]">
-                    <Label className="font-orbitron text-[12px] @xl:text-[13px] @2xl:text-[15px] text-center">
+                    <Label className="font-orbitron text-[10px] @xl:text-[13px] @2xl:text-[15px] text-center">
                         {promotionProducts.product_name}
                     </Label>
 
-                    <Label className="font-anton text-[35px] @lg:text-[35px] @xl:text-[45px] @2xl:text-[55px] leading-none">
+                    <Label className="font-anton text-[25px] @lg:text-[35px] @xl:text-[45px] @2xl:text-[55px] leading-none">
                         {new Intl.NumberFormat("en-PH", {
                             style: "currency",
                             currency: "PHP",
@@ -100,7 +100,7 @@ const FlashSaleUI = ({ promotionProducts }: props) => {
             </div>
 
             {/* Footer */}
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 mt-8 @sm:mt-4">
+            <div className="flex flex-col @sm:flex-row items-center justify-between gap-3 mt-8 @sm:mt-4">
                 <div className="flex flex-col justify-center items-center">
                     <Label className="font-orbitron text-[8px] @lg:text-[9px] @xl:text-[10px] @2xl:text-[12px]">
                         Visit Our Website

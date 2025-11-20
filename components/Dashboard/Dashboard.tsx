@@ -65,7 +65,9 @@ const Dashboard = () => {
     // }
     useEffect(() => {
         const interval = setInterval(() => {
-            nextSlide();
+            if (featuredProducts.length > 0) {
+                nextSlide();
+            }
         }, 5000);
 
         return () => clearInterval(interval);
@@ -94,7 +96,7 @@ const Dashboard = () => {
                                 initial={{ opacity: 0, y: -100, animationDuration: .5 }}
                                 animate={{ opacity: 1, y: 0, animationDuration: .5 }}
                                 exit={{ opacity: 0, animationDuration: .5 }}>
-                                
+
 
                                 <label className='text-[15px] font-anton md:text-[20px] lg:text-[30px] xl:text-[40px] 2xl:text-[50px]'>{featuredProducts[current].product_name}</label>
                                 <label className='font-thin text-[11px] md:text-[12px] lg:text-[15px] xl:text-[16px] 2xl:text-[18px]'>{featuredProducts[current].description}</label>

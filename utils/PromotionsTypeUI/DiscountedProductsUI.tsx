@@ -61,17 +61,17 @@ const DiscountedProductsUI = ({ promotionProducts }: props) => {
 
                     <div className="flex items-center z-30">
                         <div className="flex flex-col">
-                            <Label className="font-anton text-[35px] @md:text-[35px] @lg:text-[35px] @xl:text-[45px] @2xl:text-[50px] leading-none">
+                            <Label className="font-anton text-[20px] @md:text-[35px] @lg:text-[35px] @xl:text-[45px] @2xl:text-[50px] leading-none">
                                 PRODUCT
                             </Label>
 
-                            <Label className="font-orbitron text-[10px] @sm:text-[10px] @2xl:text-[15px] leading-none bg-[#FF7777] @xl:px-1 xl:py-[4px]  @2xl:px-2 @2xl:py-[6px] text-center flex justify-center items-center">
+                            <Label className="font-orbitron text-[9px] @sm:text-[10px] @2xl:text-[15px] leading-none bg-[#FF7777] @xl:px-1 xl:py-[4px]  @2xl:px-2 @2xl:py-[6px] text-center flex justify-center items-center">
                                 ₱{promotionProducts.value}
                                 <span>OFF</span>
                             </Label>
                         </div>
 
-                        <Label className="font-anton text-[60px] @lg:text-[60px] @xl:text-[75px] @2xl:text-[90px] leading-none text-[#FF7777]">
+                        <Label className="font-anton text-[43px] @lg:text-[60px] @xl:text-[75px] @2xl:text-[90px] leading-none text-[#FF7777]">
                             DISCOUNT
                         </Label>
                     </div>
@@ -89,11 +89,11 @@ const DiscountedProductsUI = ({ promotionProducts }: props) => {
                 />
 
                 <div className="absolute w-full flex flex-col justify-center items-center mt-[-10%] @sm:mt-[-15%]">
-                    <Label className="font-orbitron text-[12px] @xl:text-[13px] @2xl:text-[15px] text-center">
+                    <Label className="font-orbitron text-[10px] @xl:text-[13px] @2xl:text-[15px] text-center">
                         {promotionProducts.product_name}
                     </Label>
 
-                    <Label className="font-anton text-[35px] @lg:text-[35px] @xl:text-[45px] @2xl:text-[55px] leading-none">
+                    <Label className="font-anton text-[25px] @lg:text-[35px] @xl:text-[45px] @2xl:text-[55px] leading-none">
                         {new Intl.NumberFormat("en-PH", {
                             style: "currency",
                             currency: "PHP",

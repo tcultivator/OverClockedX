@@ -37,7 +37,7 @@ const Footer = () => {
     }
     return (
         <div className="bg-black p-3 md:p-10 w-full flex justify-center text-white font-Abyssinica font-thin">
-            <div className="w-full md:w-[80%] flex flex-col gap-6">
+            <div className="w-full xl:w-[90%] 2xl:w-[80%] flex flex-col gap-6">
 
                 {/* Logo */}
                 <Label className="text-[20px] md:text-[26px] font-bold flex justify-center md:justify-start cursor-pointer font-orbitron">
@@ -94,7 +94,7 @@ const Footer = () => {
                     </div>
 
                     {/* Newsletter */}
-                    <div className="flex flex-col gap-2">
+                    <div className="flex flex-col gap-2 ">
                         <Label className="">Newsletter</Label>
                         <form onSubmit={subscribe_newsletter} className="flex flex-col gap-2">
                             <Label className="font-thin text-white/80">
@@ -102,7 +102,7 @@ const Footer = () => {
                             </Label>
                             <Input onChange={(e) => setSubscriber_email(e.target.value)}
                                 type="email"
-                                className="border border-white/50 p-5 rounded-[5px]"
+                                className="border border-white/50 p-5 rounded-[5px] "
                                 placeholder="Email"
                                 required
                             />
