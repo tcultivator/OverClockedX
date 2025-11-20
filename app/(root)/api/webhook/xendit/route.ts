@@ -7,7 +7,7 @@ export async function POST(req: NextRequest) {
         const body = await req.json();
         const { event, data } = body
         if (event == 'payment.succeeded') {
-            await db.query('UPDATE orders SET payment_status = ? WHERE reference_id = ?', ['success', data.reference_id])
+            await db.query('UPDATE orders SET payment_status = ?,order_status = ? WHERE reference_id = ?', ['success', 'preparing', data.reference_id])
             //this update also the sales count of that product
         }
         sendMail({
