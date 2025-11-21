@@ -3,7 +3,8 @@ import { NextResponse } from "next/server";
 import { ProductsType } from "@/types/ProductTypes";
 export async function POST() {
     const query = `SELECT p.*,
-      promo.value
+      promo.value,
+      promo.promotion_type 
     FROM products p
     LEFT JOIN product_promotion_list promo
       ON promo.product_id = p.product_id 

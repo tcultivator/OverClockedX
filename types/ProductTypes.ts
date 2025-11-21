@@ -12,4 +12,5 @@ export interface ProductsType {
     created_at: Date
     updated_at: Date
     value?: number | null;
+    promotion_type: string;
 }
