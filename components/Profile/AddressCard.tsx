@@ -22,9 +22,12 @@ const AddressCard = ({ address, email }: Props) => {
     const [rName, setRName] = useState<string>(address?.rname ?? '');
     const [country, setCountry] = useState<string>(address?.country ?? '');
     const [cityMunicipality, setCityMunicipality] = useState<string>(address?.cityMunicipality ?? '');
-    const [description, setDescription] = useState<string>(address?.description ?? '');
+    const [description, setDescription] = useState<string>(address?.trademark ?? '');
     const [barangay, setBarangay] = useState<string>(address?.barangay ?? '');
     const [province, setProvince] = useState<string>(address?.province ?? '');
+    const [phone_number, setPhone_number] = useState<string>(address?.phone_number ?? '');
+
+
     const UpdateAddress = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!email) {
@@ -37,7 +40,7 @@ const AddressCard = ({ address, email }: Props) => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ rName: rName, country: country, cityMunicipality: cityMunicipality, barangay: barangay, province: province, trademark: description, email: email }),
+            body: JSON.stringify({ rName: rName, phone_number: phone_number, country: country, cityMunicipality: cityMunicipality, barangay: barangay, province: province, trademark: description, email: email }),
         })
         const result = await res.json()
         setTimeout(() => {
@@ -45,6 +48,8 @@ const AddressCard = ({ address, email }: Props) => {
             console.log('the request is done ', result)
         }, 1000);
     }
+
+
     return (
         <div className='w-full bg-black p-3 md:p-10'>
             <div className='pb-2 border-b border-white/30 mb-2 text-2xl'>
@@ -57,6 +62,11 @@ const AddressCard = ({ address, email }: Props) => {
                         <div className='flex flex-col'>
                             <label htmlFor="">Fullname</label>
                             <Input type="text" value={rName} onChange={(e) => setRName(e.target.value)} />
+                        </div>
+
+                        <div className='flex flex-col'>
+                            <label htmlFor="">Phone Number</label>
+                            <Input type="number" value={phone_number} onChange={(e) => setPhone_number(e.target.value)} />
                         </div>
 
                         <div className='flex flex-col'>

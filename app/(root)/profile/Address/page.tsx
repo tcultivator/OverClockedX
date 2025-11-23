@@ -4,16 +4,8 @@ import AddressCard from '@/components/Profile/AddressCard'
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
 import db from '@/lib/db';
-interface UserAddress {
-    id: number;
-    email: string;
-    rname: string;
-    country: string;
-    cityMunicipality: string;
-    barangay: string;
-    province: string;
-    description: string;
-}
+import { UserAddress } from '@/types/UserAddressTypes'
+
 const Address = async () => {
     const session = await auth();
     if (!session) {

@@ -1,16 +1,7 @@
 import { create } from 'zustand'
 import { useLoading } from './loadingStore';
 import { toast } from "sonner"
-interface UserAddress {
-    email: string;
-    rname: string;
-    country: string;
-    cityMunicipality: string;
-    barangay: string;
-    province: string;
-    trademark: string;
-}
-
+import { UserAddress } from '@/types/UserAddressTypes';
 type userDataTypesFromGoogle = {
     email: string;
     name: string;
