@@ -196,7 +196,7 @@ const PurchaseCard = ({ groupData }: Props) => {
                                                         <Label className='font-thin'>{new Intl.NumberFormat('en-PH', {
                                                             style: 'currency',
                                                             currency: 'PHP',
-                                                        }).format(selectedGroup.items.reduce((sum, item) => sum + item.sub_total * item.quantity, 0))}</Label>
+                                                        }).format(selectedGroup.items.reduce((sum, item) => sum + item.price * item.quantity, 0))}</Label>
                                                     </div>
                                                 </div>
                                                 <div className='flex items-center justify-between '>
@@ -204,7 +204,7 @@ const PurchaseCard = ({ groupData }: Props) => {
                                                     <Label className='font-thin'>{new Intl.NumberFormat('en-PH', {
                                                         style: 'currency',
                                                         currency: 'PHP',
-                                                    }).format(selectedGroup.total_amount - selectedGroup.items.reduce((sum, item) => sum + item.sub_total * item.quantity, 0))}</Label>
+                                                    }).format(selectedGroup.total_amount - selectedGroup.items.reduce((sum, item) => sum + item.price * item.quantity, 0))}</Label>
                                                 </div>
                                                 <div className='flex items-center justify-between'>
                                                     <Label>Total</Label>
