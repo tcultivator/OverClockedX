@@ -87,7 +87,8 @@ const CheckoutProduct = ({ id, product_id, product_image,
                                 product_image: product_image,
                                 price: price,
                                 stocks: stocks,
-                                quantity: 1
+                                quantity: 1,
+                                value:value
                             })
                         }} ><TfiShoppingCart />Add to Cart</Button>
                         <Button className='p-5 flex items-center justify-center gap-3' onClick={() => {

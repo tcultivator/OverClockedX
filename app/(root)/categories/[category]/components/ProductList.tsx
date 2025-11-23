@@ -195,7 +195,8 @@ const ProductList = ({ products, category }: Props) => {
                                             product_image: data.product_image,
                                             price: data.price,
                                             stocks: data.stocks,
-                                            quantity: 1
+                                            quantity: 1,
+                                            value:data.value
                                         })
                                     }} className={`${productListDisplayOrientation[5]}`}><TfiShoppingCart className='text-[15px] ' />{isList ? '' : 'Add to cart'}</button>
                                 </div>

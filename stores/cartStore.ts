@@ -108,6 +108,7 @@ export const useCartStore = create<cart>((set) => ({
                 price: products?.price!,
                 stocks: products?.stocks!,
                 quantity: products?.quantity!,
+                value: products?.value
             };
 
             if (response.status == 201) {
@@ -268,7 +269,7 @@ export const useCartStore = create<cart>((set) => ({
             product_id: products?.product_id!,
             product_name: products?.product_name!,
             product_image: products?.product_image!,
-            price: products?.price!,
+            price: products?.price! - (products?.value != null ? products.value : 0),
             stocks: products?.stocks!,
             quantity: products?.quantity!,
         };
