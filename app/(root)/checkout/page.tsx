@@ -74,7 +74,7 @@ const Checkout = () => {
     const [barangay, setBarangay] = useState<string>('');
     const [province, setProvince] = useState<string>('');
     const [email, setEmail] = useState<string>('');
-    const [phoneNumber, setPhoneNumber] = useState<string | number>('');
+    const [phoneNumber, setPhoneNumber] = useState<string>('');
 
     //zustand state for updating shipping information
     const CustomInput = useUserStore((state) => state.CustomInput)
@@ -116,13 +116,13 @@ const Checkout = () => {
                     body: JSON.stringify({
                         amount: finalCheckoutItems.reduce((sum, item) => sum + (item.price - (item.value != null ? item.value : 0)) * item.quantity, 0) + shippingCost,
                         referenceId: 'txn-' + Date.now(),
-                        phoneNumber: '09171234567',
+                        phoneNumber: phoneNumber,
                         email: user?.email,
                     }),
                 });
                 const result = await res.json()
                 const data = result as GcashCB
-                
+
                 const insertOrders = await fetch('/api/order', {
                     method: 'POST',
                     headers: {
@@ -133,7 +133,8 @@ const Checkout = () => {
                         referenceId: data.referenceId,
                         total_amount: finalCheckoutItems.reduce((sum, item) => sum + (item.price - (item.value != null ? item.value : 0)) * item.quantity, 0) + shippingCost,
                         checkoutItems: finalCheckoutItems,
-                        payment_method: paymentOptions
+                        payment_method: paymentOptions,
+                        userAdress: userAdress
                     }),
                 })
                 const insertOrdersDone = await insertOrders.json()
@@ -267,6 +268,14 @@ const Checkout = () => {
 
                                 </div>
                                 <div className='flex flex-col'>
+                                    <label htmlFor="">Phone Number</label>
+                                    <div className='w-full flex gap-2 items-center'>
+                                        <Input disabled={userAdress.length > 0} type="number" value={userAdress[0]?.phone_number ?? phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
+                                        {phoneNumber != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
+                                    </div>
+
+                                </div>
+                                <div className='flex flex-col'>
                                     <label htmlFor="">Country</label>
                                     <div className='w-full flex gap-2 items-center'>
                                         <Input disabled={userAdress.length > 0} list="countries" name="countries" value={userAdress[0]?.country ?? country} onChange={(e) => setCountry(e.target.value)} />
@@ -336,7 +345,6 @@ const Checkout = () => {
                                     userAdress.length <= 0 && <Button onClick={() => {
                                         if (rName != '' && country != '' && cityMunicipality != '' && description != '' && barangay != '' && province != '' && email != '' && phoneNumber != '') {
                                             addCustomAddress([{
-
                                                 email: email,
                                                 rname: rName,
                                                 country: country,
@@ -344,7 +352,7 @@ const Checkout = () => {
                                                 barangay: barangay,
                                                 province: province,
                                                 trademark: description,
-
+                                                phone_number: phoneNumber,
                                             }])
                                         } else {
                                             alert('you need to fillup all the field')
