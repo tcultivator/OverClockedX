@@ -96,11 +96,19 @@ const CartSideBar = () => {
                                     }} className='w-[60%] flex flex-col gap-1'>
                                         <div className='flex flex-col'>
                                             <Label htmlFor="">{src.product_name}</Label>
-                                            <Label htmlFor=""> {new Intl.NumberFormat('en-PH', {
-                                                style: 'currency',
-                                                currency: 'PHP',
-                                            }).format(src.price)}
-                                            </Label>
+                                            <div className='flex gap-1 items-center'>
+                                                <Label className={`${src.value != null && 'text-white/50 line-through text-[11px]'}`} htmlFor=""> {new Intl.NumberFormat('en-PH', {
+                                                    style: 'currency',
+                                                    currency: 'PHP',
+                                                }).format(src.price)}
+                                                </Label>
+                                                {src.value != null && <Label htmlFor=""> {new Intl.NumberFormat('en-PH', {
+                                                    style: 'currency',
+                                                    currency: 'PHP',
+                                                }).format(src.price - src.value)}
+                                                </Label>}
+                                            </div>
+
                                             <Label htmlFor="">Stocks: {src.stocks > 0 ? <span>{src.stocks}</span> : <span className='text-red-500'>Out of stocks</span>}</Label>
                                         </div>
 

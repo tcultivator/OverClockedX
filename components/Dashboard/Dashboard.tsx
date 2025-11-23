@@ -117,7 +117,8 @@ const Dashboard = () => {
                                             product_image: featuredProducts[current].product_image,
                                             price: featuredProducts[current].price,
                                             stocks: featuredProducts[current].stocks,
-                                            quantity: 1
+                                            quantity: 1,
+                                            value:featuredProducts[current].value
                                         })
                                     }} className='bg-white text-[10px] py-2 w-full flex flex-col items-center justify-center text-black  rounded-[10px] md:text-[12px] rounded-[5px] lg:flex-row '><AiOutlineShoppingCart className='text-[15px]' />  ADD TO CART</button>
                                 </div>
