@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { Accounts } from "@/types/AccountsType";
 import { RandomString } from "@/utils/randomStringGenerator/RandomString";
 import { sendMail } from "@/lib/nodemailer";
+const buildURL = process.env.NEXTAUTH_URL;
 export async function POST(req: NextRequest) {
     const body = await req.json()
     try {
@@ -13,10 +14,10 @@ export async function POST(req: NextRequest) {
         if (result.length === 0) return NextResponse.json({ status: 404 })
         const token = RandomString()
         await db.query('INSERT INTO reset_logs (email,reset_token,expired_at)VALUES(?,?,DATE_ADD(NOW(), INTERVAL 15 MINUTE))', [body.email, token])
-        sendMail({
+        await sendMail({
             to: body.email, sub: 'Reset Password', message: `<div>
                     <label htmlFor="">Note:this link will expired 15 minutes</label>
-                    <a href="https://overclockedx.onrender.com/reset?token=${token}">go to reset page</a>
+                    <a href="${buildURL}/reset?token=${token}">go to reset page</a>
                 </div>` })
         return NextResponse.json({ status: 200 })
     } catch (err) {

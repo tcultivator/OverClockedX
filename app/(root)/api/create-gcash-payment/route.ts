@@ -7,7 +7,7 @@ const xendit = new Xendit({
     secretKey: process.env.XENDIT_SECRET_KEY as string
 })
 const paymentRequest = xendit.PaymentRequest;
-
+const buildURL = process.env.NEXTAUTH_URL;
 export async function POST(req: NextRequest) {
     try {
         const { amount, referenceId, phoneNumber, email } = await req.json();
@@ -16,8 +16,8 @@ export async function POST(req: NextRequest) {
             paymentMethod: {
                 ewallet: {
                     channelProperties: {
-                        successReturnUrl: "https://overclockedx.onrender.com/success",
-                        failureReturnUrl: "https://overclockedx.onrender.com/profile"
+                        successReturnUrl: `${buildURL}/success`,
+                        failureReturnUrl: `${buildURL}/profile`
                     },
                     channelCode: "GCASH"
                 },
