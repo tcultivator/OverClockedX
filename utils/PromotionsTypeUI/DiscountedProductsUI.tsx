@@ -9,6 +9,7 @@ import { FaFacebook } from "react-icons/fa";
 import { IoLogoInstagram } from "react-icons/io5";
 import { promotion_products } from '@/types/promotion_products_types';
 import { useRouter } from 'next/navigation';
+const buildURL = process.env.NEXT_PUBLIC_BASE_URL;
 type props = {
     promotionProducts: promotion_products
 }
@@ -109,9 +110,9 @@ const DiscountedProductsUI = ({ promotionProducts }: props) => {
                         Visit Our Website
                     </Label>
 
-                    <Link href={"https://overclockedx.onrender.com"}>
+                    <Link href={`${buildURL}`}>
                         <Label className="font-orbitron break-all text-[9px] @lg:text-[10px] @xl:text-[11px] @2xl:text-[13px] text-center">
-                            https://overclockedx.onrender.com
+                            {buildURL}
                         </Label>
                     </Link>
                 </div>

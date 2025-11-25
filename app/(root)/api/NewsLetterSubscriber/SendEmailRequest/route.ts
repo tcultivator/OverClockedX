@@ -1,6 +1,6 @@
 import { sendMail } from '@/lib/nodemailer'
 import { NextResponse, NextRequest } from 'next/server'
-
+const buildURL = process.env.NEXTAUTH_URL;
 export async function POST(req: NextRequest) {
 
     const body = await req.json()
@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
                                 Thank you for subscribing to our newsletter. To complete, please confirm your email address by clicking the button below.
                                 </p>
         
-                                <a href="https://overclockedx.onrender.com/NewsLetterSubscriberConfirmation?email=${body.email}"
+                                <a href="${buildURL}/NewsLetterSubscriberConfirmation?email=${body.email}"
                                 style="display: inline-block; background-color: #2563eb; color: #ffffff; text-decoration: none; padding: 15px 25px; border-radius: 6px; font-weight: bold; font-size: 16px;">
                                 Subscribe
                                 </a>                                   
