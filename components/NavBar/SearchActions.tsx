@@ -60,14 +60,14 @@ const SearchActions = () => {
             const recentSearchData = localStorage.getItem('searchItems')
             const turnStringToArray = recentSearchData?.split(',')
             if (turnStringToArray?.length) {
-                searchPostRequest(inputRef.current?.value!)
-                turnStringToArray.push(inputRef.current?.value!)
+                searchPostRequest(inputRef.current?.value)
+                turnStringToArray.push(inputRef.current?.value)
                 const turnArrayInotString = turnStringToArray.join(",")
                 localStorage.setItem('searchItems', turnArrayInotString)
                 inputRef.current.value = '';
             } else {
-                searchPostRequest(inputRef.current?.value!)
-                localStorage.setItem('searchItems', inputRef.current?.value!)
+                searchPostRequest(inputRef.current?.value)
+                localStorage.setItem('searchItems', inputRef.current?.value)
                 inputRef.current.value = '';
             }
 
