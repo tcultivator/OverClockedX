@@ -21,6 +21,7 @@ import { PiShoppingCartThin } from "react-icons/pi";
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
+import { PiTrashSimpleThin } from "react-icons/pi";
 
 const CartSideBar = () => {
     const router = useRouter();
@@ -43,21 +44,21 @@ const CartSideBar = () => {
                 <PiShoppingCartThin onClick={() => openCartToggle()} className="text-2xl text-black" />
             </SheetTrigger>
             <SheetContent>
-                <div className='border-b border-white/30 flex items-center p-3 justify-between'>
-                    <SheetTitle>Shopping Cart</SheetTitle>
-                    <LiaTimesSolid onClick={() => openCartToggle()} className="text-md cursor-pointer text-white" />
+                <div className='border-b border-black/30 flex items-center p-3 justify-between'>
+                    <SheetTitle className='font-orbitron text-black'>Shopping Cart</SheetTitle>
+                    <LiaTimesSolid onClick={() => openCartToggle()} className="text-md cursor-pointer text-black" />
                 </div>
 
                 <div className='relative w-full h-full box-border flex flex-col gap-2'>
-                    {cartItems.length > 0 && <div className='px-4 underline text-blue-400 flex justify-end items-end'>
-                        <AlertDialog>
+                    {cartItems.length > 0 && <div className='px-4 underline text-blue-400 flex justify-end items-end text-black'>
+                        <AlertDialog >
                             <AlertDialogTrigger asChild>
-                                <button className='underline'>Clear Cart</button>
+                                <button className='underline text-red-400'>Clear Cart</button>
                             </AlertDialogTrigger>
                             <AlertDialogContent>
                                 <AlertDialogHeader>
-                                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                                    <AlertDialogDescription>
+                                    <AlertDialogTitle className='text-black'>Are you absolutely sure?</AlertDialogTitle>
+                                    <AlertDialogDescription className='text-black'>
                                         This action cannot be undone. This will permanently delete all products in the cart.
                                     </AlertDialogDescription>
                                 </AlertDialogHeader>
@@ -72,8 +73,8 @@ const CartSideBar = () => {
                     <div className='overflow-y-auto max-h-[84vh] flex flex-col gap-2 px-1'>
                         {
                             cartItems.map((src, index) => (
-                                <div key={index} className='flex gap-1 items-center justify-center bg-black border-b border-white/15 p-1 relative'>
-                                    <input disabled={src.stocks <= 0} type="checkbox" className='cursor-pointer' checked={checkoutItems.some(item => item.id == src.id)} onChange={(e) => {
+                                <div key={index} className='flex gap-3 items-center justify-center border-b border-white/15 p-1 relative'>
+                                    <input disabled={src.stocks <= 0} type="checkbox" className='cursor-pointer absolute top-0 right-1 text-[25px]' checked={checkoutItems.some(item => item.id == src.id)} onChange={(e) => {
                                         if (e.target.checked) {
                                             addToCheckout(src)
                                         } else {
@@ -83,7 +84,7 @@ const CartSideBar = () => {
                                     <div onClick={() => {
                                         openCartToggle()
                                         router.push(`/product/${src.product_id}`)
-                                    }} className='w-[25%]'>
+                                    }} className='w-[30%] bg-white rounded aspect-square'>
                                         <Image
                                             src={src.product_image}
                                             alt=''
@@ -94,31 +95,39 @@ const CartSideBar = () => {
                                         openCartToggle()
                                         router.push(`/product/${src.product_id}`)
                                     }} className='w-[60%] flex flex-col gap-1'>
-                                        <div className='flex flex-col'>
-                                            <Label htmlFor="">{src.product_name}</Label>
+                                        <div className='flex flex-col gap-1'>
+                                            <Label htmlFor="" className='text-black text-[14px]'>{src.product_name}</Label>
+                                            <Label htmlFor="" className='text-black/50 text-[12px]'>Stocks: {src.stocks > 0 ? <span className='text-black'>{src.stocks} left</span> : <span className='text-red-500'>Out of stocks</span>}</Label>
+                                            <Label className=" bg-[#e31612] text-white rounded w-max text-[13px] p-1">
+                                                ON SALE
+                                            </Label>
                                             <div className='flex gap-1 items-center'>
-                                                <Label className={`${src.value != null && 'text-white/50 line-through text-[11px]'}`} htmlFor=""> {new Intl.NumberFormat('en-PH', {
-                                                    style: 'currency',
-                                                    currency: 'PHP',
-                                                }).format(src.price)}
-                                                </Label>
-                                                {src.value != null && <Label htmlFor=""> {new Intl.NumberFormat('en-PH', {
+
+                                                {src.value != null && <Label className='text-[#e31612]' htmlFor=""> {new Intl.NumberFormat('en-PH', {
                                                     style: 'currency',
                                                     currency: 'PHP',
                                                 }).format(src.price - src.value)}
                                                 </Label>}
+                                                <Label className={`${src.value != null ? 'text-black/50 line-through text-[11px]' : 'text-black'}   `} htmlFor=""> {new Intl.NumberFormat('en-PH', {
+                                                    style: 'currency',
+                                                    currency: 'PHP',
+                                                }).format(src.price)}
+                                                </Label>
+                                            </div>
+                                            <div className='flex gap-3 items-center'>
+                                                <div className="flex gap-2 border border-black/50  w-max p-1 px-2 rounded text-[10px]">
+                                                    <input disabled type="number" className=" text-black px-1 w-[20px] text-[13px] text-center outline-none rounded p-1" value={src.quantity} />
+                                                </div>
+                                                <button onClick={() => removeItemInCart(src)}><PiTrashSimpleThin className='text-black text-[27px]' /></button>
+
                                             </div>
 
-                                            <Label htmlFor="">Stocks: {src.stocks > 0 ? <span>{src.stocks}</span> : <span className='text-red-500'>Out of stocks</span>}</Label>
+
                                         </div>
 
                                     </div>
-                                    <div className="flex gap-2 bg-black w-max p-1 px-2 rounded text-[10px]">
 
-                                        <input disabled type="number" className=" text-white px-1 w-[20px] bg-white/30 text-center outline-none rounded p-1" value={src.quantity} />
 
-                                    </div>
-                                    <button onClick={() => removeItemInCart(src)} className='absolute top-0 right-0 text-[25px] text-red-400'><RiDeleteBack2Fill /></button>
                                 </div>
                             ))
                         }
@@ -132,9 +141,9 @@ const CartSideBar = () => {
                             }}>
                                 <Label>Clear</Label>
                             </button>
-                            <Label htmlFor=""><span>{checkoutItems.length}</span> selected</Label>
+                            <Label htmlFor="" className='text-black'><span>{checkoutItems.length}</span> selected</Label>
                         </div>
-                        <Label className='w-[49%] text-end flex justify-end' htmlFor="">SubTotal: <span>{checkoutItems.length > 0 ? new Intl.NumberFormat('en-PH', {
+                        <Label className='w-[49%] text-end flex justify-end text-black' htmlFor="">SubTotal: <span>{checkoutItems.length > 0 ? new Intl.NumberFormat('en-PH', {
                             style: 'currency',
                             currency: 'PHP',
                         }).format(checkoutItems.reduce((sum, item) => sum + item.price * 1, 0)) : new Intl.NumberFormat('en-PH', {
@@ -144,14 +153,14 @@ const CartSideBar = () => {
                     </div>
                     <div className='flex items-center gap-2'>
 
-                        <Button onClick={() => openCartToggle()} variant={'secondary'} className='w-[49%]'>Close</Button>
+                        <Button onClick={() => openCartToggle()} variant={'secondary'} className='w-[49%] border border-black/50'>Close</Button>
 
 
                         <Button disabled={checkoutItems.length <= 0} onClick={() => {
                             addToFinalCheckout()
                             openCartToggle()
                             router.push('/checkout')
-                        }} variant={'secondary'} className='w-[49%]'>Checkout</Button>
+                        }} variant={'default'} className='w-[49%]'>Checkout</Button>
                     </div>
                 </SheetFooter>
             </SheetContent>
