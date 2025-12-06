@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useUserStore } from '@/stores/userStore';
 import { useCartStore } from '@/stores/cartStore';
 import { useEffect } from 'react';
+import { PiUser } from "react-icons/pi";
 
 type Props = {
     session: session | null
@@ -24,7 +25,7 @@ const ProfileButtonAction = ({ session }: Props) => {
     const clearUserCartInSignout = useCartStore((state) => state.clearUserCartInSignout)
     const clearUser = useUserStore((state) => state.clearUser)
     function viewProfile() {
-        console.log('display the user info')
+        
         if (!session) {
             navigate.push('/login')
         } else {
@@ -37,14 +38,14 @@ const ProfileButtonAction = ({ session }: Props) => {
             session?.user?.email &&
             session.user.name
         ) {
-            console.log('dapat gagana to')
+            
             setUser({
                 email: session.user.email,
                 name: session.user.name,
                 image: session.user.image ?? null
             })
         } else {
-            console.log('dapat eto naman gagana kapag naglogout')
+            
             clearUserCartInSignout()
             clearUser()
         }
@@ -53,7 +54,7 @@ const ProfileButtonAction = ({ session }: Props) => {
 
     return (
         <div className="cursor-pointer">
-            <FaRegUserCircle onClick={() => viewProfile()} className="text-lg text-white" />
+            <PiUser onClick={() => viewProfile()} className="text-[22px] text-black" />
         </div>
     )
 }

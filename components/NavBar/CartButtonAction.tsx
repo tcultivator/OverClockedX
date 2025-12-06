@@ -2,6 +2,8 @@
 import React from 'react'
 
 import { useCartStore } from '@/stores/cartStore';
+
+
 import { useEffect } from 'react';
 import CartSideBar from '../CartSideBar/CartSideBar';
 type session = {
@@ -36,7 +38,7 @@ const CartButtonAction = ({ session }: Props) => {
     return (
         <div className="relative cursor-pointer ">
             <CartSideBar />
-            <label className="flex absolute bg-white text-black  w-[17px] h-[17px] text-[10px] justify-center items-center rounded top-[-7px] right-[-10px]" htmlFor="">{cartItems.length}</label>
+            <label className="flex absolute bg-primary text-white  w-[17px] h-[17px] text-[10px] justify-center items-center rounded top-[-7px] right-[-10px]" htmlFor="">{cartItems.length}</label>
         </div>
     )
 }

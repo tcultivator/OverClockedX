@@ -1,6 +1,6 @@
- module.exports = {
-      // ...
-      plugins: [
-        require('@tailwindcss/container-queries'),
-      ],
-    };
+module.exports = {
+  // ...
+  plugins: [
+    require('@tailwindcss/container-queries'),
+  ],
+};

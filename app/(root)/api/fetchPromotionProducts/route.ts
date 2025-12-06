@@ -25,7 +25,7 @@ export async function GET() {
         product_promotion_list.promotion_type
          FROM product_promotion_list 
          JOIN products ON product_promotion_list.product_id = products.product_id 
-         WHERE product_promotion_list.isActive = true`
+         WHERE product_promotion_list.isActive = true LIMIT 6`
 
         const [rows] = await db.query(query)
         const returnProducts = rows as promotion_products[]

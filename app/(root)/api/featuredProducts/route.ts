@@ -9,7 +9,7 @@ export async function POST() {
     LEFT JOIN product_promotion_list promo
       ON promo.product_id = p.product_id 
       AND promo.isActive = 1
-      AND promo.end_date > NOW() ORDER BY p.sales_count DESC LIMIT 5`
+      AND promo.end_date > NOW() ORDER BY p.sales_count DESC LIMIT 8`
     try {
         const [rows] = await db.query(query)
         const result = rows as ProductsType[]
