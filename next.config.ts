@@ -8,7 +8,8 @@ module.exports = {
       { hostname: "lh3.googleusercontent.com" },
       { hostname: "files.edgestore.dev" },
       { hostname: "res.cloudinary.com" },
-      { hostname: "https://b.tile.openstreetmap.org" }
+      { hostname: "https://b.tile.openstreetmap.org" },
+      { hostname: "images.barcodelookup.com" },
     ],
   },
   allowedDevOrigins: [

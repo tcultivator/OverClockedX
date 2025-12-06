@@ -17,7 +17,7 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet"
-
+import { PiShoppingCartThin } from "react-icons/pi";
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
@@ -40,7 +40,7 @@ const CartSideBar = () => {
     return (
         <Sheet open={openCart}>
             <SheetTrigger asChild>
-                <CiShoppingCart onClick={() => openCartToggle()} className="text-2xl text-white" />
+                <PiShoppingCartThin onClick={() => openCartToggle()} className="text-2xl text-black" />
             </SheetTrigger>
             <SheetContent>
                 <div className='border-b border-white/30 flex items-center p-3 justify-between'>

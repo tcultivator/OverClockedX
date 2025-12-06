@@ -5,26 +5,30 @@ import DropDownMenu from './DropDownMenu';
 import ProfileButtonAction from './ProfileButtonAction';
 import CartButtonAction from './CartButtonAction';
 import { auth } from '@/auth';
+import SearchActions from './SearchActions';
 const NavBar = async () => {
     const session = await auth()
+
     return (
-        < div className="sticky z-40 bg-[#1f1f1f]  p-[2px] p-[3px] md:px-2 md:py-2  w-full top-0">
-            <div className="flex justify-between bg-black inset-shadow-sm inset-shadow-white/50 rounded-[10px] items-center p-3 gap-5 lg:justify-around ">
-                <Link href="/"><label className="text-[15px] font-bold  items-center text-center flex cursor-pointer text-white font-orbitron md:text-[23px]">OverClockedX</label></Link>
-                <div id='menus' className='flex flex-row-reverse items-center justify-between gap-20 lg:flex-row'>
-                    <DropDownMenu
-                    />
-                    <div className=" gap-5 items-center justify-center flex ">
+        < div className="sticky z-50 bg-white flex flex-col justify-center items-center py-2  md:px-2 md:py-2  w-full top-0">
+            <div className="flex justify-between  items-center p-1 gap-5 w-full px-5">
+                <SearchActions />
+
+                <div className='w-[50%] flex justify-center items-center'>
+                    <Link href="/"><label className="text-[18px] items-center text-center flex cursor-pointer text-black font-orbitron md:text-[27px]">OVERCLOCKEDX</label></Link>
+                </div>
+
+                <div id='menus' className='flex  w-[25%] items-end justify-end gap-20 '>
+                    <div className=" gap-5 items-start justify-start flex ">
                         <CartButtonAction session={session} />
                         <ProfileButtonAction
                             session={session}
                         />
                     </div>
                 </div>
-
-
-
             </div>
+            <DropDownMenu
+            />
         </div >
     )
 }

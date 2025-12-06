@@ -1,6 +1,7 @@
- module.exports = {
-      // ...
-      plugins: [
-        require('@tailwindcss/container-queries'),
-      ],
-    };
+module.exports = {
+  // ...
+  plugins: [
+    require('@tailwindcss/container-queries'),
+    require('@tailwindcss/line-clamp'),
+  ],
+};

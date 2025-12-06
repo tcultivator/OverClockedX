@@ -77,12 +77,12 @@ const TrendingProducts = () => {
     };
 
     return (
-        <section className="p-4 m-auto px-[2px] xl:px-[5%]">
+        <section className="p-4 m-auto w-[90%] sm:w-[80%] md:w-[80%] xl:w-[90%] lg:w-[95%] px-[2px] xl:px-[5%]">
             <div className="w-full">
-                <h2 className="text-2xl font-anton text-[40px] text-left  w-max p-2 text-white rounded-t-md">Promotions</h2>
+                <h2 className="text-2xl font-anton text-[40px] text-left  w-max p-2 text-black rounded-t-md">Promotions</h2>
             </div>
             <AnimatePresence mode='wait'>
-                {promotionProducts.length > 0 ? < div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {promotionProducts.length > 0 ? < div className="grid grid-cols-1 md:grid-cols-2 gap-2 items-start">
                     {/* Left side */}
                     <div className="grid grid-rows-1 md:grid-rows-2 lg:grid-rows-1 gap-4">
                         <motion.div className="w-full h-full object-cover rounded-md" key={"left-big"}
@@ -114,7 +114,7 @@ const TrendingProducts = () => {
                     md:grid-rows-3 
                     lg:grid-cols-2 
                     lg:grid-rows-2 
-                    gap-4
+                    gap-2
                 ">
                         {/* On medium: show images[2,3,4]; On large: images[1,2,3,4] */}
                         {[2, 3, 4].map((i) => (
@@ -144,8 +144,8 @@ const TrendingProducts = () => {
 
                     </div>
                 </div> :
-                    <div className='w-full flex items-center justfy-center p-5 text-white/50 bg-black rounded-[10px] text-center'>
-                        <Label className='text-center m-auto'>NO PROMOTIONS</Label>
+                    <div className='w-full flex items-center justfy-center p-5 text-black/50 bg-white rounded-[10px] text-center'>
+                        <Label className='text-center m-auto '>NO PROMOTIONS</Label>
                     </div>
                 }
             </AnimatePresence>

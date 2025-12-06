@@ -7,23 +7,39 @@
 ## Features
 
 ### Authentication
-- Sign in using Google or email credentials  
-- Sign up with Google or email credentials  
-- Email verification sent during credential-based signup  
-- Account activation required via email confirmation  
-- Forgot password and reset password via email  
+- Sign in with Google or email + password
+- Sign up with Google or email
+- Email verification for credential-based signup
+- Account activation required via verification link
+- Forgot password + secure reset via email  
 
 ### Shopping Experience
-- Browse and search computer components  
-- Filter products in the product list (e.g., by category, price, or brand)  
-- Click on products to view a preview with detailed information  
-- View suggested products related to the one currently being previewed  
-- View featured products (best-selling items) on the dashboard  
-- View recently added promotions and discounts on the dashboard  
-- Add, update, and remove items from shopping cart  
-- Checkout all selected items in the cart or directly from the product preview  
-- Apply vouchers during checkout, with discounts reflected based on voucher type (e.g., shipping vouchers)  
-- View order history and tracking details  
+- Browse and search PC components and peripherals
+- Product filtering (category, brand, price, specs, etc.)
+- Detailed product preview with images, specs, and stock
+- Suggested/related product recommendations
+- Featured products (best-sellers) on the dashboard
+- Display promotions and discounted items
+- Add, update, or remove cart items
+- Checkout from cart or directly from a product page
+- Voucher support (e.g., shipping vouchers, discount vouchers)
+- View order history and shipment tracking
+- Cancel Order (based on allowed status conditions)
+
+### AI Assistant — TechMate
+Your built-in AI chatbot designed to assist users with:
+- Hardware recommendations
+- Compatibility checks
+- Troubleshooting
+- Product comparisons
+- Personalized suggestions
+TechMate enhances the shopping experience by offering real-time AI guidance.
+
+### Newsletter System
+Users can subscribe to OverClockedX newsletters to receive:
+- Product promotions
+- New arrivals
+Delivered via email for instant updates.
 
 ### User Profile
 - View and update profile information (username, contact number, address, and profile picture)  
@@ -41,12 +57,13 @@
 - **Authentication:** [Auth.js](https://authjs.dev/) (Google and Credentials providers)  
 - **State Management:** [Zustand](https://zustand-demo.pmnd.rs/)  
 - **Payments:** [Xendit](https://www.xendit.co/) (GCash integration)  
-- **Email Service:** [Nodemailer](https://nodemailer.com/)  
+- **Email Service:** [sendGrid](https://sendgrid.com/en-us)  
 - **File Uploads:** [Edge Store](https://edgestore.dev/)  
 - **UI Components:** [shadcn/ui](https://ui.shadcn.dev/)  
 - **Styling:** [Tailwind CSS](https://tailwindcss.com/)  
-- **Animations:** [Framer Motion](https://www.framer.com/motion/)  
-
+- **Animations:** [Framer Motion](https://www.framer.com/motion/)
+- **BarCode Lookup:**  [barcodelookup](https://www.barcodelookup.com/)
+- **OpenAi**  [OpenAi](https://openai.com/)
 ---
 
 ## Installation
