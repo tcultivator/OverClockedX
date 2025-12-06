@@ -22,7 +22,7 @@ const CartButtonAction = ({ session }: Props) => {
     const clearUserCartInSignout = useCartStore((state) => state.clearUserCartInSignout)
 
     const openCartToggle = useCartStore((state) => state.openCartToggle)
-    
+
 
     useEffect(() => {
         if (session) {
@@ -38,8 +38,8 @@ const CartButtonAction = ({ session }: Props) => {
     return (
         <div className="relative cursor-pointer ">
             <CartSideBar />
-            <label className="flex absolute bg-primary text-white  w-[17px] h-[17px] text-[10px] justify-center items-center rounded top-[-7px] right-[-10px]" htmlFor="">{cartItems.length}</label>
-        </div>
+            {cartItems.length > 0 && < label className="flex absolute bg-primary text-white  w-[17px] h-[17px] text-[10px] justify-center items-center rounded-[50%] top-[-7px] right-[-10px]" htmlFor="">{cartItems.length}</label>}
+        </div >
     )
 }
 
