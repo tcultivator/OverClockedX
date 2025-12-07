@@ -27,9 +27,9 @@ const DiscountedProducts = () => {
     return (
         <div className="p-4 m-auto w-[90%] sm:w-[80%] md:w-[80%] xl:w-[90%] lg:w-[95%] px-[2px] xl:px-[5%]">
             <div className="w-full">
-                <h2 className="text-2xl font-orbitron font-bold text-[30px] text-left w-max p-2 text-black rounded-t-md">
+                {promotionProducts.length > 0 && <h2 className="text-2xl font-orbitron font-bold text-[30px] text-left w-max p-2 text-black rounded-t-md">
                     SALES
-                </h2>
+                </h2>}
             </div>
 
             <div className="relative">

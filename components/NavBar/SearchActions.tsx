@@ -15,12 +15,11 @@ const SearchActions = () => {
     const sideBar = useSideBarStore((state) => state.sideBar)
     const inputRef = useRef<HTMLInputElement>(null);
     const [recentSearch, setRecentSearch] = useState(() => {
-        const recentSearchData = localStorage.getItem('searchItems')
-        const turnStringToArray = recentSearchData?.split(',')
-        if (turnStringToArray?.length) {
+        try {
+            const recentSearchData = localStorage.getItem('searchItems')
+            const turnStringToArray = recentSearchData?.split(',')
             return turnStringToArray
-        }
-        else {
+        } catch (err) {
             return []
         }
     })
@@ -57,19 +56,26 @@ const SearchActions = () => {
     const submitSearchInDashboard = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         if (inputRef.current?.value) {
-            const recentSearchData = localStorage.getItem('searchItems')
-            const turnStringToArray = recentSearchData?.split(',')
-            if (turnStringToArray?.length) {
-                searchPostRequest(inputRef.current?.value)
-                turnStringToArray.push(inputRef.current?.value)
-                const turnArrayInotString = turnStringToArray.join(",")
-                localStorage.setItem('searchItems', turnArrayInotString)
-                inputRef.current.value = '';
-            } else {
+            try {
+                const recentSearchData = localStorage.getItem('searchItems')
+                const turnStringToArray = recentSearchData?.split(',')
+                if (turnStringToArray?.length) {
+                    searchPostRequest(inputRef.current?.value)
+                    turnStringToArray.push(inputRef.current?.value)
+                    const turnArrayInotString = turnStringToArray.join(",")
+                    localStorage.setItem('searchItems', turnArrayInotString)
+                    inputRef.current.value = '';
+                } else {
+                    searchPostRequest(inputRef.current?.value)
+                    localStorage.setItem('searchItems', inputRef.current?.value)
+                    inputRef.current.value = '';
+                }
+            } catch (err) {
                 searchPostRequest(inputRef.current?.value)
                 localStorage.setItem('searchItems', inputRef.current?.value)
                 inputRef.current.value = '';
             }
+
 
 
 
