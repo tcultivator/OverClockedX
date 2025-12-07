@@ -17,6 +17,12 @@ import { useToast } from '@/stores/toastStore';
 import { useCategoriesHeaderStore } from '@/stores/categoriesHeaderStore';
 import { Label } from '@/components/ui/label';
 
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from "@/components/ui/tooltip"
+
 type Props = {
     products: ProductsType[]
     category: string
@@ -26,6 +32,7 @@ const ProductList = ({ products, category }: Props) => {
 
     const router = useRouter();
     const [finalProducts, setFinalProducts] = useState(products)
+    const [categories, setCategory] = useState(category)
     const searchParams = useSearchParams();
     const [loadingProducts, setLoadingProducts] = useState(false)
 
@@ -46,6 +53,7 @@ const ProductList = ({ products, category }: Props) => {
         const low = searchParams.get('low') || ''
         const high = searchParams.get('high') || ''
         const brands = searchParams.get('brands') || ''
+        const search = searchParams.get('search') || ''
         setOffset(0)
         offsetRef.current = 0;
         setNoProductMessage(false)
@@ -58,12 +66,12 @@ const ProductList = ({ products, category }: Props) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ category: category, SortBy: SortBy, Availability: Availability, low: low, high: high, offset: offsetRef.current, brands: arrayBrands }),
+                body: JSON.stringify({ category: categories, SortBy: SortBy, Availability: Availability, low: low, high: high, offset: offsetRef.current, brands: arrayBrands, search: search }),
             })
             const response = await res.json()
             setFinalProducts(response.result)
             setOffset(prev => {
-                const newOffset = prev + 15;
+                const newOffset = prev + 18;
                 offsetRef.current = newOffset;
                 return newOffset;
             });
@@ -75,7 +83,7 @@ const ProductList = ({ products, category }: Props) => {
 
         getFilter()
 
-    }, [searchParams, category])
+    }, [searchParams, categories])
 
     const productListDisplayOrientation = useCategoriesHeaderStore((state) => state.productListDisplayOrientation)
     const isList = useCategoriesHeaderStore((state) => state.isList)
@@ -107,19 +115,19 @@ const ProductList = ({ products, category }: Props) => {
                     const high = searchParams.get('high') || ''
                     const brands = searchParams.get('brands') || ''
                     const arrayBrands = brands.split(',')
-
+                    const search = searchParams.get('search') || ''
                     const getFilter = async () => {
                         const res = await fetch('/api/filterProducts', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
                             },
-                            body: JSON.stringify({ category: category, SortBy: SortBy, Availability: Availability, low: low, high: high, offset: offsetRef.current, brands: arrayBrands }),
+                            body: JSON.stringify({ category: categories, SortBy: SortBy, Availability: Availability, low: low, high: high, offset: offsetRef.current, brands: arrayBrands, search: search }),
                         })
                         const response = await res.json()
                         setFinalProducts(prev => [...prev, ...response.result])
                         setOffset(prev => {
-                            const newOffset = prev + 15;
+                            const newOffset = prev + 18;
                             offsetRef.current = newOffset;
                             return newOffset;
                         });
@@ -144,62 +152,79 @@ const ProductList = ({ products, category }: Props) => {
         return () => listElement.removeEventListener('scroll', detectScroll);
     }, [])
     return (
-        <div className='flex flex-col max-h-[85vh] bg-black inset-shadow-sm inset-shadow-white/50 rounded-[10px] justify-start w-full font-thin md:max-h-[92vh]'>
+        <div className='flex flex-col max-h-[85vh] text-black rounded justify-start w-full font-thin md:max-h-[92vh]'>
             <CategoriesHeader />
             <div ref={listRef} className='overflow-y-auto z-0'>
                 <div id="right" className={`${loadingProducts ? 'opacity-25' : 'opacity-100'} ${productListDisplayOrientation[0]}`}>
                     {loadingProducts ? (
                         finalProducts && finalProducts.map((data, index) => (
                             < div className="flex flex-col gap-3 space-y-3" key={index}>
-                                <Skeleton className="h-50 w-full rounded-xl" />
+                                <Skeleton className="h-50 w-full rounded-xl bg-black/50" />
                                 <div className="space-y-2">
-                                    <Skeleton className="h-4 w-[90%]" />
-                                    <Skeleton className="h-4 w-[60%]" />
+                                    <Skeleton className="h-4 w-[90%] bg-black/50" />
+                                    <Skeleton className="h-4 w-[60%] bg-black/50" />
                                 </div>
                             </div >
                         ))
                     ) : (
 
                         finalProducts.length > 0 ? finalProducts.map((data, index) => (
-                            <div key={index} className={`${productListDisplayOrientation[1]}`}>
+                            <div key={index} className={`${productListDisplayOrientation[1]} group`}>
                                 <div className={`${productListDisplayOrientation[2]}`} onClick={() => router.push(`/product/${data.product_id}`)} >
-                                    {data.value != null && <Label className='absolute top-2 right-2 p-1 bg-red-400 flex items-center gap-1'>{new Intl.NumberFormat('en-PH', {
-                                        style: 'currency',
-                                        currency: 'PHP',
-                                        minimumFractionDigits: 0,
-                                        maximumFractionDigits: 0
-                                    }).format(data.value)}<span>OFF</span></Label>}
+                                    {data.value != null &&
+                                        <Label className="absolute top-2 left-2 bg-[#e31612] p-2 text-white rounded">
+                                            {new Intl.NumberFormat('en-PH', {
+                                                style: 'currency',
+                                                currency: 'PHP',
+                                                minimumFractionDigits: 0,
+                                                maximumFractionDigits: 0
+                                            }).format(data.value)}<span>OFF</span></Label>}
                                     <div className={`${productListDisplayOrientation[3]}`}>
-                                        <div className={`${productListDisplayOrientation[6]}`}>
+                                        <div className={`${productListDisplayOrientation[6]} `}>
                                             <Image src={data.product_image} alt='' className='w-full h-full max-w-xs z-0' width={400} height={400} />
                                         </div>
                                         <div className='flex flex-col'>
                                             <label className='text-xs'>{data.product_name}</label>
-                                            <label className="text-sm md:text-2xl">
-                                                {new Intl.NumberFormat('en-PH', {
-                                                    style: 'currency',
-                                                    currency: 'PHP',
-                                                }).format(data.price)}
-                                            </label>
+                                            <div className='flex items-center gap-1'>
+                                                {data.value != null && <Label className="text-[#e31612] text-sm md:text-md">
+                                                    {new Intl.NumberFormat('en-PH', {
+                                                        style: 'currency',
+                                                        currency: 'PHP',
+                                                    }).format(data.price - data.value)}
+                                                </Label>}
+                                                <Label className={`${data.value != null ? 'text-black/50 line-through text-[10px]' : 'text-black text-sm md:text-md'}  `}>
+                                                    {new Intl.NumberFormat('en-PH', {
+                                                        style: 'currency',
+                                                        currency: 'PHP',
+                                                    }).format(data.price)}
+                                                </Label>
+                                            </div>
+
                                         </div>
 
                                     </div>
                                 </div>
-                                <div className={`${productListDisplayOrientation[4]}`}>
-                                    <button disabled={toastState} onClick={() => {
-                                        addToCart({
-                                            id: data.id,
-                                            email: user?.email,
-                                            product_id: data.product_id,
-                                            product_name: data.product_name,
-                                            product_image: data.product_image,
-                                            price: data.price,
-                                            stocks: data.stocks,
-                                            quantity: 1,
-                                            value:data.value
-                                        })
-                                    }} className={`${productListDisplayOrientation[5]}`}><TfiShoppingCart className='text-[15px] ' />{isList ? '' : 'Add to cart'}</button>
-                                </div>
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <button disabled={toastState} onClick={() => {
+                                            addToCart({
+                                                id: data.id,
+                                                email: user?.email,
+                                                product_id: data.product_id,
+                                                product_name: data.product_name,
+                                                product_image: data.product_image,
+                                                price: data.price,
+                                                stocks: data.stocks,
+                                                quantity: 1,
+                                                value: data.value
+                                            })
+                                        }} className={`group-hover:bg-black/80 absolute ${isList ? 'top-2' : 'top-[85%]'}  right-2  bg-black text-white aspect-square p-2 text-[30px] flex items-center justify-center w-[40px] h-[40px] rounded-[50%]`}><TfiShoppingCart className='text-[15px] ' /></button>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        <p>Add to Cart</p>
+                                    </TooltipContent>
+                                </Tooltip>
+
 
                             </div>
 
@@ -213,8 +238,8 @@ const ProductList = ({ products, category }: Props) => {
 
                 </div>
                 {loading && !noProductMessage && <div className='w-full flex justify-center items-center gap-2 pb-5'><ClipLoader
-                    size={25}
-                    color='white'
+                    size={20}
+                    color='black'
                     loading={true} />Loading...</div>}
                 {noProductMessage && <div className='w-full flex justify-center items-center gap-2 pb-5'>No more products</div>}
             </div>

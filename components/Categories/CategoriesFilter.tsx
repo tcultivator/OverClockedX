@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { BsFillXCircleFill } from "react-icons/bs";
 import { FaCheckCircle } from "react-icons/fa";
@@ -8,11 +8,13 @@ import { Button } from '../ui/button';
 import { useFilterStore } from '@/stores/filterStore';
 import { RiCloseLargeFill } from "react-icons/ri";
 import { brands } from '@/utils/datasetAddress/brands'
+import { Label } from '../ui/label';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select"
 const CategoriesFilter = () => {
     const searchParams = useSearchParams();
 
     const handleFilterChange = (filterName: string, value: string) => {
+
         if (value == 'In Stock' || value == 'Out of Stock') {
             console.log('gagana lang dapat to kapag ung availability ung ififilter ko')
             setAvailabilityState(value);
@@ -22,6 +24,7 @@ const CategoriesFilter = () => {
             setSortbyFilterState(true)
         }
         const params = new URLSearchParams(searchParams.toString());
+        params.delete('search');
         if (value) {
             params.set(filterName, value);
         } else {
@@ -36,6 +39,7 @@ const CategoriesFilter = () => {
     const handleInputFilter = () => {
         setPriceRangeFilterState(true)
         const params = new URLSearchParams(searchParams.toString());
+        params.delete('search');
         params.set('low', value[0].toString() || '0');
         params.set('high', value[1].toString() || '100000')
         window.history.pushState({}, '', `?${params.toString()}`);
@@ -91,7 +95,9 @@ const CategoriesFilter = () => {
 
 
     const handleBrandFilter = () => {
+
         const params = new URLSearchParams(searchParams.toString());
+        params.delete('search');
         params.set('brands', selectedBrands.toString());
         window.history.pushState({}, '', `?${params.toString()}`);
         setFilterDisplay(false)
@@ -103,19 +109,43 @@ const CategoriesFilter = () => {
         setSelectedBrands([])
         window.history.pushState({}, '', `?${params.toString()}`);
     }
+
+    useEffect(() => {
+        const search = searchParams.get('search') || ''
+        console.log('eto ung sa search params ng search: ', search)
+        if (search != '') {
+            console.log('this should log')
+
+            //clear brands filter state
+            setSelectedBrands([])
+
+            //clear price range filter state
+            setPriceRangeFilterState(false)
+            setValue([0, 100000])
+
+            //clear sort by filter state
+            setSortbyFilterState(false)
+
+            // clear availability state
+            setAvailabilityState('')
+            setAvailabilityFilterState(false)
+        }
+
+
+    }, [searchParams])
     return (
-        <div className='bg-black'>
-            <div id="left" className={`w-full bg-black  ${displayFilter == false ? 'hidden' : 'block'} h-screen w-full box-border left-0 p-5  absolute top-0 md:relative  md:block lg:block xl:block font-thin md:w-[350px] md:inset-shadow-sm md:inset-shadow-white/50 z-50 md:rounded-[10px] md:p-5 md:z-10`}>
+        <div className=''>
+            <div id="left" className={`w-full bg-white  ${displayFilter == false ? 'hidden' : 'block'} h-screen w-full box-border left-0 p-5  absolute top-0 md:relative  md:block lg:block xl:block font-thin md:w-[350px] md:border-r md:border-r-black/20  z-50 md:p-5 md:z-10`}>
                 <div className="sticky top-0">
                     <div className='w-full flex justify-end'>
                         <button className='block md:hidden ' onClick={() => {
                             console.log(displayFilter)
                             setFilterDisplay(false)
-                        }}><RiCloseLargeFill /></button>
+                        }}><RiCloseLargeFill className='text-black' /></button>
                     </div>
 
-                    <div className='py-6 border-b border-gray-400 flex flex-col gap-2'>
-                        <h1 className='text-xl'>Availability</h1>
+                    <div className='py-6 border-b border-black/20 flex flex-col gap-2 text-black'>
+                        <Label className='text-lg font-orbitron uppercase'>Availability</Label>
 
                         <div className='flex gap-1 items-center'>
                             <input
@@ -126,7 +156,8 @@ const CategoriesFilter = () => {
                                 checked={availabilityState === "In Stock"}
                                 onChange={(e) => handleFilterChange("availability", e.target.value)}
                             />
-                            <label htmlFor='In Stock' className='cursor-pointer'>In Stock</label>
+                            <Label htmlFor='In Stock' className='cursor-pointer font-normal'>In Stock</Label>
+
                         </div>
 
                         <div className='flex gap-1 items-center'>
@@ -138,7 +169,7 @@ const CategoriesFilter = () => {
                                 checked={availabilityState === "Out of Stock"}
                                 onChange={(e) => handleFilterChange("availability", e.target.value)}
                             />
-                            <label htmlFor="Out of Stock" className='cursor-pointer'>Out of Stock</label>
+                            <Label htmlFor="Out of Stock" className='cursor-pointer font-normal'>Out of Stock</Label>
                         </div>
                         {availabilityFilterState &&
                             <div>
@@ -147,11 +178,11 @@ const CategoriesFilter = () => {
                         }
 
                     </div>
-                    <div className='py-6 border-b border-gray-400 flex flex-col gap-2'>
-                        <label className="text-white text-xl">Sort by</label>
+                    <div className='py-6 border-b border-black/20 flex flex-col gap-2 text-black'>
+                        <Label className='text-lg font-orbitron uppercase'>Sort By</Label>
                         <Select onValueChange={(value) => handleFilterChange("Sortby", value)}>
                             <SelectTrigger>
-                                <SelectValue className='text-white' placeholder="Select Sort by" />
+                                <SelectValue className='text-black' placeholder="Select Sort by" />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectGroup>
@@ -168,11 +199,11 @@ const CategoriesFilter = () => {
                             </div>
                         }
                     </div>
-                    <div className='py-6 border-b border-gray-400 flex flex-col gap-4'>
-                        <h1 className='text-xl '>Price</h1>
+                    <div className='py-6 border-b border-black/20 flex flex-col gap-4 text-black'>
+                        <Label className='text-lg font-orbitron uppercase'>Price</Label>
                         <div className='flex box-border  gap-2 items-center relative'>
                             <div className='box-border flex items-center'>
-                                <input className='w-full p-2 pl-5 border border-gray-400 rounded-[25px]' type="number" placeholder="0"
+                                <input className='w-full p-2 pl-5 border border-black/30 rounded-[25px]' type="number" placeholder="0"
                                     value={value[0]}
                                     onChange={(e) => {
                                         const newValue = Number(e.target.value);
@@ -204,7 +235,7 @@ const CategoriesFilter = () => {
                             aria-label="Price Range"
                         />
                         <div >
-                            <Button onClick={() => handleInputFilter()} className='w-full flex items-center justify-center gap-3' variant={'secondary'}><FaCheckCircle />Apply</Button>
+                            <Button onClick={() => handleInputFilter()} className='w-full flex items-center justify-center gap-3' variant={'default'}><FaCheckCircle />Apply</Button>
                         </div>
                         {
                             priceRangeFilterState &&
@@ -214,8 +245,8 @@ const CategoriesFilter = () => {
                         }
                     </div>
 
-                    <div className='flex flex-col gap-2 bg-black'>
-                        <h1 className='text-xl'>Brands</h1>
+                    <div className='flex flex-col gap-2 bg-white text-black'>
+                        <Label className='text-lg font-orbitron uppercase'>Brands</Label>
                         <div className='max-h-[100px] md:max-h-[250px] overflow-auto flex flex-col gap-2 '>
                             <div className="flex flex-col gap-2 justify-start items-start">
                                 {brands.map((data, index) => (
@@ -231,7 +262,7 @@ const CategoriesFilter = () => {
                                             }
 
                                         }} />
-                                        <label htmlFor="">{data}</label>
+                                        <Label htmlFor="" className='font-normal'>{data}</Label>
                                     </div>
                                 ))}
                             </div>
@@ -244,7 +275,7 @@ const CategoriesFilter = () => {
                                 <label className='flex gap-2 items-center' htmlFor="">{selectedBrands.length}<span>Selected</span></label>
                             </div>
 
-                            <Button onClick={() => handleBrandFilter()} className='flex items-center justify-center gap-3' variant={'secondary'}><FaCheckCircle />Apply</Button>
+                            <Button onClick={() => handleBrandFilter()} className='flex items-center justify-center gap-3' variant={'default'}><FaCheckCircle />Apply</Button>
                         </div>
 
                     </div>

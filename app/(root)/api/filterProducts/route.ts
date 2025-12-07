@@ -26,6 +26,21 @@ export async function POST(req: NextRequest) {
     WHERE (p.category = ? OR p.parent = ?) 
     `;
 
+
+    //this query is seperated because its a search query meaning its independent
+    const searchQuery = `
+     SELECT 
+      p.*,
+      promo.value
+    FROM products p
+    LEFT JOIN product_promotion_list promo
+      ON promo.product_id = p.product_id
+      AND promo.isActive = 1
+      AND promo.end_date > NOW()
+    WHERE p.category LIKE ? OR p.parent LIKE ? OR p.product_name LIKE ? OR p.description LIKE ? OR p.brand LIKE ? LIMIT 18 OFFSET ?
+    
+    `
+
     const availability = () => {
         switch (body.Availability) {
             case 'In Stock':
@@ -62,7 +77,7 @@ export async function POST(req: NextRequest) {
     }
     const PriceRangeValue = PriceRange()
     console.log('eto ung laman ng price range value, ', PriceRangeValue)
-    console.log('eto laman ng body.brands, ', body.brands)  
+    console.log('eto laman ng body.brands, ', body.brands)
     const selectedBrands = () => {
         if (body.brands[0] != '' && body.brands != undefined) {
             return ` AND (${body.brands.map((item: string) => `brand = '${item}'`).join(" OR ")})`
@@ -74,10 +89,16 @@ export async function POST(req: NextRequest) {
     console.log('eto laman ng selected brands, ', finalSelectedBrands)
 
     try {
-        console.log(query + finalSelectedBrands + availabilityValue + PriceRangeValue + SortByValue + ' LIMIT 15 OFFSET ?')
-        const [rows] = body.category == 'allProducts' ? await db.query(query + finalSelectedBrands + availabilityValue + PriceRangeValue + SortByValue + ' LIMIT 15 OFFSET ?', [body.offset]) : await db.query(query + finalSelectedBrands + availabilityValue + PriceRangeValue + SortByValue + ' LIMIT 15 OFFSET ?', [body.category, body.category, body.offset])
-        const result = rows as ProductsType[]
-        return NextResponse.json({ result })
+        if (body.search != '') {
+            const [rows] = await db.query(searchQuery, [body.search, body.search, body.search, body.search, body.search, body.offset])
+            const result = rows as ProductsType[]
+            return NextResponse.json({ result })
+        } else {
+            const [rows] = body.category == 'allProducts' ? await db.query(query + finalSelectedBrands + availabilityValue + PriceRangeValue + SortByValue + ' LIMIT 18 OFFSET ?', [body.offset]) : await db.query(query + finalSelectedBrands + availabilityValue + PriceRangeValue + SortByValue + ' LIMIT 18 OFFSET ?', [body.category, body.category, body.offset])
+            const result = rows as ProductsType[]
+            return NextResponse.json({ result })
+        }
+
     } catch (err) {
         console.log(err)
         return NextResponse.json({ status: 500 })

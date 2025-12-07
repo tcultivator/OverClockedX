@@ -10,5 +10,6 @@ export const useFilterStore = create<filter>((set) => ({
         set({
             displayFilter: value
         })
-    }
+    },
+
 })) 
