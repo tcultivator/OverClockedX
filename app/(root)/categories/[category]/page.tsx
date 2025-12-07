@@ -29,7 +29,7 @@ const CategoryPage = async ({ params }: PageProps) => {
       ON promo.product_id = p.product_id 
       AND promo.isActive = 1
       AND promo.end_date > NOW()
-    LIMIT 15 OFFSET 0
+    LIMIT 18 OFFSET 0
   `) : await db.query(`
     SELECT 
       p.*,
@@ -40,12 +40,12 @@ const CategoryPage = async ({ params }: PageProps) => {
       AND promo.isActive = 1
       AND promo.end_date > NOW()
     WHERE p.category = ? OR p.parent = ?
-    LIMIT 15 OFFSET 0
+    LIMIT 18 OFFSET 0
   `, [category, category])
     const products = rows as ProductsType[];
     return (
         <div className=' w-full h-[screen] '>
-            <div className="flex px-[2px] md:px-2  text-white md:gap-2">
+            <div className="flex px-[2px] md:pr-2 ">
                 <CategoriesFilter />
                 <ProductList
                     products={products}

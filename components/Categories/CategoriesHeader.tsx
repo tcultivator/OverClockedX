@@ -6,12 +6,11 @@ import { useCategoriesHeaderStore } from '@/stores/categoriesHeaderStore';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { CiSearch } from "react-icons/ci";
-import Image from 'next/image';
-import { Label } from '../ui/label';
-import { ProductsType } from '@/types/ProductTypes';
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { IoFilterOutline } from "react-icons/io5";
-
+import { useSearchParams } from 'next/navigation'
+import { BsFillXCircleFill } from "react-icons/bs";
 const CategoriesHeader = () => {
     const setFilterDisplay = useFilterStore((state) => state.setFilterDisplay)
     const router = useRouter();
@@ -19,66 +18,62 @@ const CategoriesHeader = () => {
     const setGridDisplay = useCategoriesHeaderStore((state) => state.setGridDisplay)
     const isList = useCategoriesHeaderStore((state) => state.isList)
     const [searchValu, setSearchVal] = useState('')
-    const [searchResults, setSearchResults] = useState<ProductsType[]>([])
-    let isTimeoutActive: ReturnType<typeof setTimeout> | null = null;
-    const searchProducts = (value: string) => {
-        if (isTimeoutActive != null) {
-            clearTimeout(isTimeoutActive)
-        }
-        isTimeoutActive = setTimeout(() => {
+    const searchParams = useSearchParams();
 
-            setSearchVal(value)
-            if (value != '') {
-                searchFunction(value)
-            } else {
-                setSearchResults([])
-            }
-        }, 1500)
+    const [searchActive, setSearchActive] = useState(false)
 
-    }
-
-    const searchFunction = async (value: string) => {
-        console.log('eto ung search payload,', value)
-        const searchproduct = await fetch('/api/searchProducts', {
-            method: 'POST',
-            headers: {
-                'Content-type': 'application/json'
-            },
-            body: JSON.stringify({ searchValue: value })
+    const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        setSearchActive(true)
+        const params = new URLSearchParams(searchParams.toString());
+        const arr: string[] = []
+        params.forEach((value, key) => {
+            arr.push(key)
         })
-        const result = await searchproduct.json()
-        if (result.status !== 500) {
-            console.log('eto ung result ng search! ', result)
-            setSearchResults(result)
-        } else {
-            console.log('something went wrong')
+        console.log(arr)
+        for (const item of arr) {
+            params.delete(item)
+            window.history.pushState({}, '', `?${params.toString()}`);
         }
+        params.set('search', searchValu.toString());
+        window.history.pushState({}, '', `?${params.toString()}`);
     }
+
+    const clearSearch = () => {
+        const params = new URLSearchParams(searchParams.toString());
+        params.delete('search');
+        setSearchActive(false)
+        setSearchVal('')
+        window.history.pushState({}, '', `?${params.toString()}`);
+    }
+
+    useEffect(() => {
+        const search = searchParams.get('search') || ''
+        console.log('eto ung sa search params ng search: ', search)
+        if (search == '') {
+            clearSearch()
+        }
+
+
+    }, [searchParams])
+
+
+
     return (
-        <div className="flex justify-between sticky gap-1 items-center top-0 z-30  p-2 md:px-5 w-full font-Abyssinica font-thin h-max border-b border-white/20 md:justify-end">
+        <div className="flex bg-white justify-between sticky gap-1 items-center top-0 z-30  p-2 md:px-5 w-full font-Abyssinica font-thin h-max border-b border-black/20 md:justify-end">
             <button className='block md:hidden bg-white text-black text-[14px] rounded p-1' onClick={() => setFilterDisplay(true)}><IoFilterOutline /></button>
             <div className='flex items-center gap-5'>
                 <div className='relative'>
-                    <div className='flex gap-2 items-center'>
-                        <Input className='md:w-[350px]' type='text' placeholder='Search here...' onChange={(e) => searchProducts(e.target.value)} />
-                        <Button onClick={() => searchFunction(searchValu)} variant={'secondary'}><CiSearch /></Button>
-                    </div>
-                    <div className={` bg-white  max-h-[50vh] overflow-auto mt-1 rounded w-full absolute flex flex-col gap-2 ${searchResults.length != 0 && 'p-1'}`}>
-                        {searchResults.map((data, index) => (
-                            <div key={index} onClick={() => router.push(`/product/${data.product_id}`)} className='flex items-center gap-2 rounded bg-black/70 text-white cursor-pointer p-1'>
-                                <Image src={data.product_image} width={100} height={100} alt='' className='w-[50px]' />
-                                <div className='flex flex-col gap-1 cursor-pointer'>
-                                    <Label>{data.product_name}</Label>
-                                    <Label>{data.price}</Label>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
+                    <form onSubmit={handleSearch} className='flex gap-2 items-center'>
+                        {searchActive && <button className='flex items-center text-[13px] justify-center gap-2' onClick={clearSearch}><BsFillXCircleFill className='text-red-400' /> Clear Search</button>}
+                        <Input className='md:w-[350px]' type='text' placeholder='Search here...' value={searchValu || ''} onChange={(e) => setSearchVal(e.target.value)} />
+                        <Button type='submit' disabled={searchValu == ''} variant={'default'}><CiSearch /></Button>
+                    </form>
                 </div>
 
-                <div className="flex gap-2 items-center text-white">
-                    <button className={`${isList && 'bg-white text-black'} text-[14px] rounded p-1`} onClick={setListDisplay}><CiBoxList /></button>
-                    <button className={`${isList == false && 'bg-white text-black'} text-[14px] rounded p-1`} onClick={setGridDisplay}><IoGridOutline /></button>
+                <div className="flex gap-2 items-center text-black">
+                    <button className={`${isList && 'bg-black text-white'} text-[14px] rounded p-1`} onClick={setListDisplay}><CiBoxList /></button>
+                    <button className={`${isList == false && 'bg-black text-white'} text-[14px] rounded p-1`} onClick={setGridDisplay}><IoGridOutline /></button>
                 </div>
             </div>
 

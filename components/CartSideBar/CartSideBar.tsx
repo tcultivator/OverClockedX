@@ -22,7 +22,11 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
 import { PiTrashSimpleThin } from "react-icons/pi";
-
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from "@/components/ui/tooltip"
 const CartSideBar = () => {
     const router = useRouter();
     const openCart = useCartStore((state) => state.openCart)
@@ -53,7 +57,14 @@ const CartSideBar = () => {
                     {cartItems.length > 0 ? <div className='px-4 underline text-blue-400 flex justify-end items-end text-black'>
                         <AlertDialog >
                             <AlertDialogTrigger asChild>
-                                <button className='underline text-red-400'>Clear Cart</button>
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <button className='underline text-red-400'>Clear Cart</button>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        <p>Remove All Items</p>
+                                    </TooltipContent>
+                                </Tooltip>
                             </AlertDialogTrigger>
                             <AlertDialogContent>
                                 <AlertDialogHeader>
@@ -137,7 +148,15 @@ const CartSideBar = () => {
                                                 <div className="flex gap-2 border border-black/50  w-max p-1 px-2 rounded text-[10px]">
                                                     <input disabled type="number" className=" text-black px-1 w-[20px] text-[13px] text-center outline-none rounded p-1" value={src.quantity} />
                                                 </div>
-                                                <button onClick={() => removeItemInCart(src)}><PiTrashSimpleThin className='text-black text-[27px]' /></button>
+                                                <Tooltip>
+                                                    <TooltipTrigger asChild>
+                                                        <button onClick={() => removeItemInCart(src)}><PiTrashSimpleThin className='text-black text-[27px]' /></button>
+                                                    </TooltipTrigger>
+                                                    <TooltipContent>
+                                                        <p>Remove Item</p>
+                                                    </TooltipContent>
+                                                </Tooltip>
+
 
                                             </div>
 

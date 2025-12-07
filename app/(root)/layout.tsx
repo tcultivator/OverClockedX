@@ -7,7 +7,7 @@ import CartSideBar from "@/components/CartSideBar/CartSideBar";
 import './globals.css';
 import Toast from "@/components/ToastNotification/Toast";
 import Loading from "@/components/loader/loading";
-
+import FloatingChatBot from "@/components/Chat/components/FloatingChatBot";
 import { Toaster } from "@/components/ui/sonner"
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -50,7 +50,7 @@ export default function RootLayout({
         <Toast />
         <Footer />
         <Loading />
-
+        <FloatingChatBot />
       </body>
     </html>
   );
