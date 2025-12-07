@@ -74,7 +74,7 @@ const CartSideBar = () => {
                             <Image src="/eyes.png" alt='' width={400} height={400} className='w-[70px]' />
                             <div className='flex items-center gap-1 flex-col text-center justify-center'>
                                 <Label className='text-black font-orbitron'>Your Cart is Empty</Label>
-                                <Label className='text-black/50'>Looks like you haven't added anything in you cart yet</Label>
+                                <Label className='text-black/50'>Looks like you haven&apos;t added anything in you cart yet</Label>
                                 <button
                                     onClick={() => {
                                         router.push(`/categories/allProducts`)
