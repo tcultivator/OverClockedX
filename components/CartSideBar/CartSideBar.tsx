@@ -50,7 +50,7 @@ const CartSideBar = () => {
                 </div>
 
                 <div className='relative w-full h-full box-border flex flex-col gap-2'>
-                    {cartItems.length > 0 && <div className='px-4 underline text-blue-400 flex justify-end items-end text-black'>
+                    {cartItems.length > 0 ? <div className='px-4 underline text-blue-400 flex justify-end items-end text-black'>
                         <AlertDialog >
                             <AlertDialogTrigger asChild>
                                 <button className='underline text-red-400'>Clear Cart</button>
@@ -69,7 +69,26 @@ const CartSideBar = () => {
                             </AlertDialogContent>
                         </AlertDialog>
 
-                    </div>}
+                    </div> :
+                        <div className='w-full flex items-center gap-1 flex-col text-center justify-center h-full'>
+                            <Image src="/eyes.png" alt='' width={400} height={400} className='w-[70px]' />
+                            <div className='flex items-center gap-1 flex-col text-center justify-center'>
+                                <Label className='text-black font-orbitron'>Your Cart is Empty</Label>
+                                <Label className='text-black/50'>Looks like you haven't added anything in you cart yet</Label>
+                                <button
+                                    onClick={() => {
+                                        router.push(`/categories/allProducts`)
+                                        openCartToggle()
+                                    }}
+
+                                    className="w-[160px] rounded-[5px] p-3 text-[13px] transition-all duration-300 bg-black text-white hover:bg-black/80"
+                                >
+                                    SHOP NOW
+                                </button>
+                            </div>
+
+                        </div>
+                    }
                     <div className='overflow-y-auto max-h-[84vh] flex flex-col gap-2 px-1'>
                         {
                             cartItems.map((src, index) => (

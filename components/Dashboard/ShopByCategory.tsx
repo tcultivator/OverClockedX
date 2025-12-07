@@ -64,7 +64,7 @@ const ShopByCategory = () => {
                             <button
                                 onClick={() => SelectCategories(categoriesData[current].navigation)}
                                 
-                                className="w-full sm:w-[160px] rounded-[5px] p-4 text-[13px] bg-white"
+                                className="w-full sm:w-[160px] rounded-[5px] p-4 text-[13px] transition-all duration-300 bg-white hover:bg-white/80"
                             >
                                 BROWSE {categoriesData[current].title}
                             </button>
