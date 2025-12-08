@@ -10,7 +10,9 @@ import { Label } from '../ui/label';
 import Image from 'next/image';
 import { ProductsType } from '@/types/ProductTypes';
 import { Spinner } from "@/components/ui/spinner"
+import { useRouter } from 'next/navigation';
 const SearchActions = () => {
+    const router = useRouter();
     const setSideBar = useSideBarStore((state) => state.setSideBar)
     const sideBar = useSideBarStore((state) => state.sideBar)
     const inputRef = useRef<HTMLInputElement>(null);
@@ -169,6 +171,10 @@ const SearchActions = () => {
                                                     className="bg-white p-1 rounded relative
                                                                    flex-shrink-0
                                                                    w-[45%] sm:w-[42%] md:w-[27%] lg:w-[19%] xl:w-[13%] min-w-[150px]"
+                                                    onClick={() => {
+                                                        closeSearchWindow()
+                                                        router.push(`/product/${data.product_id}`)
+                                                    }}
                                                 >
 
 
@@ -248,6 +254,10 @@ const SearchActions = () => {
                                                 className="bg-white p-1 rounded relative
                                                                    flex-shrink-0
                                                                    w-[35%] sm:w-[30%] md:w-[28%] lg:w-[22%] xl:w-[16%]"
+                                                onClick={() => {
+                                                    closeSearchWindow()
+                                                    router.push(`/product/${data.product_id}`)
+                                                }}
                                             >
 
 
