@@ -10,6 +10,7 @@ import { useChatBotStore } from '@/stores/chatBotStore';
 import { Textarea } from '../ui/textarea';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion'
+import ReactMarkdown from 'react-markdown';
 type Props = {
     setOpenChat: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -112,13 +113,14 @@ export default function Chat({ setOpenChat }: Props) {
                                     <Label>
                                         <RiRobot2Fill className="text-white bg-green-600 p-1 rounded-full text-[18px]" />
                                     </Label>
-                                    <div className="bg-gray-200 text-black px-3 py-2 rounded-xl shadow-sm min-h-[30px] flex items-center">
-                                        {msg.bot ?? (i === messages.length - 1 && loading ? <><PulseLoader
-                                            margin={1}
-                                            size={5}
-                                            speedMultiplier={1}
-                                        /></> : null)}
+                                    <div className="bg-gray-200 text-black px-3 py-2 rounded-xl shadow-sm min-h-[30px] flex flex-col items-start">
+                                        {msg.bot ? (
+                                            <ReactMarkdown>{msg.bot}</ReactMarkdown>
+                                        ) : i === messages.length - 1 && loading ? (
+                                            <PulseLoader margin={1} size={5} speedMultiplier={1} />
+                                        ) : null}
                                     </div>
+
                                 </div>
                             </div>
 
