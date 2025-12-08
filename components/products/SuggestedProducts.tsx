@@ -11,7 +11,7 @@ interface Props {
 const SuggestedProducts = ({ relatedProducts }: Props) => {
     return (
         <div className='p-[2px] md:p-2 text-white lg:w-[90%] xl:w-[80%] 2xl:w-[70%] mx-auto'>
-            <h1 className='text-2xl font-orbitron font-bold text-[30px] text-left w-max p-2 text-black rounded-t-md uppercase'>You may also like</h1>
+            <h1 className='text-[17px] font-orbitron font-bold md:text-[25px] text-left w-max p-2 text-black rounded-t-md uppercase'>You may also like</h1>
             {
                 relatedProducts.length > 0 ?
                     <div className=' grid grid-cols-3 gap-1 md:gap-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5'>

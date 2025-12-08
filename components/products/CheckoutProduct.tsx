@@ -176,7 +176,7 @@ const CheckoutProduct = ({ id, product_id, product_image,
                     </div>
 
 
-                    <div className='w-full grid grid-cols-4 md:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-4 p-3'>
+                    <div className='w-full items-start grid grid-cols-4 md:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-4 p-3'>
                         <div className='flex flex-col gap-2 items-center justify-center'>
                             <div className='relative p-1 w-[50px] aspect-square flex items-center justify-center'>
                                 <div className='absolute p-1 w-[25%] h-[25%] top-0 left-0 rounded-tl border-t border-l border-black/20'></div>
@@ -232,9 +232,9 @@ const CheckoutProduct = ({ id, product_id, product_image,
             <div className="flex lg:w-[90%] xl:w-[80%] 2xl:w-[70%] mx-auto flex-col gap-6 ">
                 <Tabs defaultValue="Specifications" className='gap-3 flex flex-col'>
                     <TabsList className=' rounded border-b border-black/30'>
-                        <TabsTrigger className='shadow-none' value="Specifications"><CiCircleAlert /> Specifications</TabsTrigger>
-                        <TabsTrigger className='shadow-none' value="Descriptions"><CiCircleAlert /> Descriptions</TabsTrigger>
-                        <TabsTrigger className='shadow-none' value="AI Insights"><PiLightbulbThin /> AI Insights</TabsTrigger>
+                        <TabsTrigger className='shadow-none text-[12px] md:text-[14px]' value="Specifications"><CiCircleAlert /> Specifications</TabsTrigger>
+                        <TabsTrigger className='shadow-none text-[12px] md:text-[14px]' value="Descriptions"><CiCircleAlert /> Descriptions</TabsTrigger>
+                        <TabsTrigger className='shadow-none text-[12px] md:text-[14px]' value="AI Insights"><PiLightbulbThin /> AI Insights</TabsTrigger>
 
                     </TabsList>
                     <TabsContent value="Specifications">

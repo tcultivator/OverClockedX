@@ -18,7 +18,12 @@ const HeaderDropDown = () => {
     const Networks = ['Router', 'Switch']
 
     const sideBar = useSideBarStore((state) => state.sideBar)
+    const setSideBar = useSideBarStore((state) => state.setSideBar)
     function SelectCategories(category: string): void {
+        console.log('eto ung screen size: ', window.innerWidth)
+        if (window.innerWidth < 768) {
+            setSideBar()
+        }
         router.push(`/categories/${category}`);
     }
 

@@ -150,7 +150,10 @@ const CartSideBar = () => {
                                                 </div>
                                                 <Tooltip>
                                                     <TooltipTrigger asChild>
-                                                        <button onClick={() => removeItemInCart(src)}><PiTrashSimpleThin className='text-black text-[27px]' /></button>
+                                                        <button onClick={(e) => {
+                                                            e.stopPropagation()
+                                                            removeItemInCart(src)
+                                                        }}><PiTrashSimpleThin className='text-black text-[27px]' /></button>
                                                     </TooltipTrigger>
                                                     <TooltipContent>
                                                         <p>Remove Item</p>
