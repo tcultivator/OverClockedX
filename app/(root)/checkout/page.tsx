@@ -148,8 +148,25 @@ const Checkout = () => {
             case 'Maya':
                 alert('this feature is not ready yet, please select Gcash as payment options')
                 break
-            case 'CreditCard':
-                alert('this feature is not ready yet, please select Gcash as payment options')
+            case 'Cash On Delivery':
+                const codOrder = await fetch('/api/order', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: user?.email,
+                        referenceId: 'txn-' + Date.now(),
+                        total_amount: finalCheckoutItems.reduce((sum, item) => sum + (item.price - (item.value != null ? item.value : 0)) * item.quantity, 0) + shippingCost,
+                        checkoutItems: finalCheckoutItems,
+                        payment_method: paymentOptions,
+                        userAdress: userAdress
+                    }),
+                })
+                const codOrderDone = await codOrder.json()
+                console.log("eto laman ng inser orderr ", codOrderDone)
+                
+                
                 break
 
             default:
@@ -172,367 +189,377 @@ const Checkout = () => {
         })
     }
     return (
-        <div className='px-2 pb-2 text-white flex flex-col md:gap-2 md:flex-row'>
-            <div className='bg-black  flex flex-col rounded-t-[10px] gap-5 p-3 w-full md:inset-shadow-sm inset-shadow-white/50 md:p-10 md:rounded-[10px]'>
-                <h1>Checkout</h1>
-                <div className='flex gap-2 items center'>
-                    <div className='flex items-center justify-center gap-2 bg-[#1E1E1E] text-[13px]  p-2  rounded-[10px] border border-white/50 md:p-5 md:text-[15px]'>
-                        <input
-                            id='delivery'
-                            type="radio"
-                            value='delivery'
-                            checked={shippingOptions == 'delivery'}
-                            onChange={(e) => {
-                                console.log(e.target.checked)
-                                setShippingOption(e.target.value)
+        <div className='pb-2 text-white flex justify-center flex-col md:flex-row'>
+            <div className='w-full bg-white border-r md:border-r-black/30 flex justify-end'>
+                <div className=' text-black  flex flex-col  gap-5 p-3 w-full md:w-[90%] lg:w-[85%] xl:w-[80%] 2xl:w-[70%]  md:p-10'>
+                    <h1>Checkout</h1>
+                    <div className='flex gap-2 items center'>
+                        <div className='flex items-center justify-center gap-2 bg-white  text-[13px]  p-2  rounded-[10px] border border-black/50 md:p-5 md:text-[15px]'>
+                            <input
+                                id='delivery'
+                                type="radio"
+                                value='delivery'
+                                checked={shippingOptions == 'delivery'}
+                                onChange={(e) => {
+                                    console.log(e.target.checked)
+                                    setShippingOption(e.target.value)
 
-                            }}
-                            className='cursor-pointer' />
-                        <TbTruckDelivery />
-                        <label htmlFor="delivery" className='cursor-pointer'>Delivery</label>
-                    </div>
-                    <div className='flex items-center justify-center gap-2 bg-[#1E1E1E] text-[13px] p-2 rounded-[10px] border border-white/50 md:p-5 md:text-[15px]'>
-                        <input
-                            id='pickup'
-                            type="radio"
-                            value='pickup'
-                            checked={shippingOptions == 'pickup'}
-                            onChange={(e) => {
-                                setShippingOption(e.target.value)
-                            }}
-                            className='cursor-pointer' />
-                        <PiPackageDuotone />
-                        <label htmlFor="pickup" className='cursor-pointer'>Pick up</label>
-                    </div>
-                </div>
-
-                <div className='flex flex-col'>
-                    <label htmlFor="">Payment Method</label>
-                    <div className='flex gap-2 items-center'>
-                        <Select onValueChange={(value) => setPaymentOptions(value)}>
-                            <SelectTrigger>
-                                <SelectValue placeholder="Select payment method" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectGroup>
-                                    <SelectLabel>Payment Methods</SelectLabel>
-                                    <SelectItem value="Gcash">Gcash</SelectItem>
-                                    <SelectItem value="Maya">Maya</SelectItem>
-                                    <SelectItem value={CODorOTC}>{CODorOTC}</SelectItem>
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select>
-
-                        {paymentOptions != '' ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
+                                }}
+                                className='cursor-pointer' />
+                            <TbTruckDelivery />
+                            <label htmlFor="delivery" className='cursor-pointer'>Delivery</label>
+                        </div>
+                        <div className='flex items-center justify-center gap-2 bg-white text-[13px] p-2 rounded-[10px] border border-black/50 md:p-5 md:text-[15px]'>
+                            <input
+                                id='pickup'
+                                type="radio"
+                                value='pickup'
+                                checked={shippingOptions == 'pickup'}
+                                onChange={(e) => {
+                                    setShippingOption(e.target.value)
+                                }}
+                                className='cursor-pointer' />
+                            <PiPackageDuotone />
+                            <label htmlFor="pickup" className='cursor-pointer'>Pick up</label>
+                        </div>
                     </div>
 
-                </div>
+                    <div className='flex flex-col'>
+                        <label htmlFor="">Payment Method</label>
+                        <div className='flex gap-2 items-center'>
+                            <Select onValueChange={(value) => setPaymentOptions(value)}>
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Select payment method" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectGroup>
+                                        <SelectLabel>Payment Methods</SelectLabel>
+                                        <SelectItem value="Gcash">Gcash</SelectItem>
+                                        <SelectItem value="Maya">Maya</SelectItem>
+                                        <SelectItem value={CODorOTC}>{CODorOTC}</SelectItem>
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
 
-                <Accordion
-                    type="single"
-                    collapsible
-                    className="w-full"
-                    defaultValue="item-1"
-                >
-                    <AccordionItem value="item-1">
-                        <AccordionTrigger>Shipping Information</AccordionTrigger>
-                        <AccordionContent className="flex flex-col gap-4 text-balance">
-                            <div className='flex items-center justify-between'>
-                                <h1>Update Shipping Information</h1>
-                                <button onClick={() => {
-                                    if (userAdress.length > 0) {
-                                        CustomInput();
-                                    } else {
-                                        addToUserAdress();
-                                    }
-                                }} className='underline text-[12px] text-blue-400'>{userAdress.length > 0 ? 'Edit Address' : 'Use Current Address'}</button>
-                            </div>
+                            {paymentOptions != '' ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
+                        </div>
 
+                    </div>
 
-                            <form className='flex flex-col gap-1 md:flex  '>
-
-                                <div className='flex flex-col'>
-                                    <label htmlFor="">Fullname</label>
-                                    <div className='w-full flex gap-2 items-center'>
-                                        <Input required disabled={userAdress.length > 0} type="text" value={userAdress[0]?.rname ?? rName} onChange={(e) => setRName(e.target.value)} />
-                                        {rName != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
-                                    </div>
-                                </div>
-
-                                <div className='flex flex-col'>
-                                    <label htmlFor="">Email Address</label>
-                                    <div className='w-full flex gap-2 items-center'>
-                                        <Input disabled={userAdress.length > 0} type="email" value={userAdress[0]?.email ?? email} onChange={(e) => setEmail(e.target.value)} />
-                                        {email != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
-                                    </div>
-
-                                </div>
-                                <div className='flex flex-col'>
-                                    <label htmlFor="">Phone Number</label>
-                                    <div className='w-full flex gap-2 items-center'>
-                                        <Input disabled={userAdress.length > 0} type="number" value={userAdress[0]?.phone_number ?? phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
-                                        {phoneNumber != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
-                                    </div>
-
-                                </div>
-                                <div className='flex flex-col'>
-                                    <label htmlFor="">Country</label>
-                                    <div className='w-full flex gap-2 items-center'>
-                                        <Input disabled={userAdress.length > 0} list="countries" name="countries" value={userAdress[0]?.country ?? country} onChange={(e) => setCountry(e.target.value)} />
-                                        {country != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
-                                        <datalist id='countries' className='absolute bg-white text-black'>
-                                            {countries.map((data, index) => (
-                                                <option key={index} value={data}>{data}</option>
-                                            ))}
-                                        </datalist>
-                                    </div>
-
-                                </div>
-                                <div className='flex gap-1'>
-
-                                    <div className='flex flex-col w-full'>
-                                        <label htmlFor="">City/Municipality</label>
-                                        <div className='w-full flex gap-2 items-center'>
-                                            <Input disabled={userAdress.length > 0} list='city' name='city' value={userAdress[0]?.cityMunicipality ?? cityMunicipality} onChange={(e) => setCityMunicipality(e.target.value)} />
-                                            {cityMunicipality != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
-                                            <datalist id='city'>
-                                                {luzonPlaces.map((data, index) => (
-                                                    <option key={index} value={data}>{data}</option>
-                                                ))}
-                                            </datalist>
-                                        </div>
-
-                                    </div>
-
-                                    <div className='flex flex-col w-full'>
-                                        <label htmlFor="">Barangay</label>
-                                        <div className='w-full flex gap-2 items-center'>
-                                            <Input disabled={userAdress.length > 0} list='barangay' name='barangay' value={userAdress[0]?.barangay ?? barangay} onChange={(e) => setBarangay(e.target.value)} />
-                                            {barangay != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
-                                            <datalist id='barangay'>
-                                                {barangaysJaen.map((data, index) => (
-                                                    <option key={index} value={data}>{data}</option>
-                                                ))}
-                                            </datalist>
-                                        </div>
-
-                                    </div>
-
-                                    <div className='flex flex-col w-full'>
-                                        <label htmlFor="">Province</label>
-                                        <div className='w-full flex gap-2 items-center'>
-                                            <Input disabled={userAdress.length > 0} list='province' name='province' value={userAdress[0]?.province ?? province} onChange={(e) => setProvince(e.target.value)} />
-                                            {province != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
-                                            <datalist id='province'>
-                                                {luzonProvinces.map((data, index) => (
-                                                    <option key={index} value={data}>{data}</option>
-                                                ))}
-                                            </datalist>
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-                                <div className='flex flex-col'>
-                                    <label htmlFor="">Trademark</label>
-                                    <div className='w-full flex gap-2 items-center'>
-                                        <Textarea disabled={userAdress.length > 0} value={userAdress[0]?.trademark ?? description} onChange={(e) => setDescription(e.target.value)} />
-                                        {description != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
-                                    </div>
-                                </div>
-                                {
-                                    userAdress.length <= 0 && <Button onClick={() => {
-                                        if (rName != '' && country != '' && cityMunicipality != '' && description != '' && barangay != '' && province != '' && email != '' && phoneNumber != '') {
-                                            addCustomAddress([{
-                                                email: email,
-                                                rname: rName,
-                                                country: country,
-                                                cityMunicipality: cityMunicipality,
-                                                barangay: barangay,
-                                                province: province,
-                                                trademark: description,
-                                                phone_number: phoneNumber,
-                                            }])
+                    <Accordion
+                        type="single"
+                        collapsible
+                        className="w-full"
+                        defaultValue="item-1"
+                    >
+                        <AccordionItem value="item-1">
+                            <AccordionTrigger>Shipping Information</AccordionTrigger>
+                            <AccordionContent className="flex flex-col gap-4 text-balance">
+                                <div className='flex items-center justify-between'>
+                                    <h1>Update Shipping Information</h1>
+                                    <button onClick={() => {
+                                        if (userAdress.length > 0) {
+                                            CustomInput();
                                         } else {
-                                            alert('you need to fillup all the field')
+                                            addToUserAdress();
                                         }
-                                    }} variant={'secondary'} className='w-full'>Submit</Button>
-                                }
-                            </form>
-                        </AccordionContent>
-                    </AccordionItem>
-                </Accordion>
-            </div>
-            <div className='flex flex-col gap-5 bg-black p-3 w-full md:bg-black/0 md:p-10'>
-                <h1>Review your cart</h1>
+                                    }} className='underline text-[12px] text-blue-400'>{userAdress.length > 0 ? 'Edit Address' : 'Use Current Address'}</button>
+                                </div>
 
-                <div className='flex flex-col gap-2'>
-                    {finalCheckoutItems.map((data, index) => (
-                        <div key={index} className='flex justify-between gap-5 p-5 items-center bg-black rounded relative'>
-                            <div className='flex gap-3 items-center'>
-                                <Image src={data.product_image} alt="" className='w-20 border border-white/50' width={100} height={100} />
-                                <div className='flex flex-col'>
-                                    <label htmlFor="">{data.product_name}</label>
-                                    <div className='flex items-center gap-2'>
-                                        <label htmlFor="" className={`${data.value != null && 'line-through text-white/30'}`}>{data.price}</label>
-                                        {data.value != null && <Label>{new Intl.NumberFormat('en-PH', {
-                                            style: 'currency',
-                                            currency: 'PHP',
-                                        }).format(data.price - Number(data.value))}</Label>}
+
+                                <form className='flex flex-col gap-1 md:flex  '>
+
+                                    <div className='flex flex-col'>
+                                        <label htmlFor="">Fullname</label>
+                                        <div className='w-full flex gap-2 items-center'>
+                                            <Input required disabled={userAdress.length > 0} type="text" value={userAdress[0]?.rname ?? rName} onChange={(e) => setRName(e.target.value)} />
+                                            {rName != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
+                                        </div>
                                     </div>
+
+                                    <div className='flex flex-col'>
+                                        <label htmlFor="">Email Address</label>
+                                        <div className='w-full flex gap-2 items-center'>
+                                            <Input disabled={userAdress.length > 0} type="email" value={userAdress[0]?.email ?? email} onChange={(e) => setEmail(e.target.value)} />
+                                            {email != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
+                                        </div>
+
+                                    </div>
+                                    <div className='flex flex-col'>
+                                        <label htmlFor="">Phone Number</label>
+                                        <div className='w-full flex gap-2 items-center'>
+                                            <Input disabled={userAdress.length > 0} type="number" value={userAdress[0]?.phone_number ?? phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
+                                            {phoneNumber != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
+                                        </div>
+
+                                    </div>
+                                    <div className='flex flex-col'>
+                                        <label htmlFor="">Country</label>
+                                        <div className='w-full flex gap-2 items-center'>
+                                            <Input disabled={userAdress.length > 0} list="countries" name="countries" value={userAdress[0]?.country ?? country} onChange={(e) => setCountry(e.target.value)} />
+                                            {country != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
+                                            <datalist id='countries' className='absolute bg-white text-black'>
+                                                {countries.map((data, index) => (
+                                                    <option key={index} value={data}>{data}</option>
+                                                ))}
+                                            </datalist>
+                                        </div>
+
+                                    </div>
+                                    <div className='flex gap-1'>
+
+                                        <div className='flex flex-col w-full'>
+                                            <label htmlFor="">City/Municipality</label>
+                                            <div className='w-full flex gap-2 items-center'>
+                                                <Input disabled={userAdress.length > 0} list='city' name='city' value={userAdress[0]?.cityMunicipality ?? cityMunicipality} onChange={(e) => setCityMunicipality(e.target.value)} />
+                                                {cityMunicipality != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
+                                                <datalist id='city'>
+                                                    {luzonPlaces.map((data, index) => (
+                                                        <option key={index} value={data}>{data}</option>
+                                                    ))}
+                                                </datalist>
+                                            </div>
+
+                                        </div>
+
+                                        <div className='flex flex-col w-full'>
+                                            <label htmlFor="">Barangay</label>
+                                            <div className='w-full flex gap-2 items-center'>
+                                                <Input disabled={userAdress.length > 0} list='barangay' name='barangay' value={userAdress[0]?.barangay ?? barangay} onChange={(e) => setBarangay(e.target.value)} />
+                                                {barangay != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
+                                                <datalist id='barangay'>
+                                                    {barangaysJaen.map((data, index) => (
+                                                        <option key={index} value={data}>{data}</option>
+                                                    ))}
+                                                </datalist>
+                                            </div>
+
+                                        </div>
+
+                                        <div className='flex flex-col w-full'>
+                                            <label htmlFor="">Province</label>
+                                            <div className='w-full flex gap-2 items-center'>
+                                                <Input disabled={userAdress.length > 0} list='province' name='province' value={userAdress[0]?.province ?? province} onChange={(e) => setProvince(e.target.value)} />
+                                                {province != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
+                                                <datalist id='province'>
+                                                    {luzonProvinces.map((data, index) => (
+                                                        <option key={index} value={data}>{data}</option>
+                                                    ))}
+                                                </datalist>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div className='flex flex-col'>
+                                        <label htmlFor="">Trademark</label>
+                                        <div className='w-full flex gap-2 items-center'>
+                                            <Textarea disabled={userAdress.length > 0} value={userAdress[0]?.trademark ?? description} onChange={(e) => setDescription(e.target.value)} />
+                                            {description != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
+                                        </div>
+                                    </div>
+                                    {
+                                        userAdress.length <= 0 && <Button onClick={() => {
+                                            if (rName != '' && country != '' && cityMunicipality != '' && description != '' && barangay != '' && province != '' && email != '' && phoneNumber != '') {
+                                                addCustomAddress([{
+                                                    email: email,
+                                                    rname: rName,
+                                                    country: country,
+                                                    cityMunicipality: cityMunicipality,
+                                                    barangay: barangay,
+                                                    province: province,
+                                                    trademark: description,
+                                                    phone_number: phoneNumber,
+                                                }])
+                                            } else {
+                                                alert('you need to fillup all the field')
+                                            }
+                                        }} variant={'default'} className='w-full'>Submit</Button>
+                                    }
+                                </form>
+                            </AccordionContent>
+                        </AccordionItem>
+                    </Accordion>
+                </div>
+            </div>
+
+            <div className='w-full bg-white'>
+                <div className='flex flex-col gap-5 text-black p-3 w-full md:w-[90%] lg:w-[85%] xl:w-[80%] 2xl:w-[70%] md:p-10'>
+                    <h1>Review your cart</h1>
+
+                    <div className='flex flex-col gap-2'>
+                        {finalCheckoutItems.map((data, index) => (
+                            <div key={index} className='flex justify-between gap-5 p-5 items-center 0 bg-[#F1F0EE] rounded relative'>
+                                <div className='flex gap-3 items-center'>
+                                    <Image src={data.product_image} alt="" className='w-20 border bg-white border-black/20' width={100} height={100} />
+                                    <div className='flex flex-col'>
+                                        <label htmlFor="">{data.product_name}</label>
+                                        <div className='flex items-center gap-2'>
+
+                                            {data.value != null && <Label>{new Intl.NumberFormat('en-PH', {
+                                                style: 'currency',
+                                                currency: 'PHP',
+                                            }).format(data.price - Number(data.value))}</Label>}
+                                            <Label htmlFor="" className={`${data.value != null && 'line-through text-black/30 text-[12px]'}`}>{new Intl.NumberFormat('en-PH', {
+                                                style: 'currency',
+                                                currency: 'PHP',
+                                            }).format(data.price)}</Label>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div className="flex gap-2 border border-black/20 w-max p-1 px-2 rounded text-[10px]">
+                                    <button onClick={() => {
+                                        if (data.quantity > 1) {
+                                            updateQuantityOfFinalCheckoutItem(false, data.product_id)
+                                        }
+                                    }} className="text-black" ><FaMinus /></button>
+                                    <input disabled type="number" className=" text-black px-1 w-[20px] bg-white/30 text-center outline-none rounded p-1" value={data.quantity} />
+                                    <button onClick={() => {
+                                        if (data.stocks > data.quantity) {
+                                            updateQuantityOfFinalCheckoutItem(true, data.product_id)
+                                        }
+                                    }} className="text-black"><FaPlus /></button>
 
                                 </div>
-                            </div>
-                            <div className="flex gap-2 bg-black w-max p-1 px-2 rounded text-[10px]">
-                                <button onClick={() => {
-                                    if (data.quantity > 1) {
-                                        updateQuantityOfFinalCheckoutItem(false, data.product_id)
-                                    }
-                                }} className="text-white" ><FaMinus /></button>
-                                <input disabled type="number" className=" text-white px-1 w-[20px] bg-white/30 text-center outline-none rounded p-1" value={data.quantity} />
-                                <button onClick={() => {
-                                    if (data.stocks > data.quantity) {
-                                        updateQuantityOfFinalCheckoutItem(true, data.product_id)
-                                    }
-                                }} className="text-white"><FaPlus /></button>
+                                <button disabled={finalCheckoutItems.length <= 0} onClick={() => removeItemFromFinalCheckoutItems(data.product_id)} className='absolute top-0 right-0 text-[25px] text-red-400'><RiDeleteBack2Fill /></button>
 
                             </div>
-                            <button disabled={finalCheckoutItems.length <= 0} onClick={() => removeItemFromFinalCheckoutItems(data.product_id)} className='absolute top-0 right-0 text-[25px] text-red-400'><RiDeleteBack2Fill /></button>
-
-                        </div>
-                    ))}
+                        ))}
 
 
-                </div>
-                <Sheet>
-                    <SheetTrigger asChild>
-                        <button onClick={() => console.log('click')} className='flex p-2 rounded-[10px] items-center bg-white justify-between text-black/50'>
-                            <div className='flex gap-1 items-center'>
-                                <BiSolidDiscount className='text-black/50' />
-                                <label className='cursor-pointer' htmlFor="">Vouchers</label>
-                            </div>
-                            <div className='flex gap-1 items-center'>
-                                <label className={`${voucherAmount == 0 ? 'cursor-pointer text-black/50 ' : 'cursor-pointer text-green-400 border border-green-400 text-[12px] px-4'}`} htmlFor="">{voucherAmount == 0 ? 'Select Voucher' : 'Free Shipping Discount'}</label>
-                                <MdOutlineChevronRight />
-                            </div>
-
-                        </button>
-                    </SheetTrigger>
-                    <SheetContent>
-                        <SheetHeader>
-                            <SheetTitle>Select Vouchers</SheetTitle>
-                        </SheetHeader>
-                        <div className='flex flex-col gap-2 items-center p-2'>
-                            {vouchers.map((data, index) => (
-                                <div key={index} className={`${data.is_used == true ? 'opacity-25' : 'opacity-100'} rounded flex justify-between w-full bg-[#1C6CFF]`}>
-                                    <div className=' flex flex-col items-center p-2'>
-                                        <label className='' htmlFor="">{data.type}</label>
-                                        <label htmlFor="" className='font-anton text-[25px]'>{new Intl.NumberFormat('en-PH', {
-                                            style: 'currency',
-                                            currency: 'PHP',
-                                        }).format(data.amount)}</label>
-                                    </div>
-                                    <div className='w-max bg-red-400 h-full relative border-l border-white/40 flex items-center justify-center'>
-                                        <div className='w-[20px] bg-black absolute rounded-[50%] h-[20px] top-[-6px] left-[-10px]'></div>
-                                        <div className='w-[20px] bg-black absolute rounded-[50%] h-[20px] bottom-[-6px] left-[-10px]'></div>
-                                        <SheetClose asChild>
-                                            <button className='rotate-90 w-full  text-center items-center justify-center flex' onClick={() => {
-                                                applyVoucher(data)
-                                            }} disabled={data.is_used == true}>USE</button>
-                                        </SheetClose>
-
-                                    </div>
+                    </div>
+                    <Sheet>
+                        <SheetTrigger asChild>
+                            <button onClick={() => console.log('click')} className='flex p-2 rounded-[10px] items-center bg-[#F1F0EE] justify-between text-black/50'>
+                                <div className='flex gap-1 items-center'>
+                                    <BiSolidDiscount className='text-black/50' />
+                                    <label className='cursor-pointer' htmlFor="">Vouchers</label>
                                 </div>
-                            ))}
-                        </div>
-                    </SheetContent>
-                </Sheet>
+                                <div className='flex gap-1 items-center'>
+                                    <label className={`${voucherAmount == 0 ? 'cursor-pointer text-black/50 ' : 'cursor-pointer text-green-400 border border-green-400 text-[12px] px-4'}`} htmlFor="">{voucherAmount == 0 ? 'Select Voucher' : 'Free Shipping Discount'}</label>
+                                    <MdOutlineChevronRight />
+                                </div>
 
-                <div className=''>
-                    <div className='flex justify-between items-center'>
-                        <label htmlFor="" className='text-white/90 font-thin'>Subtotal</label>
-                        <label htmlFor="">{finalCheckoutItems.length > 0 ? new Intl.NumberFormat('en-PH', {
-                            style: 'currency',
-                            currency: 'PHP',
-                        }).format(finalCheckoutItems.reduce((sum, item) => sum + (item.price - (item.value != null ? item.value : 0)) * item.quantity, 0)) : new Intl.NumberFormat('en-PH', {
-                            style: 'currency',
-                            currency: 'PHP',
-                        }).format(0)}</label>
-                    </div>
-                    <div className='flex justify-between items-center'>
-                        <label htmlFor="" className='text-white/90 font-thin'>Shipping</label>
-                        <div className='flex items-center gap-2'>
-                            {voucherAmount != 0 && <label className='line-through text-red-300' htmlFor="">{new Intl.NumberFormat('en-PH', {
+                            </button>
+                        </SheetTrigger>
+                        <SheetContent>
+                            <SheetHeader>
+                                <SheetTitle>Select Vouchers</SheetTitle>
+                            </SheetHeader>
+                            <div className='flex flex-col gap-2 items-center p-2'>
+                                {vouchers.map((data, index) => (
+                                    <div key={index} className={`${data.is_used == true ? 'opacity-25' : 'opacity-100'} rounded flex justify-between w-full bg-[#1C6CFF]`}>
+                                        <div className=' flex flex-col items-center p-2'>
+                                            <label className='' htmlFor="">{data.type}</label>
+                                            <label htmlFor="" className='font-anton text-[25px]'>{new Intl.NumberFormat('en-PH', {
+                                                style: 'currency',
+                                                currency: 'PHP',
+                                            }).format(data.amount)}</label>
+                                        </div>
+                                        <div className='w-max bg-red-400 h-full relative border-l border-white/40 flex items-center justify-center'>
+                                            <div className='w-[20px] bg-black absolute rounded-[50%] h-[20px] top-[-6px] left-[-10px]'></div>
+                                            <div className='w-[20px] bg-black absolute rounded-[50%] h-[20px] bottom-[-6px] left-[-10px]'></div>
+                                            <SheetClose asChild>
+                                                <button className='rotate-90 w-full  text-center items-center justify-center flex' onClick={() => {
+                                                    applyVoucher(data)
+                                                }} disabled={data.is_used == true}>USE</button>
+                                            </SheetClose>
+
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </SheetContent>
+                    </Sheet>
+
+                    <div className='flex flex-col gap-1'>
+                        <div className='flex justify-between items-center'>
+                            <Label htmlFor="" className='text-black/90 font-light'>Subtotal</Label>
+                            <Label className='font-light' htmlFor="">{finalCheckoutItems.length > 0 ? new Intl.NumberFormat('en-PH', {
                                 style: 'currency',
                                 currency: 'PHP',
-                            }).format(shippingCost)}</label>}
-                            <label htmlFor="">{new Intl.NumberFormat('en-PH', {
+                            }).format(finalCheckoutItems.reduce((sum, item) => sum + (item.price - (item.value != null ? item.value : 0)) * item.quantity, 0)) : new Intl.NumberFormat('en-PH', {
                                 style: 'currency',
                                 currency: 'PHP',
-                            }).format(shippingCost - voucherAmount)}</label>
+                            }).format(0)}</Label>
+                        </div>
+                        <div className='flex justify-between items-center'>
+                            <Label htmlFor="" className='text-black/90 font-light'>Shipping</Label>
+                            <div className='flex items-center gap-2'>
+                                {voucherAmount != 0 && <Label className='line-through text-red-300 font-light text-[12px]' htmlFor="">{new Intl.NumberFormat('en-PH', {
+                                    style: 'currency',
+                                    currency: 'PHP',
+                                }).format(shippingCost)}</Label>}
+                                <Label className='font-light' htmlFor="">{new Intl.NumberFormat('en-PH', {
+                                    style: 'currency',
+                                    currency: 'PHP',
+                                }).format(shippingCost - voucherAmount)}</Label>
+                            </div>
+
+                        </div>
+                        <div className='flex justify-between items-center'>
+                            <Label htmlFor="" className='text-black/90 font-light'>Discount</Label>
+                            <div className='flex items-center gap-2'>
+                                {voucherAmount != 0 && <Label className='text-white font-light text-[12px] bg-red-500 px-1' htmlFor="">Voucher Selected</Label>}
+                                <Label className='font-light' htmlFor="">{new Intl.NumberFormat('en-PH', {
+                                    style: 'currency',
+                                    currency: 'PHP',
+                                }).format(voucherAmount)}</Label>
+                            </div>
+
+                        </div>
+                        <div className='flex justify-between items-center'>
+                            <Label htmlFor="">Total</Label>
+                            <Label htmlFor="">{finalCheckoutItems.length > 0 ? new Intl.NumberFormat('en-PH', {
+                                style: 'currency',
+                                currency: 'PHP',
+                            }).format(finalCheckoutItems.reduce((sum, item) => sum + (item.price - (item.value != null ? item.value : 0)) * item.quantity, 0) + (shippingCost - voucherAmount)) : new Intl.NumberFormat('en-PH', {
+                                style: 'currency',
+                                currency: 'PHP',
+                            }).format(0)}</Label>
                         </div>
 
                     </div>
-                    <div className='flex justify-between items-center'>
-                        <label htmlFor="" className='text-white/90 font-thin'>Discount</label>
-                        <div className='flex items-center gap-2'>
-                            {voucherAmount != 0 && <label className='text-red-300' htmlFor="">Voucher Selected</label>}
-                            <label htmlFor="">{new Intl.NumberFormat('en-PH', {
-                                style: 'currency',
-                                currency: 'PHP',
-                            }).format(voucherAmount)}</label>
-                        </div>
 
+                    <div>
+                        <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                                <Button variant={'default'} className=' p-2 flex gap-2 items-center justify-center w-full' disabled={buttonLoading === true || finalCheckoutItems.length <= 0 || paymentOptions == '' || userAdress.length == 0}> {buttonLoading && (
+                                    <ClipLoader
+                                        color='white'
+                                        size={20}
+                                    />
+                                )}
+                                    {buttonLoading ? "Please Wait..." : "Place Order"}</Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                                <AlertDialogHeader>
+                                    <AlertDialogTitle>Ready to Place Your Order?</AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                        By confirming, your order will be submitted for processing.
+                                    </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                    <AlertDialogAction onClick={() => {
+                                        const totalPrice = finalCheckoutItems.reduce((sum, item) => sum + item.price * item.quantity, 0) + shippingCost;
+                                        if (totalPrice < 100000 && user != null) {
+                                            CheckoutProduct();
+                                        } else {
+                                            alert('Order Price Maximum is 100000');
+                                        }
+                                    }}>Continue</AlertDialogAction>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
                     </div>
-                    <div className='flex justify-between items-center'>
-                        <label htmlFor="">Total</label>
-                        <label htmlFor="">{finalCheckoutItems.length > 0 ? new Intl.NumberFormat('en-PH', {
-                            style: 'currency',
-                            currency: 'PHP',
-                        }).format(finalCheckoutItems.reduce((sum, item) => sum + (item.price - (item.value != null ? item.value : 0)) * item.quantity, 0) + (shippingCost - voucherAmount)) : new Intl.NumberFormat('en-PH', {
-                            style: 'currency',
-                            currency: 'PHP',
-                        }).format(0)}</label>
-                    </div>
+
 
                 </div>
-
-                <div>
-                    <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                            <Button variant={'secondary'} className=' p-2 flex gap-2 items-center justify-center w-full' disabled={buttonLoading === true || finalCheckoutItems.length <= 0 || paymentOptions == '' || userAdress.length == 0}> {buttonLoading && (
-                                <ClipLoader
-                                    color='black'
-                                    size={20}
-                                />
-                            )}
-                                {buttonLoading ? "Please Wait..." : "Place Order"}</Button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                            <AlertDialogHeader>
-                                <AlertDialogTitle>Ready to Place Your Order?</AlertDialogTitle>
-                                <AlertDialogDescription>
-                                    By confirming, your order will be submitted for processing.
-                                </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                <AlertDialogAction onClick={() => {
-                                    const totalPrice = finalCheckoutItems.reduce((sum, item) => sum + item.price * item.quantity, 0) + shippingCost;
-                                    if (totalPrice < 100000 && user != null) {
-                                        CheckoutProduct();
-                                    } else {
-                                        alert('Order Price Maximum is 100000');
-                                    }
-                                }}>Continue</AlertDialogAction>
-                            </AlertDialogFooter>
-                        </AlertDialogContent>
-                    </AlertDialog>
-                </div>
-
-
             </div>
+
         </div>
     )
 }
