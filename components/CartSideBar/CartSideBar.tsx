@@ -57,20 +57,13 @@ const CartSideBar = () => {
                     {cartItems.length > 0 ? <div className='px-4 underline text-blue-400 flex justify-end items-end text-black'>
                         <AlertDialog >
                             <AlertDialogTrigger asChild>
-                                <Tooltip>
-                                    <TooltipTrigger asChild>
-                                        <button className='underline text-red-400'>Clear Cart</button>
-                                    </TooltipTrigger>
-                                    <TooltipContent>
-                                        <p>Remove All Items</p>
-                                    </TooltipContent>
-                                </Tooltip>
+                                <button className='underline text-red-400 text-[13px]'>Clear Cart</button>
                             </AlertDialogTrigger>
                             <AlertDialogContent>
                                 <AlertDialogHeader>
                                     <AlertDialogTitle className='text-black'>Are you absolutely sure?</AlertDialogTitle>
                                     <AlertDialogDescription className='text-black'>
-                                        This action cannot be undone. This will permanently delete all products in the cart.
+                                        This action cannot be undone. This will permanently remove all products in the cart.
                                     </AlertDialogDescription>
                                 </AlertDialogHeader>
                                 <AlertDialogFooter>
@@ -100,7 +93,7 @@ const CartSideBar = () => {
 
                         </div>
                     }
-                    <div className='overflow-y-auto max-h-[84vh] flex flex-col gap-2 px-1'>
+                    <div className='overflow-y-auto max-h-[78vh] flex flex-col gap-2 px-1'>
                         {
                             cartItems.map((src, index) => (
                                 <div key={index} className='flex gap-3 items-center justify-center border-b border-white/15 p-1 relative'>
@@ -174,7 +167,7 @@ const CartSideBar = () => {
                         }
                     </div>
                 </div>
-                <SheetFooter>
+                <SheetFooter className=''>
                     <div className='flex items-center gap-2'>
                         <div className='w-[49%] flex gap-2'>
                             <button className={`${checkoutItems.length > 0 ? 'underline text-blue-400 cursor-pointer' : 'hidden'}`} onClick={() => {

@@ -8,7 +8,7 @@ const Loading = () => {
     return (
         <>
             {loading !='' && <div className='fixed top-0 left-0 w-screen h-screen flex justify-center items-center bg-black/50 z-50'>
-                <div className="flex w-full max-w-xs flex-col gap-4 [--radius:1rem] bg-black text-white">
+                <div className="flex w-full max-w-xs flex-col gap-4 [--radius:1rem] bg-black rounded-md text-white">
                     <Item variant="muted">
                         <ItemMedia>
                             <Spinner />
