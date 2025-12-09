@@ -165,7 +165,11 @@ const Checkout = () => {
                 })
                 const codOrderDone = await codOrder.json()
                 console.log("eto laman ng inser orderr ", codOrderDone)
-                
+                if (codOrderDone.status == 500) {
+                    //add better error handling
+                    alert('something went wrong')
+                }
+                router.push('/cod-success-page');
                 
                 break
 
