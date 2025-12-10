@@ -4,7 +4,7 @@ import db from "@/lib/db";
 export async function POST(req: NextRequest) {
     const body = await req.json();
     try {
-        await db.query('UPDATE accounts SET username = ? WHERE email = ?', [body.username, body.email])
+        await db.query('UPDATE accounts SET username = ?,profile_Image = ? WHERE email = ?', [body.username, body.profile_Image, body.email])
         return NextResponse.json({ status: 200 })
     } catch (err) {
         console.log(err)

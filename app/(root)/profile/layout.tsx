@@ -5,7 +5,7 @@ import ProfileNavBar from '@/components/ProfileNavBar/ProfileNavBar'
 
 export default function ProfileLayout({ children }: { children: React.ReactNode }) {
     return (
-        <div className=' text-white p-[2px] md:p-2 rounded flex flex-col box-border  h-screen items-center lg:flex-row md:gap-2 lg:w-[90%] lg:mx-auto xl:w-[70%] 2xl:w-[60%]'>
+        <div className='  z-50 flex flex-col box-border bg-[#F1F0EE] absolute top-0 left-0 w-screen  h-screen items-center '>
             <ProfileNavBar />
             <EdgeStoreProvider>
                 {children}

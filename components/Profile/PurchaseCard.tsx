@@ -17,6 +17,10 @@ import { Label } from '@/components/ui/label'
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Button } from '../ui/button';
 import { ClipLoader } from 'react-spinners';
+import { orderStatusUI } from '@/utils/orderStatusUI/orderStatusUI';
+
+import { LuSquareArrowOutUpRight } from "react-icons/lu";
+
 type Props = {
     groupData: GroupedOrder[]
 }
@@ -44,116 +48,248 @@ const PurchaseCard = ({ groupData }: Props) => {
         }));
     };
 
+    const [filterOrderStatus, setFilterOrderStatus] = useState('all')
+
+    const orderStatusFilter = ['all', 'pending', 'preparing', 'On Delivery', 'success', 'cancel']
+
 
 
     return (
-        <>
-            <div className='flex flex-col gap-2 w-full bg-black lg:max-h-[400px] overflow-auto lg:p-2'>
-                {purchaseData.map((group, groupIndex) => {
-                    const isExpanded = expandedGroups[groupIndex] || false;
+        <div className='w-full sm:w-[85%] lg:w-[95%] xl:w-[80%] 2xl:w-[70%] mx-auto flex flex-col gap-2'>
+            <div className=' '>
+                <Label className='text-[15px] md:text-[20px] font-orbitron font-normal'>My Orders</Label>
+            </div>
 
-                    return (
-                        <div
-                            className='flex flex-col gap-2 bg-[#1E1E1E]  p-2 text-[11px] lg:text-[15px] lg:rounded-[10px] lg:p-4'
-                            key={groupIndex}
-                        >
-                            <div className='flex justify-between items-center'>
-                                <h1>
-                                    Reference Id: <span className='font-bold'>{group.reference_id}</span>
-                                </h1>
-                                <h1 className='text-red-400'>{group.order_status}</h1>
-                            </div>
+            <div className='py-2 px-[2px] w-full flex items-center gap-1 md:gap-2 overflow-x-auto flex-nowrap no-scrollbar'>
+                {orderStatusFilter.map((data, index) => (
+                    <button key={index} onClick={() => setFilterOrderStatus(data)} className={`cursor-pointer flex justify-center items-center py-1 px-3 rounded min-w-[100px] border ${filterOrderStatus === data ? 'text-white bg-black' : 'text-black bg-white border-black/30'}`}>
+                        <Label className='text-[12px] capitalize'>{data}</Label>
+                    </button>
+                ))}
 
-                            <div
-                                style={{
-                                    maxHeight: isExpanded ? `${group.items.length * 100}px` : '90px',
-                                    overflow: 'hidden',
-                                    transition: 'max-height 0.6s ease',
-                                }}
-                                className='flex flex-col gap-2 box-border relative'
-                                onClick={() => {
-                                    setSelectedGroup(group)
-                                    setOpenDialog(true)
-                                }}
-                            >
-                                {group.items.map((item, itemIndex) => (
+            </div>
+            <div className='flex flex-col'>
+                {/* desktop view header */}
+                <div className='hidden md:flex w-full items-center p-2 border-b border-black/20 rounded-t bg-white'>
+                    <div className='w-[7%]'>
+                        <Label className='text-[10px] lg:text-[12px] capitalize'>Order Id</Label>
+                    </div>
+                    <div className='w-[25%]'>
+                        <Label className='text-[10px] lg:text-[12px] capitalize'>Products</Label>
+                    </div>
+                    <div className='w-[12%]'>
+                        <Label className='text-[10px] lg:text-[12px] capitalize'>Price</Label>
+                    </div>
+                    <div className='w-[6%]'>
+                        <Label className='text-[10px] lg:text-[12px] capitalize'>Quantity</Label>
+                    </div>
+                    <div className='w-[15%]'>
+                        <Label className='text-[10px] lg:text-[12px] capitalize'>Reference Id</Label>
+                    </div>
+                    <div className='w-[12%]'>
+                        <Label className='text-[10px] lg:text-[12px] capitalize'>Sub Total</Label>
+                    </div>
+                    <div className='w-[10%]'>
+                        <Label className='text-[10px] lg:text-[12px] capitalize'>Status</Label>
+                    </div>
+                    <div className='w-[13%]'>
+                        <Label className='text-[10px] lg:text-[12px] capitalize'>Order Date</Label>
+                    </div>
+                </div>
+
+                {
+                    purchaseData.filter(item => filterOrderStatus === 'all' ? item.order_status != '' : item.order_status == filterOrderStatus).length > 0 ?
+
+                        <div className='flex flex-col gap-2  lg:max-h-[75vh] overflow-auto'>
+                            {purchaseData.filter(item => filterOrderStatus === 'all' ? item.order_status != '' : item.order_status == filterOrderStatus).map((group, groupIndex) => {
+                                const isExpanded = expandedGroups[groupIndex] || false;
+
+                                return (
                                     <div
-                                        className='flex items-center justify-between rounded bg-black p-2'
-                                        key={itemIndex}
-                                    >
-                                        <div className='flex gap-1 items-start'>
-                                            <Image
-                                                src={item.product_image}
-                                                alt=""
-                                                className='w-20 border border-white/50'
-                                                width={100}
-                                                height={100}
-                                            />
-                                            <div className='flex flex-col'>
-                                                <h1>{item.product_name}</h1>
-                                                <h1>x{item.quantity}</h1>
-                                                <h1>
-                                                    {new Intl.NumberFormat('en-PH', {
-                                                        style: 'currency',
-                                                        currency: 'PHP',
-                                                    }).format(item.price)}
-                                                </h1>
+                                        className='flex flex-col gap-2  '
+                                        key={groupIndex}>
+                                        <div className='hidden md:block bg-white border-b border-black/20 p-2 rounded'>
+                                            <div style={{
+                                                maxHeight: isExpanded ? `${group.items.length * 70}px` : '60px',
+                                                overflow: 'hidden',
+                                                transition: 'max-height 0.6s ease',
+                                            }}
+                                                onClick={() => {
+                                                    setSelectedGroup(group)
+                                                    setOpenDialog(true)
+                                                }}
+                                            >
+                                                {group.items.map((item, itemIndex) => (
+                                                    <div key={itemIndex} className='w-full flex items-center' >
+                                                        <div className='w-[7%]'>
+                                                            <Label className='text-[11px] lg:text-[13px]'>{group.order_id}</Label>
+                                                        </div>
+                                                        <div className='w-[25%] flex items-center gap-1'>
+                                                            <div>
+                                                                <Image
+                                                                    src={item.product_image}
+                                                                    alt=""
+                                                                    className='w-15 aspect-square bg-white'
+                                                                    width={100}
+                                                                    height={100}
+                                                                />
+                                                            </div>
+                                                            <Label className='text-[11px] lg:text-[13px]'>{item.product_name}</Label>
+                                                        </div>
+                                                        <div className='w-[12%]'>
+                                                            <Label className='text-[11px] lg:text-[13px]'>{new Intl.NumberFormat('en-PH', {
+                                                                style: 'currency',
+                                                                currency: 'PHP',
+                                                            }).format(item.price)}</Label>
+                                                        </div>
+                                                        <div className='w-[6%]'>
+                                                            <Label className='text-[11px] lg:text-[13px]'>{item.quantity}</Label>
+                                                        </div>
+                                                        <div className='w-[15%]'>
+                                                            <Label className='text-[11px] lg:text-[13px]'>{group.reference_id}</Label>
+                                                        </div>
+                                                        <div className='w-[12%]'>
+                                                            <Label className='text-[11px] lg:text-[13px]'>{new Intl.NumberFormat('en-PH', {
+                                                                style: 'currency',
+                                                                currency: 'PHP',
+                                                            }).format(item.sub_total)}</Label>
+                                                        </div>
+                                                        <div className='w-[10%]'>
+                                                            <Label className={`${orderStatusUI[group.order_status]} text-[11px] lg:text-[13px] capitalize`}>{group.order_status}</Label>
+                                                        </div>
+                                                        <div className='w-[13%]'>
+                                                            <Label className='text-[11px] lg:text-[13px]'>{new Date(group.created_at).toLocaleString("en-US", { month: "long", day: 'numeric', year: "numeric" })}</Label>
+                                                        </div>
+
+                                                    </div>
+                                                ))}
+                                            </div>
+
+                                            {/* show more button */}
+                                            <div className={`flex ${group.items.length > 1 ? 'justify-between' : 'justify-end'}  items-center`}>
+                                                {group.items.length > 1 && (
+                                                    <button
+                                                        onClick={() => toggleExpand(groupIndex)}
+                                                        className='text-blue-400 text-[12px]'
+                                                    >
+                                                        {isExpanded ? 'Show Less' : 'Show More'}
+                                                    </button>
+                                                )}
+
                                             </div>
                                         </div>
-                                        <h1>
-                                            SubTotal:{' '}
-                                            {new Intl.NumberFormat('en-PH', {
-                                                style: 'currency',
-                                                currency: 'PHP',
-                                            }).format(item.sub_total)}
-                                        </h1>
-                                    </div>
-                                ))}
-                            </div>
+                                        <div className='rounded flex flex-col gap-2 bg-white p-3 border border-black/10 md:hidden'>
+                                            <div style={{
+                                                maxHeight: isExpanded ? `${group.items.length * 195}px` : '185px',
+                                                overflow: 'hidden',
+                                                transition: 'max-height 0.6s ease',
+                                            }}
+                                                className='flex flex-col gap-2'>
+                                                <div className='flex justify-between items-center'>
+                                                    <Label className='text-[10px] font-normal'>{new Date(group.created_at).toLocaleString("en-US", { month: "long", day: 'numeric', year: "numeric" })}</Label>
+                                                    <button onClick={() => {
+                                                        setSelectedGroup(group)
+                                                        setOpenDialog(true)
+                                                    }} className=' text-black text-[18px]'><LuSquareArrowOutUpRight /></button>
+                                                </div>
+                                                {group.items.map((item, itemIndex) => (
+                                                    <div key={itemIndex} className='flex flex-col gap-1'>
 
-                            <div className='flex justify-between items-center'>
-                                {group.items.length > 1 && (
-                                    <button
-                                        onClick={() => toggleExpand(groupIndex)}
-                                        className='text-blue-400 text-sm'
-                                    >
-                                        {isExpanded ? 'Show Less' : 'Show More'}
-                                    </button>
-                                )}
-                                <h1 className='text-end'>
-                                    {group.items.length} items:{' '}
-                                    <span>
-                                        {new Intl.NumberFormat('en-PH', {
-                                            style: 'currency',
-                                            currency: 'PHP',
-                                        }).format(group.total_amount)}
-                                    </span>
-                                </h1>
+                                                        <div className='flex items-center gap-1'>
+                                                            <div >
+                                                                <Image
+                                                                    src={item.product_image}
+                                                                    alt=""
+                                                                    className='w-22 aspect-square bg-white rounded-[15px] border border-black/15'
+                                                                    width={100}
+                                                                    height={100}
+                                                                />
+                                                            </div>
+                                                            <div className='flex flex-col justify-start '>
+                                                                <Label className='text-[12px] font-normal'>{item.product_name}</Label>
+                                                                <Label className='text-[12px] font-normal'>{new Intl.NumberFormat('en-PH', {
+                                                                    style: 'currency',
+                                                                    currency: 'PHP',
+                                                                }).format(item.price)}</Label>
+                                                            </div>
+                                                        </div>
+                                                        <div className='flex flex-col gap-1'>
+                                                            <div className='flex items-center justify-between'>
+                                                                <Label className='text-[12px] text-black/60'>Order Id</Label>
+                                                                <Label className='text-[12px] text-black/80'>{group.order_id}</Label>
+                                                            </div>
+                                                            <div className='flex items-center justify-between'>
+                                                                <Label className='text-[12px] text-black/60'>Quantity</Label>
+                                                                <Label className='text-[12px] text-black/80'>{item.quantity}</Label>
+                                                            </div>
+                                                            <div className='flex items-center justify-between'>
+                                                                <Label className='text-[12px] text-black/60'>Status</Label>
+                                                                <Label className={`${orderStatusUI[group.order_status]} text-[12px] capitalize`}>{group.order_status}</Label>
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+                                                ))}
+
+                                            </div>
+                                            {/* show more button */}
+                                            <div className={`flex ${group.items.length > 1 ? 'justify-between' : 'justify-end'}  items-center`}>
+                                                {group.items.length > 1 && (
+                                                    <button
+                                                        onClick={() => toggleExpand(groupIndex)}
+                                                        className='text-blue-400 text-[12px]'
+                                                    >
+                                                        {isExpanded ? 'Show Less' : 'Show More'}
+                                                    </button>
+                                                )}
+
+
+                                            </div>
+
+
+
+                                        </div>
+
+                                    </div>
+                                );
+                            })}
+                        </div> :
+                        <div className='bg-white border border-black/10 p-5 rounded mt-2 flex flex-col gap-1 items-center justify-center'>
+                            <Image src="/eyes.png" alt='' width={400} height={400} className='w-[70px]' />
+                            <div className='flex items-center gap-1 flex-col text-center justify-center'>
+                                <Label className='text-black font-orbitron'>No Orders Found</Label>
+                                <Label className='text-black/50'>It looks like you haven&apos;t made any orders yet</Label>
                             </div>
                         </div>
-                    );
-                })}
+
+
+                }
+
+
             </div>
+
+
             {/* Alert Dialog */}
             <AlertDialog open={openDialog} onOpenChange={setOpenDialog}>
-                <AlertDialogContent className="bg-[#1E1E1E] text-white border border-gray-700">
+                <AlertDialogContent className="bg-white text-black border border-gray-700">
                     <AlertDialogHeader>
                         <AlertDialogTitle>Purchase Details</AlertDialogTitle>
 
                         {selectedGroup ? (
                             <>
                                 <div className='flex flex-col'>
-                                    <Label className='text-white/60 text-md'>Order Id:{selectedGroup.order_id}</Label>
-                                    <Label className='text-white/60 text-sm'>{new Date(selectedGroup.created_at).toLocaleString("en-US", { month: "long", day: 'numeric', year: "numeric" })}</Label>
+                                    <Label className='text-black/60 text-sm'>Order Id:{selectedGroup.order_id}</Label>
+                                    <Label className='text-black/60 text-sm'>{new Date(selectedGroup.created_at).toLocaleString("en-US", { month: "long", day: 'numeric', year: "numeric" })}</Label>
                                 </div>
-                                <div className='flex gap-2 text-white'>
+                                <div className='flex gap-2 text-black'>
                                     <div className=' flex flex-col gap-2 w-full'>
                                         <div className='p-3 border rounded-[10px] border-black/15 flex flex-col gap-2'>
                                             <div className='flex items-center gap-3'>
                                                 <Label>Purchase Item</Label>
-                                                <Label className='font-thin flex items-center justify-center p-1 rounded bg-red-400/30 text-red-400 w-max px-2'>Order {selectedGroup.order_status}</Label>
+                                                <Label className='font-normal flex items-center justify-center p-1 rounded bg-red-400/30 text-red-400 w-max px-2'>Order {selectedGroup.order_status}</Label>
                                             </div>
-                                            <Label className="text-sm text-white/40">These are the products in the order.</Label>
+                                            <Label className="text-sm text-black/40">These are the products in the order.</Label>
 
                                             <ScrollArea className='flex flex-col gap-1 max-h-[150px] md:max-h-[200px]'>
                                                 {
@@ -181,9 +317,9 @@ const PurchaseCard = ({ groupData }: Props) => {
                                         <div className='p-3 border rounded-[10px] border-black/15 flex flex-col gap-2'>
                                             <div className='flex items-center gap-3'>
                                                 <Label>Order Summary</Label>
-                                                <Label className='font-thin flex items-center justify-center p-1 rounded bg-green-400/30 text-green-400 w-max'>Payment {selectedGroup.payment_status}</Label>
+                                                <Label className='font-normal flex items-center justify-center p-1 rounded bg-green-400/30 text-green-400 w-max'>Payment {selectedGroup.payment_status}</Label>
                                             </div>
-                                            <Label className="text-[12px] md:text-sm text-start text-white/40">A summary of the customers order details.</Label>
+                                            <Label className="text-[12px] md:text-sm text-start text-black/40">A summary of the customers order details.</Label>
                                             <div className='flex flex-col gap-2'>
                                                 <div className='flex items-center justify-between'>
                                                     <Label className='font-thin'>Payment</Label>
@@ -228,13 +364,13 @@ const PurchaseCard = ({ groupData }: Props) => {
 
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogCancel className="bg-gray-800 text-white hover:bg-gray-700">Close</AlertDialogCancel>
+                        <AlertDialogCancel className="bg-white border border-black text-black hover:bg-black/10">Close</AlertDialogCancel>
                         <AlertDialog>
                             <AlertDialogTrigger asChild>
-                                <Button disabled={!selectedGroup || selectedGroup.order_status !== 'pending'} variant={'secondary'}>{buttonLoading && (
+                                <Button disabled={!selectedGroup || selectedGroup.order_status !== 'pending'} variant={'default'}>{buttonLoading && (
                                     <ClipLoader
 
-                                        color='black'
+                                        color='white'
                                         size={17}
                                     />
                                 )}
@@ -260,7 +396,7 @@ const PurchaseCard = ({ groupData }: Props) => {
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
-        </>
+        </div>
 
     );
 };

@@ -11,6 +11,22 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { UserAddress } from '@/types/UserAddressTypes'
 import { useLoading } from '@/stores/loadingStore';
+
+import { Label } from '../ui/label';
+import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog"
+import { Button } from '../ui/button';
+
+import { GrFormEdit } from "react-icons/gr";
+
 interface Props {
     address?: UserAddress;
     email?: string | null | undefined
@@ -27,8 +43,10 @@ const AddressCard = ({ address, email }: Props) => {
     const [province, setProvince] = useState<string>(address?.province ?? '');
     const [phone_number, setPhone_number] = useState<string>(address?.phone_number ?? '');
 
+    const [dialogOpen, setDialogOpen] = useState(false)
 
     const UpdateAddress = async (e: React.FormEvent<HTMLFormElement>) => {
+        console.log('check if button click')
         e.preventDefault();
         if (!email) {
             console.log('testing to')
@@ -45,99 +63,146 @@ const AddressCard = ({ address, email }: Props) => {
         const result = await res.json()
         setTimeout(() => {
             setButtonLoading(false)
+            setDialogOpen(false)
             console.log('the request is done ', result)
         }, 1000);
     }
 
 
     return (
-        <div className='w-full bg-black p-3 md:p-10'>
-            <div className='pb-2 border-b border-white/30 mb-2 text-2xl'>
-                <h1>Address</h1>
-            </div>
-            <div className='flex '>
-                <div className='w-full'>
-                    <form onSubmit={UpdateAddress} className='flex flex-col gap-3'>
+        <div className='w-full sm:w-[90%] md:w-[85%] lg:w-[80%] xl:w-[75%] 2xl:w-[70%] mx-auto flex flex-col gap-2'>
+            <div className='p-3 rounded bg-white flex flex-col gap-2'>
+                <div className='flex items-center justify-between'>
+                    <Label>SHIPPING INFO</Label>
+                    <Dialog open={dialogOpen}>
+                        <DialogTrigger asChild>
+                            <button onClick={() => setDialogOpen(true)} className='flex items-center gap-1 justify-center text-[13px] font-normal text-black/70'><GrFormEdit /> Edit</button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-[425px]">
+                            <DialogHeader>
+                                <DialogTitle>Edit Shipping Info</DialogTitle>
+                                <DialogDescription>
+                                    Make changes to your shipping info here. Click save when you&apos;re
+                                    done.
+                                </DialogDescription>
+                            </DialogHeader>
+                            <form onSubmit={UpdateAddress} className='flex flex-col gap-3'>
+                                <div className='flex flex-col gap-2'>
+                                    <div className='flex flex-col gap-1'>
+                                        <Label htmlFor="">Fullname</Label>
+                                        <Input required type="text" value={rName || ''} onChange={(e) => setRName(e.target.value)} />
+                                    </div>
 
-                        <div className='flex flex-col'>
-                            <label htmlFor="">Fullname</label>
-                            <Input type="text" value={rName} onChange={(e) => setRName(e.target.value)} />
-                        </div>
+                                    <div className='flex flex-col gap-1'>
+                                        <Label htmlFor="">Phone Number</Label>
+                                        <Input required type="number" value={phone_number || ''} onChange={(e) => setPhone_number(e.target.value)} />
+                                    </div>
 
-                        <div className='flex flex-col'>
-                            <label htmlFor="">Phone Number</label>
-                            <Input type="number" value={phone_number} onChange={(e) => setPhone_number(e.target.value)} />
-                        </div>
+                                    <div className='flex flex-col gap-1'>
+                                        <Label htmlFor="">Country</Label>
+                                        <Input required list="countries" name="countries" value={country || ''} onChange={(e) => setCountry(e.target.value)} />
+                                        <datalist id='countries' className='absolute bg-white text-black'>
+                                            {countries.slice(0,5).map((data, index) => (
+                                                <option key={index} value={data}>{data}</option>
+                                            ))}
+                                        </datalist>
+                                    </div>
+                                    <div className='flex gap-1 w-full box-border'>
 
-                        <div className='flex flex-col'>
-                            <label htmlFor="">Country</label>
-                            <Input list="countries" name="countries" value={country} onChange={(e) => setCountry(e.target.value)} />
-                            <datalist id='countries' className='absolute bg-white text-black'>
-                                {countries.map((data, index) => (
-                                    <option key={index} value={data}>{data}</option>
-                                ))}
-                            </datalist>
-                        </div>
-                        <div className='flex gap-1 w-full box-border'>
+                                        <div className='flex flex-col gap-1'>
+                                            <Label htmlFor="">City/Municipality</Label>
+                                            <Input required list='city' name='city' value={cityMunicipality || ''} onChange={(e) => setCityMunicipality(e.target.value)} />
+                                            <datalist id='city'>
+                                                {luzonPlaces.slice(0,5).map((data, index) => (
+                                                    <option key={index} value={data}>{data}</option>
+                                                ))}
+                                            </datalist>
+                                        </div>
 
-                            <div className='flex flex-col'>
-                                <label htmlFor="">City/Municipality</label>
-                                <Input list='city' name='city' value={cityMunicipality} onChange={(e) => setCityMunicipality(e.target.value)} />
-                                <datalist id='city'>
-                                    {luzonPlaces.map((data, index) => (
-                                        <option key={index} value={data}>{data}</option>
-                                    ))}
-                                </datalist>
-                            </div>
+                                        <div className='flex flex-col gap-1'>
+                                            <Label htmlFor="">Barangay</Label>
+                                            <Input required list='barangay' name='barangay' value={barangay || ''} onChange={(e) => setBarangay(e.target.value)} />
+                                            <datalist id='barangay'>
+                                                {barangaysJaen.slice(0,5).map((data, index) => (
+                                                    <option key={index} value={data}>{data}</option>
+                                                ))}
+                                            </datalist>
+                                        </div>
 
-                            <div className='flex flex-col'>
-                                <label htmlFor="">Barangay</label>
-                                <Input list='barangay' name='barangay' value={barangay} onChange={(e) => setBarangay(e.target.value)} />
-                                <datalist id='barangay'>
-                                    {barangaysJaen.map((data, index) => (
-                                        <option key={index} value={data}>{data}</option>
-                                    ))}
-                                </datalist>
-                            </div>
+                                        <div className='flex flex-col gap-1'>
+                                            <Label htmlFor="">Province</Label>
+                                            <Input required list='province' name='province' value={province || ''} onChange={(e) => setProvince(e.target.value)} />
+                                            <datalist id='province'>
+                                                {luzonProvinces.slice(0,5).map((data, index) => (
+                                                    <option key={index} value={data}>{data}</option>
+                                                ))}
+                                            </datalist>
+                                        </div>
 
-                            <div className='flex flex-col'>
-                                <label htmlFor="">Province</label>
-                                <Input list='province' name='province' value={province} onChange={(e) => setProvince(e.target.value)} />
-                                <datalist id='province'>
-                                    {luzonProvinces.map((data, index) => (
-                                        <option key={index} value={data}>{data}</option>
-                                    ))}
-                                </datalist>
-                            </div>
+                                    </div>
 
-                        </div>
+                                    <div className='flex flex-col gap-1'>
+                                        <Label htmlFor="">Trademark</Label>
+                                        <Textarea required value={description || ''} onChange={(e) => setDescription(e.target.value)} name="" id="" placeholder='please specify which location. eg. street sign, trademark' />
+                                    </div>
+                                </div>
 
-                        <div className='flex flex-col'>
-                            <label htmlFor="">Trademark</label>
-                            <Textarea value={description} onChange={(e) => setDescription(e.target.value)} name="" id="" placeholder='please specify which location. eg. street sign, trademark' />
-                        </div>
+                                <DialogFooter>
+                                    <DialogClose asChild>
+                                        <Button onClick={() => setDialogOpen(false)} variant="outline">Cancel</Button>
+                                    </DialogClose>
+                                    <Button type="submit">
+                                        {buttonLoading && (
+                                            <ClipLoader
 
-                        <button
-                            type="submit"
-                            disabled={buttonLoading === true}
-                            className="bg-green-400 w-max px-6 py-2 text-center flex justify-center items-center gap-2"
-                        >
-                            {buttonLoading && (
-                                <ClipLoader
+                                                color='white'
+                                                size={20}
+                                            />
+                                        )}
+                                        {buttonLoading ? "Loading..." : "Save changes"}
 
-                                    color='white'
-                                    size={20}
-                                />
-                            )}
-                            {buttonLoading ? "Saving..." : "Save"}
-                        </button>
+                                    </Button>
+                                </DialogFooter>
+                            </form>
+                        </DialogContent>
 
-                    </form>
+                    </Dialog>
+                </div>
+                <div className='flex flex-col gap-2 items-start'>
+                    <div className='flex flex-col justify-start gap-1 '>
+                        <Label className='font-thin'>Fullname</Label>
+                        <Label className='font-light'>{rName || 'not set'}</Label>
+                    </div>
+                    <div className='flex flex-col justify-start gap-1 '>
+                        <Label className='font-thin'>Phone Number</Label>
+                        <Label className='font-light'>{phone_number || 'not set'}</Label>
+                    </div>
+                    <div className='flex flex-col justify-start gap-1'>
+                        <Label className='font-thin'>Country</Label>
+                        <Label className='font-light'>{country || 'not set'}</Label>
+                    </div>
+                    <div className='flex flex-col justify-start gap-1 '>
+                        <Label className='font-thin'>City/Municipality</Label>
+                        <Label className='font-light'>{cityMunicipality || 'not set'}</Label>
+                    </div>
+                    <div className='flex flex-col justify-start gap-1 '>
+                        <Label className='font-thin'>Barangay</Label>
+                        <Label className='font-light'>{barangay || 'not set'}</Label>
+                    </div>
+                    <div className='flex flex-col justify-start gap-1'>
+                        <Label className='font-thin'>Province</Label>
+                        <Label className='font-light'>{province || 'not set'}</Label>
+                    </div>
+                    <div className='flex flex-col justify-start gap-1'>
+                        <Label className='font-thin'>Trademark</Label>
+                        <Label className='font-light'>{description || 'not set'}</Label>
+                    </div>
+
                 </div>
 
             </div>
-
-        </div>
+            
+        </div >
     )
 }
 

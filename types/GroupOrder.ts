@@ -5,7 +5,7 @@ export type GroupedOrder = {
     total_amount: number;
     payment_status: string;
     payment_method: string;
-    order_status: string;
+    order_status: 'success' | 'pending' | 'cancel' | 'preparing' | 'On Delivery'|'';
     created_at: string;
     items: {
         product_id: string;
