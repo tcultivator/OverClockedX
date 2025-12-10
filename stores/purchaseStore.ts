@@ -33,13 +33,13 @@ export const usePurchaseStore = create<purchaseType>((set) => ({
             const finalPurchaseData = previousPurchaseData.map(data => {
                 if (data.order_id == value) {
                     return {
-                        ...data, order_status: 'cancel'
+                        ...data, order_status: 'cancel' as const
                     }
                 }
                 return data
             })
             const previouseSelectedGroup = usePurchaseStore.getState().selectedGroup
-            const finalSelectedGroup = previouseSelectedGroup && { ...previouseSelectedGroup, order_status: 'cancel' }
+            const finalSelectedGroup = previouseSelectedGroup && { ...previouseSelectedGroup, order_status: 'cancel' as const }
             set({
                 purchaseData: finalPurchaseData,
                 selectedGroup: finalSelectedGroup

@@ -2,6 +2,7 @@ import React from 'react'
 import db from '@/lib/db';
 import { auth } from '@/auth';
 import PurchaseCard from '@/components/Profile/PurchaseCard';
+import { GroupedOrder } from '@/types/GroupOrder';
 const Purchase = async () => {
     const session = await auth();
     const [rows] = await db.query(`SELECT orders.id AS order_id, 
@@ -20,7 +21,7 @@ const Purchase = async () => {
             products.product_image FROM orders 
             JOIN order_items ON order_items.order_id = orders.id 
             JOIN products ON order_items.product_id = products.product_id 
-            WHERE orders.email = ?;
+            WHERE orders.email = ? ORDER BY orders.created_at DESC;
     `, [session!.user?.email])
     const data = rows as Data[]
     console.log(data)
@@ -30,8 +31,8 @@ const Purchase = async () => {
         reference_id: string;
         total_amount: number;
         payment_status: string;
-        payment_method:string;
-        order_status: string;
+        payment_method: string;
+        order_status: 'success' | 'pending' | 'cancel' | 'preparing' | 'On Delivery'|'';
         created_at: string;
         quantity: number;
         price: number;
@@ -40,24 +41,7 @@ const Purchase = async () => {
         product_name: string;
         product_image: string;
     }
-    type GroupedOrder = {
-        order_id: number;
-        email: string;
-        reference_id: string;
-        total_amount: number;
-        payment_status: string;
-        payment_method:string;
-        order_status: string;
-        created_at: string;
-        items: {
-            product_id: string;
-            product_name: string;
-            product_image: string;
-            quantity: number;
-            price: number;
-            sub_total: number;
-        }[];
-    };
+    
 
     const groupData: GroupedOrder[] = []
     for (const products of data) {
@@ -70,7 +54,7 @@ const Purchase = async () => {
                 reference_id: products.reference_id,
                 total_amount: products.total_amount,
                 payment_status: products.payment_status,
-                payment_method:products.payment_method,
+                payment_method: products.payment_method,
                 order_status: products.order_status,
                 created_at: products.created_at,
                 items: [{
@@ -97,7 +81,10 @@ const Purchase = async () => {
     console.log(JSON.stringify(groupData, null, 2))
 
     return (
-        <PurchaseCard groupData={groupData} />
+        <div className='px-2 py-5 w-full flex flex-col gap-2'>
+            <PurchaseCard groupData={groupData} />
+        </div>
+
     )
 }
 
