@@ -17,6 +17,8 @@ type changePasswordErrorType = {
 
 }
 
+import { toast } from "sonner"
+
 //validation
 import { changePasswordValidation } from '@/Validation/profileValidation/settings/changePasswordValidation';
 
@@ -44,17 +46,24 @@ const SettingsComponents = ({ checkResult, email }: { checkResult: count[], emai
             const UnsubscribeResult = await Unsubscribe.json()
             if (UnsubscribeResult.status == 500) {
                 setNewsLetterButtonLoading(false)
-                alert(UnsubscribeResult.message)
+                toast("Unsubscribing to News Letter Error", {
+                    description: UnsubscribeResult.message,
+                })
+
                 return
             }
 
             setNewsLetterButtonLoading(false)
             setisNewsLetterSubscriber([{ subscriber: 0 }])
-            alert(UnsubscribeResult.message)
+            toast("Successfully Unsubscribe to News Letter", {
+                description: UnsubscribeResult.message,
+            })
         } catch (err) {
 
             setNewsLetterButtonLoading(false)
-            alert(err)
+            toast("Unsubscribing to News Letter Error", {
+                description: "Something went wrong to your request of Unsubscribing to News Letter",
+            })
         }
 
     }
@@ -72,13 +81,18 @@ const SettingsComponents = ({ checkResult, email }: { checkResult: count[], emai
             const subscribeResult = await subscribe.json()
             if (subscribeResult.status == 500) {
                 setNewsLetterButtonLoading(false)
-                alert('Error Subscribing')
+                toast("Subscribing to News Letter Error", {
+                    description: "Something went wrong to your request of Subscribing to News Letter",
+                })
+
                 return
             }
 
             setNewsLetterButtonLoading(false)
             setisNewsLetterSubscriber([{ subscriber: 1 }])
-            alert('Success Subscribing')
+            toast("Successfully Subscribe to News Letter", {
+                description: "You can now receive news, updates, and special offers directly to your email. ",
+            })
         } catch (err) {
 
             setNewsLetterButtonLoading(false)
@@ -112,6 +126,9 @@ const SettingsComponents = ({ checkResult, email }: { checkResult: count[], emai
         if (submiNewPasswordResult.status == 500) {
             setValidationErros([{ serverError: 'Something went wrong! Please try again later' }])
             setChangePasswordButtonLoading(false)
+            toast("Change Password Error", {
+                description: "Something went wrong to your request of changing password",
+            })
             return
         }
         if (submiNewPasswordResult.status == 404) {
@@ -122,6 +139,11 @@ const SettingsComponents = ({ checkResult, email }: { checkResult: count[], emai
         }
         setValidationErros([{ changePasswordSuccess: 'Successfully Change Password! New Password is Set!' }])
         setChangePasswordButtonLoading(false)
+        setCurrentPasswordInput('')
+        setNewPasswordInput('')
+        toast("Successfully Change Password", {
+            description: "Your new password has been set!",
+        })
 
     }
     const [changePasswordButtonLoading, setChangePasswordButtonLoading] = useState(false)
@@ -171,7 +193,7 @@ const SettingsComponents = ({ checkResult, email }: { checkResult: count[], emai
                         <div className="grid gap-4">
                             <div className="grid gap-3">
                                 <Label htmlFor="currentPass">Current Password</Label>
-                                <Input onChange={(e) => setCurrentPasswordInput(e.target.value)} id='currentPass' name='currentPass' type='password' defaultValue="" />
+                                <Input onChange={(e) => setCurrentPasswordInput(e.target.value)} id='currentPass' name='currentPass' type='password' value={currentPasswordInput || ''} />
                             </div>
                             <div className='flex flex-col items-center justify-center w-full'>
                                 {validationErrors && validationErrors.filter(item => item.newPassword).map((data, index) => (
@@ -183,7 +205,7 @@ const SettingsComponents = ({ checkResult, email }: { checkResult: count[], emai
                             </div>
                             <div className="grid gap-3">
                                 <Label htmlFor="newPass">New Password</Label>
-                                <Input onChange={(e) => setNewPasswordInput(e.target.value)} id='newPass' name='newPass' type='password' defaultValue="" />
+                                <Input onChange={(e) => setNewPasswordInput(e.target.value)} id='newPass' name='newPass' type='password' value={newPasswordInput || ''} />
                             </div>
                         </div>
                         <DialogFooter>
@@ -194,13 +216,13 @@ const SettingsComponents = ({ checkResult, email }: { checkResult: count[], emai
                                 }} variant="outline">Cancel</Button>
                             </DialogClose>
                             <Button className='flex items-center justify-center' onClick={submitChangePassword} type="button">{changePasswordButtonLoading && (
-                                        <ClipLoader
+                                <ClipLoader
 
-                                            color='white'
-                                            size={15}
-                                        />
-                                    )}
-                                    {changePasswordButtonLoading ? "Loading..." : "Save Changes"}</Button>
+                                    color='white'
+                                    size={15}
+                                />
+                            )}
+                                {changePasswordButtonLoading ? "Loading..." : "Save Changes"}</Button>
                         </DialogFooter>
                     </DialogContent>
 
