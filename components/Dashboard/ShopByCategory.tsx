@@ -9,7 +9,10 @@ const ShopByCategory = () => {
     const router = useRouter();
     const categoriesData = [
         { title: "LAPTOPS", image: "/bg/laptopBG.png", navigation: "Laptop" },
-        { title: "DESKTOPS", image: "/bg/desktopBG.png", navigation: "Desktop" },
+        { title: "DESKTOPS", image: "/bg/desktopBg.png", navigation: "Desktop" },
+        { title: "PERIPHERALS", image: "/bg/peripheralsBg.png", navigation: "Peripherals" },
+        { title: "COMPONENTS", image: "/bg/componentsBg.png", navigation: "Components" },
+        
     ];
 
     function nextSlide() {
@@ -64,7 +67,7 @@ const ShopByCategory = () => {
                             <button
                                 onClick={() => SelectCategories(categoriesData[current].navigation)}
                                 
-                                className="w-full sm:w-[160px] rounded-[5px] p-4 text-[13px] transition-all duration-300 bg-white hover:bg-white/80"
+                                className="w-full sm:w-[180px] rounded-[5px] p-4 text-[13px] transition-all duration-300 bg-white hover:bg-white/80"
                             >
                                 BROWSE {categoriesData[current].title}
                             </button>
@@ -73,7 +76,7 @@ const ShopByCategory = () => {
                                 onClick={() => SelectCategories('allProducts')}
                                 
                                 className="
-                                            w-full sm:w-[160px] rounded-[5px] p-4 text-[13px]
+                                            w-full sm:w-[180px] rounded-[5px] p-4 text-[13px]
                                             text-white bg-white/20 backdrop-blur-md 
                                             border border-white/30 transition-all duration-300
                                             hover:bg-white/30 hover:border-white/40 hover:text-white/80
