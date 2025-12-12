@@ -11,6 +11,8 @@ import { useLoading } from '@/stores/loadingStore';
 import { useAlertNotification } from '@/stores/alertNotificationStore';
 import { alertClasses } from '@/utils/alertNotificationTypes';
 import { use } from 'react'
+//validation
+import { resetPasswordValidation } from '@/Validation/resetPasswordValidation/resetPasswordValidation';
 type reset_logs = {
     id: number;
     email: string;
@@ -52,7 +54,7 @@ const ResetPageComponents = ({
                 setUser(response.result[0])
             }
             else {
-                router.push('/hahahaha')
+                // router.push('/hahahaha')
             }
         }
         verifyToken()
@@ -60,7 +62,13 @@ const ResetPageComponents = ({
 
     const submitNewPassword = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+        const validation = resetPasswordValidation({ password: newpass })
         setButtonLoading(true)
+        if (validation) {
+            setAlertNotif({ display: true, message: validation.message, alertType: validation.alertType })
+            setButtonLoading(false)
+            return
+        }
         const submitNew = await fetch('/api/forgotpassword/submitNewPassword', {
             method: 'POST',
             headers: {
@@ -91,25 +99,25 @@ const ResetPageComponents = ({
     return (
         <div className='w-screen h-[70vh] flex'>
             <div className="flex w-max max-w-sm flex-col gap-3 m-auto">
-                <div className="px-4 py-10 rounded-xl relative bg-black inset-shadow-sm inset-shadow-white/50 w-[300px] flex flex-col gap-3">
-                    <Label className='text-white text-[18px] text-center w-full  flex justify-center py-1' htmlFor="">RESET PASSWORD</Label>
-                    <button className='absolute top-0 right-0'><LiaTimesSolid /></button>
-                    <form onSubmit={submitNewPassword} className="flex flex-col gap-3 text-white">
+                <div className="px-4 py-10 rounded relative bg-white border border-black/20 w-[300px] flex flex-col gap-3">
+                    <Label className='text-black text-[15px] text-center w-full  flex justify-center py-1 font-orbitron' htmlFor="">RESET PASSWORD</Label>
+
+                    <form onSubmit={submitNewPassword} className="flex flex-col gap-3 text-black">
 
                         {alertNotif.display &&
-                            <div className={`${alertClasses[alertNotif.alertType]}`}>{alertNotif.message}</div>
+                            <div className={`${alertClasses[alertNotif.alertType]} whitespace-pre-line`}>{alertNotif.message}</div>
                         }
 
                         <div className="w-full flex flex-col gap-1">
                             <Label htmlFor="">Email</Label>
-                            <Input value={user?.email ?? ""} disabled type="email" required placeholder="Email" name='email' className='bg-[#161616]' />
+                            <Input value={user?.email ?? ""} disabled type="email" required placeholder="Email" name='email' className='text-black' />
                         </div>
                         <div className="w-full flex flex-col gap-1">
                             <Label htmlFor="">New Password</Label>
-                            <Input onChange={(e) => setNewpass(e.target.value)} type="password" required placeholder="New Password" name='password' className='bg-[#161616]' />
+                            <Input onChange={(e) => setNewpass(e.target.value)} type="password" required placeholder="New Password" name='password' className='text-black' />
                         </div>
                         <div className="w-full flex flex-col gap-1">
-                            <Button type='submit' variant={'secondary'}>{buttonLoading && <ClipLoader color='black'
+                            <Button type='submit' className='text-[12px] uppercase' disabled={user?.email == '' || newpass == ''} variant={'default'}>{buttonLoading && <ClipLoader color='white'
                                 size={20} />}Submit</Button>
                         </div>
                     </form>
