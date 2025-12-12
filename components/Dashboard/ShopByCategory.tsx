@@ -1,18 +1,19 @@
 "use client"
 import React, { useEffect, useState } from "react";
 import { Label } from "../ui/label";
-import { Button } from "../ui/button";
+
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from 'next/navigation';
+import Image from "next/image";
 const ShopByCategory = () => {
     const [current, setCurrent] = useState(0);
     const router = useRouter();
     const categoriesData = [
-        { title: "LAPTOPS", image: "/bg/laptopBG.png", navigation: "Laptop" },
-        { title: "DESKTOPS", image: "/bg/desktopBg.png", navigation: "Desktop" },
-        { title: "PERIPHERALS", image: "/bg/peripheralsBg.png", navigation: "Peripherals" },
-        { title: "COMPONENTS", image: "/bg/componentsBg.png", navigation: "Components" },
-        
+        { title: "LAPTOPS", image: "/bg/laptopBG.webp", navigation: "Laptop" },
+        { title: "DESKTOPS", image: "/bg/desktopBg.webp", navigation: "Desktop" },
+        { title: "PERIPHERALS", image: "/bg/peripheralsBg.webp", navigation: "Peripherals" },
+        { title: "COMPONENTS", image: "/bg/componentsBg.webp", navigation: "Components" },
+
     ];
 
     function nextSlide() {
@@ -41,11 +42,17 @@ const ShopByCategory = () => {
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.2 }}
-                    className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-                    style={{
-                        backgroundImage: `url("${categoriesData[current].image}")`,
-                    }}
-                />
+                    className="absolute inset-0"
+                >
+                    <Image
+                        src={categoriesData[current].image}
+                        alt=""
+                        fill
+                        priority
+                        sizes="100vw"
+                        className="object-cover"
+                    />
+                </motion.div>
             </AnimatePresence>
 
 
@@ -66,7 +73,7 @@ const ShopByCategory = () => {
                         <div className="flex flex-col sm:flex-row items-center gap-2 mt-3">
                             <button
                                 onClick={() => SelectCategories(categoriesData[current].navigation)}
-                                
+
                                 className="w-full sm:w-[180px] rounded-[5px] p-4 text-[13px] transition-all duration-300 bg-white hover:bg-white/80"
                             >
                                 BROWSE {categoriesData[current].title}
@@ -74,7 +81,7 @@ const ShopByCategory = () => {
 
                             <button
                                 onClick={() => SelectCategories('allProducts')}
-                                
+
                                 className="
                                             w-full sm:w-[180px] rounded-[5px] p-4 text-[13px]
                                             text-white bg-white/20 backdrop-blur-md 
