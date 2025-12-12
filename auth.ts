@@ -12,26 +12,33 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [Google,
     Credentials({
       credentials: {
-        email: {},
-        password: {},
+        email: { label: "email", type: "email" },
+        password: { label: "password", type: "password" },
       },
       authorize: async (credentials) => {
         try {
           const [rows] = await db.query('SELECT * FROM accounts WHERE email = ?', [credentials.email]);
           const accounts = rows as Accounts[];
-          const password = credentials?.password as string
-          console.log(credentials)
-          const isPasswordCorrect = await bcrypt.compare(password, accounts[0].password)
-          if (isPasswordCorrect) {
-            return {
-              email: accounts[0].email,
-              name: accounts[0].username,
-              image: accounts[0].profile_Image,
-            }
+          if (!accounts.length) {
+            console.log('no account found')
+            return null;
           }
-          return null
+
+          const password = credentials?.password as string
+          const isPasswordCorrect = await bcrypt.compare(password, accounts[0].password)
+          if (!isPasswordCorrect) {
+            console.log('password is incorrect, this log is in auth')
+            return null;
+          }
+
+          return {
+            email: accounts[0].email,
+            name: accounts[0].username,
+            image: accounts[0].profile_Image,
+          };
         } catch (err) {
-          return null
+          console.log('throw error??')
+          throw new Error("SERVER_ERROR");
         }
       }
     })
