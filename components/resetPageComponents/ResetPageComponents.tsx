@@ -54,7 +54,7 @@ const ResetPageComponents = ({
                 setUser(response.result[0])
             }
             else {
-                // router.push('/hahahaha')
+                router.push('/')
             }
         }
         verifyToken()
