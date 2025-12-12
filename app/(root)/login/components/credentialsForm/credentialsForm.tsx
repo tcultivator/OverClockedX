@@ -27,18 +27,46 @@ const CredentialsForm = () => {
         const formdata = new FormData(e.currentTarget)
         setButtonLoading(true)
         try {
-            const result = await doCredentialsSignin(formdata)
+            const result = await doCredentialsSignin(formdata);
+            console.log("Auth result:", result);
+
             if (result.error) {
-                setAlertNotif({ display: true, message: 'Failed to sign in with credentials, please try again!', alertType: 'error' })
+                if (result.error === "CredentialsSignin") {
+                    // invalid email OR invalid password
+                    setAlertNotif({
+                        display: true,
+                        message: "Incorrect email or password!",
+                        alertType: "error",
+                    });
+                } else if (result.error === "SERVER_ERROR") {
+                    setAlertNotif({
+                        display: true,
+                        message: "Something went wrong on the server!",
+                        alertType: "error",
+                    });
+                }
+
+                setButtonLoading(false);
+                return;
             }
-            setAlertNotif({ display: true, message: 'Signin success full, Redirecting to signin', alertType: 'success' })
-            setButtonLoading(false)
-            setTimeout(() => {
-                redirect('/profile')
-            }, 1000);
+
+            // SUCCESS
+            setAlertNotif({
+                display: true,
+                message: "Signin successful! Redirecting...",
+                alertType: "success",
+            });
+
+            setButtonLoading(false);
+
+            setTimeout(() => redirect('/profile'), 1000);
         } catch (err) {
-            setAlertNotif({ display: true, message: 'Something went wrong, please try again!', alertType: 'error' })
-            setButtonLoading(false)
+            setAlertNotif({
+                display: true,
+                message: "Unexpected error occurred!",
+                alertType: "error"
+            });
+            setButtonLoading(false);
         }
     }
     return (
@@ -50,22 +78,22 @@ const CredentialsForm = () => {
                 }
                 <div className="w-full ">
                     <Label htmlFor="">Email</Label>
-                    <Input type="email" required placeholder="Email" name='email' className='bg-[#161616]' />
+                    <Input type="email" required placeholder="Email" name='email' className='text-black' />
                 </div>
                 <div className="w-full">
                     <Label htmlFor="">Password</Label>
-                    <Input type="password" required placeholder="Password" name='password' className='bg-[#161616]' />
+                    <Input type="password" required placeholder="Password" name='password' className='text-black' />
                 </div>
                 <div className='w-full flex justify-end '>
                     <Link className='underline text-blue-400 text-[13px]' href={'/forgotpassword'}>forgot password</Link>
                 </div>
-                <Button type='submit' variant={'secondary'} className="">{buttonLoading && (
+                <Button type='submit' variant={'default'} className="uppercase">{buttonLoading && (
                     <ClipLoader
-                        color='black'
+                        color='white'
                         size={20}
                     />
                 )}
-                    {buttonLoading ? "Please Wait..." : "Signin"}</Button>
+                    {buttonLoading ? "Please Wait..." : "Sign in"}</Button>
             </form>
 
         </div>

@@ -1,19 +1,36 @@
-"use server"
+"use server";
 
-import { signIn } from "@/auth"
-
+import { signIn } from "@/auth";
+type Error = {
+  type: string,
+  kind: string,
+  code: string
+}
 export async function doCredentialsSignin(formdata: FormData) {
-    try {
-        const response = await signIn('credentials', {
-            email: formdata.get('email'),
-            password: formdata.get('password'),
-            redirect: false
-        })
-        return response
+  const email = formdata.get("email")?.toString() ?? "";
+  const password = formdata.get("password")?.toString() ?? "";
+
+  try {
+    const response = await signIn("credentials", {
+      email,
+      password,
+      redirect: false,
+    });
+
+    // Sometimes signIn might return undefined if failed
+    if (!response) {
+      return { error: "SERVER_ERROR" };
     }
-    catch (error) {
-        console.error("Signin error:", error)
-        throw new Error("Failed to sign in with credentials.")
+
+    return response;
+  } catch (error: unknown) {
+    const catchError = error as { type?: string; kind?: string; code?: string };
+
+    if (catchError.type === "CredentialsSignin") {
+      return { error: "CredentialsSignin" };
     }
+
+    return { error: "SERVER_ERROR" };
+  }
 
 }

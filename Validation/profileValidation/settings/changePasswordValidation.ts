@@ -17,7 +17,7 @@ export function changePasswordValidation(
     if (!newPasswordInput.trim()) error.push({ newPassword: 'New Password is Required' })
 
 
-    //check if new password has spaces
+    
     if (newPasswordInput) {
         const pwd = newPasswordInput;
         //check if current and new password are match

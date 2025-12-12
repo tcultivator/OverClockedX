@@ -9,6 +9,8 @@ import { useLoading } from '@/stores/loadingStore';
 import { useAlertNotification } from '@/stores/alertNotificationStore';
 import { alertClasses } from '@/utils/alertNotificationTypes';
 
+//validation
+import { signupValidation } from '@/Validation/signupValidation/signupValidation';
 const SignupForm = () => {
     //this is the state for user input in form
     const [userInput, setUserInput] = useState<string[]>([])
@@ -22,8 +24,9 @@ const SignupForm = () => {
     const submitSignupForm = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         setButtonLoading(true)
-        if (userInput[1] != userInput[2]) {
-            setAlertNotif({ display: true, message: 'Passwords not match', alertType: 'warning' })
+        const validation = signupValidation({ password: userInput[1], confirmPassword: userInput[2] })
+        if (validation) {
+            setAlertNotif({ display: true, message: validation.message, alertType: validation.alertType })
             setButtonLoading(false)
             return
         }
@@ -56,7 +59,7 @@ const SignupForm = () => {
         <div>
             <form onSubmit={submitSignupForm} className="flex flex-col gap-3 text-white">
                 {alertNotif.display &&
-                    <div className={`${alertClasses[alertNotif.alertType]}`}>{alertNotif.message}</div>
+                    <div className={`${alertClasses[alertNotif.alertType]} whitespace-pre-line`}>{alertNotif.message}</div>
                 }
                 <div className="w-full ">
                     <Label >Email</Label>
@@ -64,14 +67,14 @@ const SignupForm = () => {
                         const email = e.target.value;
                         setUserInput([email, userInput[1], userInput[2]]);
 
-                    }} type="email" required placeholder="Email" id='email' className='bg-[#161616]' />
+                    }} type="email" required placeholder="Email" id='email' className='text-black' />
                 </div>
                 <div className="w-full">
                     <Label >Password</Label>
                     <Input value={userInput[1] ?? ''} onChange={(e) => {
                         const password = e.target.value;
                         setUserInput([userInput[0], password, userInput[2]]);
-                    }} type="password" required placeholder="Password" id='password' className='bg-[#161616]' />
+                    }} type="password" required placeholder="Password" id='password' className='text-black' />
                 </div>
 
                 <div className="w-full">
@@ -79,15 +82,15 @@ const SignupForm = () => {
                     <Input value={userInput[2] ?? ''} onChange={(e) => {
                         const confirmPass = e.target.value;
                         setUserInput([userInput[0], userInput[1], confirmPass]);
-                    }} type="password" required placeholder="Confirm Password" id='confirmpassword' className='bg-[#161616]' />
+                    }} type="password" required placeholder="Confirm Password" id='confirmpassword' className='text-black' />
                 </div>
-                <Button type='submit' variant={'secondary'} className="">{buttonLoading && (
+                <Button type='submit' variant={'default'} className="uppercase">{buttonLoading && (
                     <ClipLoader
-                        color='black'
+                        color='white'
                         size={20}
                     />
                 )}
-                    {buttonLoading ? "Please Wait..." : "Signup"}</Button>
+                    {buttonLoading ? "Please Wait..." : "Sign up"}</Button>
             </form>
 
 
