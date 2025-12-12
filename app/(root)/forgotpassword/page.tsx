@@ -1,5 +1,5 @@
 "use client"
-import React from 'react'
+import React, { FormEvent } from 'react'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useState } from 'react'
@@ -19,7 +19,8 @@ const ForgotPassword = () => {
     const alertNotif = useAlertNotification((state) => state.alertNotif)
     const setAlertNotif = useAlertNotification((state) => state.setAlertNotif)
 
-    const sendResetLink = async () => {
+    const sendResetLink = async (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
         setButtonLoading(true)
         const response = await fetch('/api/forgotpassword/sendResetLink', {
             method: 'POST',
@@ -47,27 +48,27 @@ const ForgotPassword = () => {
     return (
         <div className='w-screen h-[70vh] flex'>
             <div className="flex w-max max-w-sm flex-col gap-3 m-auto">
-                <div className="px-4 py-10 rounded-xl relative bg-black inset-shadow-sm inset-shadow-white/50 w-[300px] flex flex-col gap-3">
-                    <Label className='text-white text-[18px] text-center w-full  flex justify-center py-1' htmlFor="">FORGOT PASSWORD</Label>
-                    <button className='absolute top-0 right-0'><LiaTimesSolid /></button>
-                    <div className="flex flex-col gap-3 text-white">
+                <div className="px-4 py-10 rounded relative bg-white border border-black/20 w-[300px] flex flex-col gap-3">
+                    <Label className='text-black text-[15px] text-center w-full  flex justify-center py-1 font-orbitron' htmlFor="">FORGOT PASSWORD</Label>
+
+                    <form onSubmit={sendResetLink} className="flex flex-col gap-3 text-black">
                         {alertNotif.display &&
                             <div className={`${alertClasses[alertNotif.alertType]}`}>{alertNotif.message}</div>
                         }
                         <div className="w-full flex flex-col gap-1">
                             <Label htmlFor="">Email</Label>
-                            <Input onChange={(e) => setEmail(e.target.value)} type="email" required placeholder="Email" name='email' className='bg-[#161616]' />
+                            <Input onChange={(e) => setEmail(e.target.value)} type="email" required placeholder="Email" name='email' className='text-black' />
                         </div>
                         <div className="w-full flex flex-col gap-1">
-                            <Button onClick={() => {
-                                sendResetLink()
-                            }} variant={'secondary'}>{buttonLoading && <ClipLoader
-                                color='black'
+                            <Button variant={'default'} type='submit' className='text-[12px]' disabled={email == ''} >{buttonLoading && <ClipLoader
+                                color='white'
                                 size={20}
-                            />}Send Reset Link</Button>
+
+                            />}SEND RESET LINK</Button>
+
 
                         </div>
-                    </div>
+                    </form>
                 </div>
 
             </div>
