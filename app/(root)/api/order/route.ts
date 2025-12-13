@@ -32,15 +32,54 @@ export async function POST(req: NextRequest) {
             to: body.email,
             sub: "Order Placed Successfully",
             message: `
-                    <div style="font-family: Arial, sans-serif; padding: 20px;">
-                        <h2>Thank you for your order!</h2>
+                    <div style="font-family: Arial, Helvetica, sans-serif; background-color: #f2f2f2; padding: 40px 20px;">
+                        <table
+                          cellpadding="0"
+                          cellspacing="0"
+                          border="0"
+                          width="100%"
+                          style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border: 1px solid #e5e5e5;"
+                        >
+                          <!-- Header -->
+                          <tr>
+                            <td style="padding: 32px 40px; text-align: center; background-color: #000000;">
+                              <h2 style="margin: 0; font-size: 22px; color: #ffffff; font-weight: 600;">
+                                Order Confirmed
+                              </h2>
+                            </td>
+                          </tr>
 
-                        <p>Your order has been successfully placed.</p>
+                          <!-- Body -->
+                          <tr>
+                            <td style="padding: 40px;">
+                              <p style="font-size: 16px; color: #111111; line-height: 1.6; margin-top: 0;">
+                                Thank you for your order. Your purchase has been successfully placed.
+                              </p>
 
-                        <p><strong>Note:</strong> This link will expire in 15 minutes.</p>
+                              
 
-                        <p>If you didn’t place this order, please contact support immediately.</p>
-                    </div>
+                              <p style="font-size: 14px; color: #666666; line-height: 1.6; margin-bottom: 0;">
+                                If you did not place this order, please contact our support team immediately.
+                              </p>
+                            </td>
+                          </tr>
+
+                          <!-- Footer -->
+                          <tr>
+                            <td
+                              style="
+                                padding: 20px 40px;
+                                background-color: #f2f2f2;
+                                text-align: center;
+                                font-size: 12px;
+                                color: #777777;
+                              "
+                            >
+                              This is an automated message. Please do not reply to this email.
+                            </td>
+                          </tr>
+                        </table>
+                      </div>
   `,
         });
 

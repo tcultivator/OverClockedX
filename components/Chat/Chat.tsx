@@ -60,11 +60,11 @@ export default function Chat({ setOpenChat }: Props) {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: .1 }}
-                className="bg-white text-black w-[320px] h-[450px] lg:w-[330px] lg:h-[470px] xl:w-[350px] xl:h-[500px] 2xl:w-[400px] 2xl:h-[550px] rounded-xl shadow-xl flex flex-col overflow-hidden z-50">
+                className="bg-white text-black border border-black/10 w-[320px] h-[500px] lg:w-[330px] lg:h-[470px] xl:w-[350px] xl:h-[500px] 2xl:w-[400px] 2xl:h-[550px] rounded shadow-xl flex flex-col overflow-hidden z-50">
 
                 {/* HEADER */}
                 <div className="flex justify-between items-center p-3 border-b border-gray-300 bg-gray-100">
-                    <Label className="font-semibold text-sm">AI assistant</Label>
+                    <Label className="font-semibold text-sm">Techmate - AI assistant</Label>
                     <Button
                         onClick={() => setOpenChat(false)}
                         variant="ghost"
@@ -74,19 +74,44 @@ export default function Chat({ setOpenChat }: Props) {
                     </Button>
                 </div>
                 {messages.length === 0 && (
-                    <div className='w-full p-5 text-center flex flex-col items-center justify-center bg-white gap-4 my-auto relative'>
-                        <Label className=' text-md text-black/50 absolute top-5'>
+                    <div className="w-full flex flex-col items-center justify-center my-auto px-6 text-center relative">
+                       
+                        
+                        <h2 className="text-[12px] font-semibold text-black mb-2">
                             How can I help you today?
-                        </Label>
-                        <Image
-                            src={'https://res.cloudinary.com/djjg39yja/image/upload/v1763668639/robotGIF_corvb0.gif'}
-                            alt='Friendly robot'
-                            width={300}
-                            height={300}
-                            className='w-[60%] max-w-xs  h-auto object-contain rounded-md'
-                        />
+                        </h2>
+
+                        <p className="text-[11px] text-black/60 max-w-md mb-3">
+                            Ask me about our products, get recommendations, or learn more about our services.
+                        </p>
+
+                        
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 w-full max-w-md">
+                            {[
+                                "Recommend a products",
+                                "Tell me about best selling products",
+                                "What are the latest laptops?",
+                                "Check product availability"
+                            ].map((text) => (
+                                <button
+                                    key={text}
+                                    className="px-4 py-3 text-[11px] border border-black/10 rounded-lg
+                     hover:border-black/30 hover:bg-black/[0.02]
+                     transition text-black/80"
+                                    onClick={() => setInput(text)}
+                                >
+                                    {text}
+                                </button>
+                            ))}
+                        </div>
+
+                        
+                        <p className="text-[11px] text-black/40 mt-3">
+                            Start typing your question below or choose a suggestion above.
+                        </p>
                     </div>
                 )}
+
 
 
                 {/* MESSAGES */}
@@ -97,11 +122,11 @@ export default function Chat({ setOpenChat }: Props) {
                             {/* USER MESSAGE */}
                             <div className="flex justify-end">
                                 <div className="flex items-start gap-2 max-w-[75%]">
-                                    <div className="bg-blue-500 text-white px-3 py-2 rounded-xl shadow-sm">
+                                    <div className="bg-black text-white px-3 py-2 rounded shadow-sm">
                                         {msg.user}
                                     </div>
                                     <Label>
-                                        <FaUserAlt className="text-white bg-blue-700 p-1 rounded-full text-[18px]" />
+                                        <FaUserAlt className="text-white bg-black p-1 rounded-full text-[18px]" />
                                     </Label>
 
                                 </div>

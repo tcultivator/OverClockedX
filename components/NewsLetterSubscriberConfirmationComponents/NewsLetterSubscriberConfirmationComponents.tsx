@@ -117,23 +117,7 @@ const NewsLetterSubscriberConfirmationComponents = () => {
             default:
                 return <>
 
-                    <div className='p-2 flex flex-col gap-2 justify-center items-center max-w-[400px]'>
-                        <div className='flex flex-col gap-1 justify-center items-center'>
-                            <IoMdCheckmarkCircleOutline className='text-[40px]' />
-                            <Label className='text-[17px] text-center'>Invalid User Token!</Label>
-                            <Label className='font-normal text-black/50 text-center'>
-                                Please Enter a valid Email in homepage!.
-                            </Label>
-                        </div>
-
-                        <div className='flex items-center gap-1 w-full justify-center py-1'>
-                            <Link href='/' className='border border-black bg-black text-white rounded p-2 uppercase w-full text-[12px] text-center'>
-                                Go to Homepage
-                            </Link>
-                        </div>
-
-
-                    </div>
+                    
 
                 </>
 

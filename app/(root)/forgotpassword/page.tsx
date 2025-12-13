@@ -1,5 +1,5 @@
 "use client"
-import React, { FormEvent } from 'react'
+import React, { FormEvent, HtmlHTMLAttributes } from 'react'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useState } from 'react'
@@ -19,7 +19,7 @@ const ForgotPassword = () => {
     const alertNotif = useAlertNotification((state) => state.alertNotif)
     const setAlertNotif = useAlertNotification((state) => state.setAlertNotif)
 
-    const sendResetLink = async (e: FormEvent<HTMLFormElement>) => {
+    const sendResetLink = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         setButtonLoading(true)
         const response = await fetch('/api/forgotpassword/sendResetLink', {

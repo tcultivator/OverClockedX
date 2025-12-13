@@ -23,6 +23,9 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 
 import { RiErrorWarningFill } from "react-icons/ri";
 import { IoIosCheckmarkCircle } from "react-icons/io";
+import { LiaTimesSolid } from "react-icons/lia";
+
+import { LiaShippingFastSolid } from "react-icons/lia";
 
 import { useLoading } from '@/stores/loadingStore';
 type GcashCB = {
@@ -170,7 +173,7 @@ const Checkout = () => {
                     alert('something went wrong')
                 }
                 router.push('/cod-success-page');
-                
+
                 break
 
             default:
@@ -397,15 +400,15 @@ const Checkout = () => {
                             <div key={index} className='flex justify-between gap-5 p-5 items-center 0 bg-[#F1F0EE] rounded relative'>
                                 <div className='flex gap-3 items-center'>
                                     <Image src={data.product_image} alt="" className='w-20 border bg-white border-black/20' width={100} height={100} />
-                                    <div className='flex flex-col'>
+                                    <div className='flex flex-col justify-start'>
                                         <label htmlFor="">{data.product_name}</label>
-                                        <div className='flex items-center gap-2'>
+                                        <div className='flex flex-col-reverse justify-start sm:flex-row items-start sm:items-center gap-1'>
 
-                                            {data.value != null && <Label>{new Intl.NumberFormat('en-PH', {
+                                            {data.value != null && <Label className='text-start'>{new Intl.NumberFormat('en-PH', {
                                                 style: 'currency',
                                                 currency: 'PHP',
                                             }).format(data.price - Number(data.value))}</Label>}
-                                            <Label htmlFor="" className={`${data.value != null && 'line-through text-black/30 text-[12px]'}`}>{new Intl.NumberFormat('en-PH', {
+                                            <Label htmlFor="" className={`${data.value != null && 'line-through text-start text-black/30 text-[12px]'}`}>{new Intl.NumberFormat('en-PH', {
                                                 style: 'currency',
                                                 currency: 'PHP',
                                             }).format(data.price)}</Label>
@@ -450,29 +453,67 @@ const Checkout = () => {
                         </SheetTrigger>
                         <SheetContent>
                             <SheetHeader>
-                                <SheetTitle>Select Vouchers</SheetTitle>
+                                <div className='flex items-center justify-between'>
+                                    <SheetTitle>Select Vouchers</SheetTitle>
+                                    <SheetClose asChild>
+                                        <LiaTimesSolid className='cursor-pointer' />
+
+                                    </SheetClose>
+                                </div>
+
                             </SheetHeader>
                             <div className='flex flex-col gap-2 items-center p-2'>
                                 {vouchers.map((data, index) => (
-                                    <div key={index} className={`${data.is_used == true ? 'opacity-25' : 'opacity-100'} rounded flex justify-between w-full bg-[#1C6CFF]`}>
-                                        <div className=' flex flex-col items-center p-2'>
-                                            <label className='' htmlFor="">{data.type}</label>
-                                            <label htmlFor="" className='font-anton text-[25px]'>{new Intl.NumberFormat('en-PH', {
-                                                style: 'currency',
-                                                currency: 'PHP',
-                                            }).format(data.amount)}</label>
-                                        </div>
-                                        <div className='w-max bg-red-400 h-full relative border-l border-white/40 flex items-center justify-center'>
-                                            <div className='w-[20px] bg-black absolute rounded-[50%] h-[20px] top-[-6px] left-[-10px]'></div>
-                                            <div className='w-[20px] bg-black absolute rounded-[50%] h-[20px] bottom-[-6px] left-[-10px]'></div>
-                                            <SheetClose asChild>
-                                                <button className='rotate-90 w-full  text-center items-center justify-center flex' onClick={() => {
-                                                    applyVoucher(data)
-                                                }} disabled={data.is_used == true}>USE</button>
-                                            </SheetClose>
+                                    <div
+                                        key={index}
+                                        className={`${data.is_used ? 'opacity-40' : 'opacity-100'
+                                            } w-full rounded-xl border border-dashed border-black bg-gradient-to-r from-black/10 to-black/20 p-4 flex flex-col gap-3`}
+                                    >
+                                        {/* Header */}
+                                        <div className="flex items-center justify-between">
+                                            <span className="text-sm font-semibold text-black flex items-center gap-1">
+                                                <LiaShippingFastSolid /> Shipping Voucher
+                                            </span>
 
+                                            {data.is_used ? (
+                                                <span className="text-xs bg-gray-300 text-gray-600 px-2 py-1 rounded-full">
+                                                    USED
+                                                </span>
+                                            ) :
+                                                <></>}
                                         </div>
+
+                                        {/* Amount */}
+                                        <div className="flex items-end gap-1">
+                                            <span className="text-3xl font-anton text-black">
+                                                {new Intl.NumberFormat('en-PH', {
+                                                    style: 'currency',
+                                                    currency: 'PHP',
+                                                }).format(data.amount)}
+                                            </span>
+                                            <span className="text-sm text-black mb-1">OFF SHIPPING</span>
+                                        </div>
+
+                                        {/* Info */}
+                                        <p className="text-xs text-black">
+                                            Valid for shipping fees only
+                                        </p>
+
+                                        {/* Action */}
+                                        <button
+                                            onClick={() => applyVoucher(data)}
+                                            disabled={data.is_used}
+                                            className={`mt-2 w-full rounded-lg py-2 text-sm font-semibold transition
+      ${data.is_used
+                                                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                                    : 'bg-black text-white hover:bg-black/80'
+                                                }
+    `}
+                                        >
+                                            Apply Shipping Voucher
+                                        </button>
                                     </div>
+
                                 ))}
                             </div>
                         </SheetContent>

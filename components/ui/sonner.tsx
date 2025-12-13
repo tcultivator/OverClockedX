@@ -4,7 +4,7 @@ import { useTheme } from "next-themes"
 import { Toaster as Sonner, ToasterProps } from "sonner"
 
 const Toaster = ({ ...props }: ToasterProps) => {
-  const { theme = "system" } = useTheme()
+  const { theme = "light" } = useTheme()
 
   return (
     <Sonner
@@ -15,6 +15,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
         {
           "--normal-bg": "white",
           "--normal-text": "black",
+          "--normal-description": "black",
           "--normal-border": "var(--border)",
         } as React.CSSProperties
       }
