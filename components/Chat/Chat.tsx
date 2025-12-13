@@ -122,8 +122,9 @@ export default function Chat({ setOpenChat }: Props) {
                             {/* USER MESSAGE */}
                             <div className="flex justify-end">
                                 <div className="flex items-start gap-2 max-w-[75%]">
-                                    <div className="bg-black text-white px-3 py-2 rounded shadow-sm">
+                                    <div className="bg-black text-white text-[12px] px-3 py-2 rounded shadow-sm">
                                         {msg.user}
+                                        
                                     </div>
                                     <Label>
                                         <FaUserAlt className="text-white bg-black p-1 rounded-full text-[18px]" />
@@ -138,9 +139,11 @@ export default function Chat({ setOpenChat }: Props) {
                                     <Label>
                                         <RiRobot2Fill className="text-white bg-green-600 p-1 rounded-full text-[18px]" />
                                     </Label>
-                                    <div className="bg-gray-200 text-black px-3 py-2 rounded-xl shadow-sm min-h-[30px] flex flex-col items-start">
+                                    <div className="bg-gray-200 text-black text-[12px] px-3 py-2 rounded shadow-sm min-h-[30px] flex flex-col items-start">
                                         {msg.bot ? (
-                                            <ReactMarkdown>{msg.bot}</ReactMarkdown>
+                                            <ReactMarkdown>
+                                                {msg.bot}
+                                                </ReactMarkdown>
                                         ) : i === messages.length - 1 && loading ? (
                                             <PulseLoader margin={1} size={5} speedMultiplier={1} />
                                         ) : null}
@@ -158,7 +161,7 @@ export default function Chat({ setOpenChat }: Props) {
                 <div className="grid w-full gap-1 p-1">
                     <Textarea
 
-                        className="flex-1 border-gray-300 rounded-lg px-3 py-2 "
+                        className="flex-1 border-gray-300 rounded px-3 py-2 "
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
                         placeholder="Type a message..."
@@ -166,7 +169,7 @@ export default function Chat({ setOpenChat }: Props) {
                     />
                     <Button
                         onClick={sendMessage}
-                        className="bg-black hover:bg-black/70 text-white px-4"
+                        className="bg-black rounded hover:bg-black/70 text-white px-4"
                     >
                         Send Message
                     </Button>
