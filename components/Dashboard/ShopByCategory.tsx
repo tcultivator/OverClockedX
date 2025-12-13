@@ -14,10 +14,12 @@ const ShopByCategory = () => {
     const [current, setCurrent] = useState(0);
     const router = useRouter();
     const categoriesData = [
-        { title: "LAPTOPS", image: "/bg/laptopBG.webp", navigation: "Laptop" },
-        { title: "DESKTOPS", image: "/bg/desktopBg.webp", navigation: "Desktop" },
-        { title: "PERIPHERALS", image: "/bg/peripheralsBg.webp", navigation: "Peripherals" },
-        { title: "COMPONENTS", image: "/bg/componentsBg.webp", navigation: "Components" },
+        { title: "LAPTOPS", image: "/bg/img5.png", navigation: "Laptop" },
+        { title: "DESKTOPS", image: "/bg/img6.jpg", navigation: "Desktop" },
+        { title: "PERIPHERALS", image: "/bg/img2.png", navigation: "Peripherals" },
+        { title: "COMPONENTS", image: "/bg/img7.png", navigation: "Components" },
+        
+
 
     ];
 
