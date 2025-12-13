@@ -81,6 +81,7 @@ const SettingsComponents = ({ checkResult, email }: { checkResult: count[], emai
             const subscribeResult = await subscribe.json()
             if (subscribeResult.status == 500) {
                 setNewsLetterButtonLoading(false)
+                
                 toast("Subscribing to News Letter Error", {
                     description: "Something went wrong to your request of Subscribing to News Letter",
                 })

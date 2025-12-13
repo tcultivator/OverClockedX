@@ -7,7 +7,7 @@ import { FaTimesCircle } from "react-icons/fa";
 import { useRouter } from 'next/navigation';
 import { useCartStore } from '@/stores/cartStore';
 import { RiErrorWarningFill } from "react-icons/ri";
-
+import { Spinner } from "@/components/ui/spinner"
 const Toast = () => {
     const toastState = useToast((state) => state.toastState)
     const toastStatus = useToast((state) => state.toastStatus)
@@ -40,12 +40,12 @@ const Toast = () => {
 
             default:
                 return <>
-                    <ClipLoader
-                        color='white'
-                        size={20}
-                    />
-                    <label htmlFor="">Adding item to cart...</label>
-                    <button className='text-white/0'>l</button>
+                    <div className='relative bg-white border border-black/10 rounded flex justify-around items-center h-full text-black'>
+                        <Spinner />
+                        <label htmlFor="">Adding item to cart...</label>
+                        <button className='text-black/0'>l</button>
+                    </div>
+
                 </>
 
         }
@@ -53,13 +53,16 @@ const Toast = () => {
 
 
     return (
-        <div className={`${toastState ? `absolute fixed w-[70%] md:w-[500px] h-[50px] ${toastStatus == 'failed' ? 'bg-red-400' : `${toastStatus=='success'?'bg-green-400':'bg-amber-400'}`} top-11 md:top-20 right-[2px] md:right-2 z-50 rounded-[10px]` : 'hidden'} `}>
-            <div className='relative flex justify-around items-center h-full text-white'>
-                <ToastStatus />
+        <>
+            {
+                toastState &&
+                <div className={`absolute fixed w-[70%] md:w-[500px] h-[50px] top-11 md:top-20 right-[2px] md:right-2 z-50 rounded-[10px] `}>
+                    <ToastStatus />
+                </div>
+            }
 
-            </div>
+        </>
 
-        </div>
     )
 }
 

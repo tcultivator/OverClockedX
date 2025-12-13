@@ -6,7 +6,7 @@ import { ProductsInCheckoutTypes } from '@/types/ProductsInCheckoutTypes'
 import { useUserStore } from './userStore'
 import { useLoading } from './loadingStore'
 import { FaBullseye } from 'react-icons/fa'
-
+import { toast } from "sonner"
 type tempData = {
     products: ProductsInCartTypes | null | undefined
 }
@@ -85,8 +85,9 @@ export const useCartStore = create<cart>((set) => ({
 
     addToCart: async (products: ProductsInCartTypes | null | undefined) => {
 
-
-        useToast.getState().displayToast(true)
+        const toastId = toast.loading('Loading... Please wait...', {
+            description: 'Adding item to cart...'
+        })
 
         try {
 
@@ -112,48 +113,51 @@ export const useCartStore = create<cart>((set) => ({
             };
 
             if (response.status == 201) {
-                useToast.getState().setToastStatus('success')
+                toast.success('Added to Cart', {
+                    id: toastId,
+                    description: 'Item is successfully added in cart'
+                })
+
                 set((state) => ({
                     cartItems: [...state.cartItems, newCartItem],
                 }))
-                if (toastTimeout != null) clearTimeout(toastTimeout);
-                toastTimeout = setTimeout((): void => {
-                    useToast.getState().displayToast(false)
-                }, 1000);
+
 
 
             }
             else if (response.status == 500 && !products?.email) {
-                useToast.getState().setToastStatus('notLogin')
+                toast.warning('Not Signin', {
+                    id: toastId,
+                    description: 'Please signin first before adding item in cart'
+                })
+
                 useCartStore.getState().storeTempData(products)
 
-                if (toastTimeout != null) clearTimeout(toastTimeout);
-                toastTimeout = setTimeout(() => {
-                    useToast.getState().displayToast(false)
-                }, 5000);
-
             } else if (response.status == 200) {
-                useToast.getState().setToastStatus('success')
+                toast.success('Added to Cart', {
+                    id: toastId,
+                    description: 'Item is successfully added in cart'
+                })
+
                 const updatedCartItems = useCartStore.getState().cartItems.map(item =>
                     item.product_id == newCartItem.product_id ? { ...item, quantity: item.quantity + 1 } :
                         item
                 )
                 set({ cartItems: updatedCartItems })
-                if (toastTimeout != null) clearTimeout(toastTimeout);
-                toastTimeout = setTimeout(() => {
-                    useToast.getState().displayToast(false)
-                }, 1000);
+
 
             }
 
 
         } catch (err) {
-            useToast.getState().setToastStatus('failed');
-            if (toastTimeout != null) clearTimeout(toastTimeout);
-            toastTimeout = setTimeout((): void => {
-                useToast.getState().displayToast(false)
-            }, 5000);
-
+            toast.success('Something went wrong', {
+                id: toastId,
+                description: 'Looks like something went wrong in our end, please try again later',
+                action: {
+                    label: "Retry",
+                    onClick: () => useCartStore.getState().retryAddtoCart(),
+                }
+            })
 
         }
     },
