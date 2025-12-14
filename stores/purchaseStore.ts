@@ -46,12 +46,15 @@ export const usePurchaseStore = create<purchaseType>((set) => ({
 
             })
             useLoading.getState().setButtonLoading(false)
-            toast("Event has been created", {
-                description: "Successfully cancel the order!",
+            toast.success("Successfully cancel the order!", {
+                description: "Your order has been cancel",
             })
 
         } catch (err) {
             useLoading.getState().setButtonLoading(false)
+            toast.error("Something went wrong!", {
+                description: "Looks like something went wrong on your request to cancel order, please contact support!",
+            })
         }
 
     },
