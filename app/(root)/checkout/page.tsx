@@ -187,8 +187,8 @@ const Checkout = () => {
     const applyVoucher = (voucher: voucherTypes) => {
         setVoucherAmount(voucher.amount)
         //added a toast that can undo the selected voucher
-        toast("Event has been created", {
-            description: "Discount Voucher is added successfully",
+        toast.success("Shipping Voucher is added successfully", {
+            description: `Ammount of ${voucher.amount} is deducted from shipping cost!`,
             action: {
                 label: "Undo",
                 onClick: () => setVoucherAmount(0),

@@ -38,8 +38,8 @@ export const useUserStore = create<useStore>((set) => ({
             userAdress: response
         })
         useLoading.getState().setLoading('')
-        toast("Event has been created", {
-            description: "Successfully added shipping information",
+        toast.success("Successfully added shipping information", {
+            description: "Your shipping information has been updated! please double check it before checkout!",
         })
     },
     CustomInput: () => {
@@ -50,8 +50,8 @@ export const useUserStore = create<useStore>((set) => ({
 
     addCustomAddress: (value: UserAddress[]) => {
         set({ userAdress: value })
-        toast("Event has been created", {
-            description: "Successfully added shipping information",
+        toast.success("Successfully added shipping information", {
+            description: "Your shipping information has been updated! please double check it before checkout!",
         })
     },
     

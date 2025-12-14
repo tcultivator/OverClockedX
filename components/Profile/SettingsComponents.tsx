@@ -46,7 +46,7 @@ const SettingsComponents = ({ checkResult, email }: { checkResult: count[], emai
             const UnsubscribeResult = await Unsubscribe.json()
             if (UnsubscribeResult.status == 500) {
                 setNewsLetterButtonLoading(false)
-                toast("Unsubscribing to News Letter Error", {
+                toast.error("Unsubscribing to News Letter Error", {
                     description: UnsubscribeResult.message,
                 })
 
@@ -55,13 +55,13 @@ const SettingsComponents = ({ checkResult, email }: { checkResult: count[], emai
 
             setNewsLetterButtonLoading(false)
             setisNewsLetterSubscriber([{ subscriber: 0 }])
-            toast("Successfully Unsubscribe to News Letter", {
+            toast.success("Successfully Unsubscribe to News Letter", {
                 description: UnsubscribeResult.message,
             })
         } catch (err) {
 
             setNewsLetterButtonLoading(false)
-            toast("Unsubscribing to News Letter Error", {
+            toast.error("Unsubscribing to News Letter Error", {
                 description: "Something went wrong to your request of Unsubscribing to News Letter",
             })
         }
@@ -81,8 +81,8 @@ const SettingsComponents = ({ checkResult, email }: { checkResult: count[], emai
             const subscribeResult = await subscribe.json()
             if (subscribeResult.status == 500) {
                 setNewsLetterButtonLoading(false)
-                
-                toast("Subscribing to News Letter Error", {
+
+                toast.error("Subscribing to News Letter Error", {
                     description: "Something went wrong to your request of Subscribing to News Letter",
                 })
 
@@ -91,13 +91,15 @@ const SettingsComponents = ({ checkResult, email }: { checkResult: count[], emai
 
             setNewsLetterButtonLoading(false)
             setisNewsLetterSubscriber([{ subscriber: 1 }])
-            toast("Successfully Subscribe to News Letter", {
+            toast.success("Successfully Subscribe to News Letter", {
                 description: "You can now receive news, updates, and special offers directly to your email. ",
             })
         } catch (err) {
 
             setNewsLetterButtonLoading(false)
-            alert(err)
+            toast.error("Subscribing to News Letter Error", {
+                description: "Something went wrong to your request of Subscribing to News Letter",
+            })
         }
 
     }
@@ -127,7 +129,7 @@ const SettingsComponents = ({ checkResult, email }: { checkResult: count[], emai
         if (submiNewPasswordResult.status == 500) {
             setValidationErros([{ serverError: 'Something went wrong! Please try again later' }])
             setChangePasswordButtonLoading(false)
-            toast("Change Password Error", {
+            toast.error("Change Password Error", {
                 description: "Something went wrong to your request of changing password",
             })
             return
@@ -142,7 +144,7 @@ const SettingsComponents = ({ checkResult, email }: { checkResult: count[], emai
         setChangePasswordButtonLoading(false)
         setCurrentPasswordInput('')
         setNewPasswordInput('')
-        toast("Successfully Change Password", {
+        toast.success("Successfully Change Password", {
             description: "Your new password has been set!",
         })
 
