@@ -1,6 +1,6 @@
 # OverClockedX
 
-**OverClockedX** is a modern e-commerce platform designed specifically for computer and hardware retail. It allows users to browse, search, and purchase components and peripherals from a streamlined and responsive web interface.
+**OverClockedX** is an e-commerce website where you can purchase computers, laptops, computer parts, peripherals, and much more. It features an AI assistant that helps you check compatibility and provides relevan information to ensure you make informed decisions. With its responsive design and clean, user-friendly interface, OverClockedX offers an easy and seamless browseing experience across all device
 
 ---
 
