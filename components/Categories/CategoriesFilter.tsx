@@ -134,55 +134,67 @@ const CategoriesFilter = () => {
 
     }, [searchParams])
     return (
-        <div className=''>
-            <div id="left" className={`w-full bg-white  ${displayFilter == false ? 'hidden' : 'block'} h-screen w-full box-border left-0 p-5  absolute top-0 md:relative  md:block lg:block xl:block font-thin md:w-[350px] md:border-r md:border-r-black/20  z-50 md:p-5 md:z-10`}>
-                <div className="sticky top-0">
-                    <div className='w-full flex justify-end'>
-                        <button className='block md:hidden ' onClick={() => {
-                            console.log(displayFilter)
-                            setFilterDisplay(false)
-                        }}><RiCloseLargeFill className='text-black' /></button>
-                    </div>
+        <div
+            id="left"
+            className={`${displayFilter ? 'block absolute top-0 left-0 z-50' : 'hidden'
+                } h-screen bg-white w-full md:relative md:block lg:block xl:block font-thin md:w-[300px] 2xl:w-[350px] md:border-r md:border-r-black/20 z-40 p-5 box-border`}
+        >
+            {/* Make this a flex column that fills the height */}
+            <div className="flex flex-col h-full min-h-0">
+                {/* Close button (mobile) */}
+                <div className="w-full flex justify-end mb-2 md:hidden">
+                    <button onClick={() => setFilterDisplay(false)}>
+                        <RiCloseLargeFill className="text-black" />
+                    </button>
+                </div>
 
-                    <div className='py-6 border-b border-black/20 flex flex-col gap-2 text-black'>
-                        <Label className='text-lg font-orbitron uppercase'>Availability</Label>
-
-                        <div className='flex gap-1 items-center'>
+                {/* Filters container scrollable */}
+                <div className="flex flex-col flex-1 min-h-0 overflow-y-auto gap-3">
+                    {/* Availability */}
+                    <div className="flex flex-col gap-2 text-black border-b border-black/20 pb-3">
+                        <Label className="text-lg font-orbitron uppercase">Availability</Label>
+                        <div className="flex gap-1 items-center">
                             <input
-                                id='In Stock'
+                                id="In Stock"
                                 type="radio"
                                 name="availability"
                                 value="In Stock"
-                                checked={availabilityState === "In Stock"}
-                                onChange={(e) => handleFilterChange("availability", e.target.value)}
+                                checked={availabilityState === 'In Stock'}
+                                onChange={(e) => handleFilterChange('availability', e.target.value)}
                             />
-                            <Label htmlFor='In Stock' className='cursor-pointer font-normal'>In Stock</Label>
-
+                            <Label htmlFor="In Stock" className="cursor-pointer font-normal">
+                                In Stock
+                            </Label>
                         </div>
-
-                        <div className='flex gap-1 items-center'>
+                        <div className="flex gap-1 items-center">
                             <input
-                                id='Out of Stock'
+                                id="Out of Stock"
                                 type="radio"
                                 name="availability"
                                 value="Out of Stock"
-                                checked={availabilityState === "Out of Stock"}
-                                onChange={(e) => handleFilterChange("availability", e.target.value)}
+                                checked={availabilityState === 'Out of Stock'}
+                                onChange={(e) => handleFilterChange('availability', e.target.value)}
                             />
-                            <Label htmlFor="Out of Stock" className='cursor-pointer font-normal'>Out of Stock</Label>
+                            <Label htmlFor="Out of Stock" className="cursor-pointer font-normal">
+                                Out of Stock
+                            </Label>
                         </div>
-                        {availabilityFilterState &&
-                            <div>
-                                <button className='flex items-center justify-center gap-2' onClick={() => clearFilterAvailability()}><BsFillXCircleFill className='text-red-400' /> Clear filter</button>
-                            </div>
-                        }
-
+                        {availabilityFilterState && (
+                            <button
+                                className="flex items-center gap-2 text-red-400"
+                                onClick={clearFilterAvailability}
+                            >
+                                <BsFillXCircleFill /> Clear filter
+                            </button>
+                        )}
                     </div>
-                    <div className='py-6 border-b border-black/20 flex flex-col gap-2 text-black'>
-                        <Label className='text-lg font-orbitron uppercase'>Sort By</Label>
-                        <Select onValueChange={(value) => handleFilterChange("Sortby", value)}>
+
+                    {/* Sort By */}
+                    <div className="flex flex-col gap-2 text-black border-b border-black/20 pb-3">
+                        <Label className="text-lg font-orbitron uppercase">Sort By</Label>
+                        <Select onValueChange={(value) => handleFilterChange('Sortby', value)}>
                             <SelectTrigger>
-                                <SelectValue className='text-black' placeholder="Select Sort by" />
+                                <SelectValue className="text-black" placeholder="Select Sort by" />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectGroup>
@@ -193,95 +205,103 @@ const CategoriesFilter = () => {
                                 </SelectGroup>
                             </SelectContent>
                         </Select>
-                        {sortbyFilterState &&
-                            <div>
-                                <button className='flex items-center justify-center gap-2' onClick={() => clearFilterSortby()}><BsFillXCircleFill className='text-red-400' /> Clear filter</button>
-                            </div>
-                        }
+                        {sortbyFilterState && (
+                            <button
+                                className="flex items-center gap-2 text-red-400"
+                                onClick={clearFilterSortby}
+                            >
+                                <BsFillXCircleFill /> Clear filter
+                            </button>
+                        )}
                     </div>
-                    <div className='py-6 border-b border-black/20 flex flex-col gap-4 text-black'>
-                        <Label className='text-lg font-orbitron uppercase'>Price</Label>
-                        <div className='flex box-border  gap-2 items-center relative'>
-                            <div className='box-border flex items-center'>
-                                <input className='w-full p-2 pl-5 border border-black/30 rounded-[25px]' type="number" placeholder="0"
+
+                    {/* Price */}
+                    <div className="flex flex-col gap-4 text-black border-b border-black/20 pb-3">
+                        <Label className="text-lg font-orbitron uppercase">Price</Label>
+                        <div className="flex gap-2 items-center relative">
+                            <div className="flex items-center relative w-full">
+                                <input
+                                    type="number"
+                                    placeholder="0"
+                                    className="w-full p-2 pl-5 border border-black/30 rounded-[25px]"
                                     value={value[0]}
-                                    onChange={(e) => {
-                                        const newValue = Number(e.target.value);
-                                        setValue([newValue, value[1]]);
-                                    }}
+                                    onChange={(e) => setValue([Number(e.target.value), value[1]])}
                                 />
-                                <label className='absolute ml-3' htmlFor="">₱</label>
+                                <label className="absolute ml-3">₱</label>
                             </div>
                             -
-                            <div className='box-border flex items-center relative'>
-                                <input className='w-full p-2 pl-5 border border-gray-400 rounded-[25px]' type="number" placeholder="100000"
+                            <div className="flex items-center relative w-full">
+                                <input
+                                    type="number"
+                                    placeholder="100000"
+                                    className="w-full p-2 pl-5 border border-black/30 rounded-[25px]"
                                     value={value[1]}
-                                    onChange={(e) => {
-                                        const newValue = Number(e.target.value);
-                                        setValue([value[0], newValue]);
-                                    }}
+                                    onChange={(e) => setValue([value[0], Number(e.target.value)])}
                                 />
-                                <label className='absolute ml-3' htmlFor="">₱</label>
+                                <label className="absolute ml-3">₱</label>
                             </div>
-
                         </div>
                         <Slider
                             value={value}
                             onValueChange={setValue}
-                            max={100000}
                             min={0}
+                            max={100000}
                             step={10}
                             className="mt-2 w-full"
-                            aria-label="Price Range"
                         />
-                        <div >
-                            <Button onClick={() => handleInputFilter()} className='w-full flex items-center justify-center gap-3' variant={'default'}><FaCheckCircle />Apply</Button>
-                        </div>
-                        {
-                            priceRangeFilterState &&
-                            <div>
-                                <button className='flex items-center justify-center gap-2' onClick={() => clearFilterPriceRange()}><BsFillXCircleFill className='text-red-400' /> Clear filter</button>
-                            </div>
-                        }
+                        <Button
+                            onClick={handleInputFilter}
+                            className="w-full flex items-center justify-center gap-1"
+                            variant="default"
+                        >
+                            <FaCheckCircle /> Apply
+                        </Button>
+                        {priceRangeFilterState && (
+                            <button className="flex items-center gap-2 text-red-400" onClick={clearFilterPriceRange}>
+                                <BsFillXCircleFill /> Clear filter
+                            </button>
+                        )}
                     </div>
 
-                    <div className='flex flex-col gap-2 bg-white text-black'>
-                        <Label className='text-lg font-orbitron uppercase'>Brands</Label>
-                        <div className='max-h-[100px] md:max-h-[250px] overflow-auto flex flex-col gap-2 '>
-                            <div className="flex flex-col gap-2 justify-start items-start">
-                                {brands.map((data, index) => (
-                                    <div key={index} className='flex gap-2 items-center justify-start'>
-                                        <input type="checkbox" checked={selectedBrands.some(item => item === data)} onChange={(e) => {
-                                            if (e.target.checked) {
-                                                setSelectedBrands(prev => [...prev, data])
-                                                console.log(selectedBrands)
-                                            }
-                                            else {
-                                                setSelectedBrands(prev => prev.filter(item => item != data))
-                                                console.log(selectedBrands)
-                                            }
+                    {/* Brands */}
+                    <div className="flex flex-col flex-1 min-h-0 gap-2 text-black p-2">
+                        <Label className="text-lg font-orbitron uppercase">Brands</Label>
 
-                                        }} />
-                                        <Label htmlFor="" className='font-normal'>{data}</Label>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                        <div className='flex justify-between items-center'>
-                            <div className='flex gap-2 items-center'>
-                                {selectedBrands.length > 0 && <button onClick={() => {
-                                    clearBrandFilter()
-                                }} className='text-blue-400 underline text-[13px]'>clear</button>}
-                                <label className='flex gap-2 items-center' htmlFor="">{selectedBrands.length}<span>Selected</span></label>
-                            </div>
-
-                            <Button onClick={() => handleBrandFilter()} className='flex items-center justify-center gap-3' variant={'default'}><FaCheckCircle />Apply</Button>
+                        <div className="flex-1 min-h-0 overflow-y-auto flex flex-col gap-2">
+                            {brands.map((data, index) => (
+                                <div key={index} className="flex gap-2 items-center">
+                                    <input
+                                        type="checkbox"
+                                        checked={selectedBrands.includes(data)}
+                                        onChange={(e) =>
+                                            setSelectedBrands((prev) =>
+                                                e.target.checked ? [...prev, data] : prev.filter((item) => item !== data)
+                                            )
+                                        }
+                                    />
+                                    <Label className="font-normal">{data}</Label>
+                                </div>
+                            ))}
                         </div>
 
+                        <div className="flex justify-between items-center mt-2">
+                            <div className="flex gap-2 items-center">
+                                {selectedBrands.length > 0 && (
+                                    <button onClick={clearBrandFilter} className="text-blue-400 underline text-[13px]">
+                                        clear
+                                    </button>
+                                )}
+                                <span>{selectedBrands.length} <span>Selected</span></span>
+                            </div>
+                            <Button onClick={handleBrandFilter} className="flex items-center justify-center gap-1">
+                                <FaCheckCircle /> Apply
+                            </Button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
 
     )
 }
