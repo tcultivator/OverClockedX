@@ -46,7 +46,7 @@ const ShopByCategory = () => {
 
 
     return (
-        <div className="relative w-full h-[500px] flex justify-end overflow-hidden">
+        <div className="relative w-full h-[500px] lg:h-[400px] 2xl:h-[500px] flex justify-end overflow-hidden">
 
 
             <AnimatePresence mode="wait">
