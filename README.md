@@ -4,16 +4,16 @@
 
 ---
 
-## Features
+## ✨ Features
 
-### Authentication
+### 🔐 Authentication
 - Sign in with Google or email + password
 - Sign up with Google or email
 - Email verification for credential-based signup
 - Account activation required via verification link
 - Forgot password + secure reset via email  
 
-### Shopping Experience
+### 🛒 Shopping Experience
 - Browse and search PC components and peripherals
 - Product filtering (category, brand, price, specs, etc.)
 - Detailed product preview with images, specs, and stock
@@ -26,7 +26,7 @@
 - View order history and shipment tracking
 - Cancel Order (based on allowed status conditions)
 
-### AI Assistant — TechMate
+### 🤖 AI Assistant — TechMate
 Your built-in AI chatbot designed to assist users with:
 - Hardware recommendations
 - Compatibility checks
@@ -35,23 +35,23 @@ Your built-in AI chatbot designed to assist users with:
 - Personalized suggestions
 TechMate enhances the shopping experience by offering real-time AI guidance.
 
-### Newsletter System
+### 📰 Newsletter System
 Users can subscribe to OverClockedX newsletters to receive:
 - Product promotions
 - New arrivals
 Delivered via email for instant updates.
 
-### User Profile
+### 🙎🏻‍♂️ User Profile
 - View and update profile information (username, contact number, address, and profile picture)  
 - View purchase history  
 
-### UX & Design
+### 🎨 UX & Design
 - Fully responsive design for desktop, tablet, and mobile  
 - Modern and clean UI for seamless shopping experience  
 
 ---
 
-## Tech Stack
+## 🛠️ Tech Stack
 
 - **Framework:** [Next.js](https://nextjs.org/) (built on [React](https://reactjs.org/)) with TypeScript  
 - **Authentication:** [Auth.js](https://authjs.dev/) (Google and Credentials providers)  
@@ -64,6 +64,42 @@ Delivered via email for instant updates.
 - **Animations:** [Framer Motion](https://www.framer.com/motion/)
 - **BarCode Lookup:**  [barcodelookup](https://www.barcodelookup.com/)
 - **OpenAi**  [OpenAi](https://openai.com/)
+---
+
+## 📸 Screenshots
+
+![Desktop View](/public/overclockedx-client/homepage.png)  
+*OverClockedX Home Page*
+
+
+---
+
+
+![Desktop View](/public/overclockedx-client/AIassistant.png)  
+*OverClockedX AI Assistant*
+
+
+---
+
+
+![Desktop View](/public/overclockedx-client/catalog.png)  
+*OverClockedX Catalog Page*
+
+
+---
+
+
+![Desktop View](/public/overclockedx-client/previewProducts.png)  
+*OverClockedX Product Preview Page*
+
+
+---
+
+
+![Desktop View](/public/overclockedx-client/checkoutpage.png)  
+*OverClockedX Checkout Page*
+
+
 ---
 
 ## Installation
