@@ -8,11 +8,13 @@ export type SendMailProps = {
   message: string;
 };
 
+
+// sending email using send grid
 export async function sendMail({ to, sub, message }: SendMailProps) {
   try {
     const msg = {
       to,
-      from: process.env.NODEMAILER_USER!, // MUST be verified sender
+      from: process.env.NODEMAILER_USER!,
       subject: sub,
       html: message,
     };

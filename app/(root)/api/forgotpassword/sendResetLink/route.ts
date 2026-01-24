@@ -2,7 +2,7 @@ import db from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 import { Accounts } from "@/types/AccountsType";
 import { RandomString } from "@/utils/randomStringGenerator/RandomString";
-import { sendMail } from "@/lib/nodemailer";
+import { sendMail } from "@/lib/sendGridEmail";
 const buildURL = process.env.NEXTAUTH_URL;
 export async function POST(req: NextRequest) {
     const body = await req.json()

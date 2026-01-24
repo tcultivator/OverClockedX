@@ -9,10 +9,7 @@ export default function Home() {
     <div>
       <ShopByCategory />
       <InfiniteBrandSlider />
-      {/* <FeaturedProducts /> */}
       <DiscountedProducts />
-      {/* <Dashboard /> */}
-      {/* <TrendingProducts /> */}
       <Dashboard />
      
     </div>

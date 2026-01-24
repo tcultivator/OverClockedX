@@ -1,7 +1,7 @@
 // app/api/webhook/xendit/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import db from "@/lib/db";
-import { sendMail } from "@/lib/nodemailer";
+import { sendMail } from "@/lib/sendGridEmail";
 export async function POST(req: NextRequest) {
     try {
         const body = await req.json();

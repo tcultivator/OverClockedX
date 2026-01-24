@@ -1,11 +1,11 @@
 export interface UserAddress {
     email: string;
     rname: string;
-    country: string;
+    address_line_1: string;
     cityMunicipality: string;
     barangay: string;
     province: string;
-    trademark: string;
+    postal_code: number;
     phone_number: string;
 
 }
