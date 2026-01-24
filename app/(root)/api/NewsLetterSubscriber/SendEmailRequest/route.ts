@@ -1,4 +1,4 @@
-import { sendMail } from '@/lib/nodemailer'
+import { sendMail } from '@/lib/sendGridEmail';
 import { NextResponse, NextRequest } from 'next/server'
 const buildURL = process.env.NEXTAUTH_URL;
 export async function POST(req: NextRequest) {

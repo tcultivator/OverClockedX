@@ -8,7 +8,6 @@ import { Button } from '@/components/ui/button';
 import { RiDeleteBack2Fill } from 'react-icons/ri';
 import { FaPlus, FaMinus } from "react-icons/fa6";
 //import of dataset for address
-import { countries } from '@/utils/datasetAddress/country'
 import { luzonProvinces } from '@/utils/datasetAddress/province'
 import { luzonPlaces } from '@/utils/datasetAddress/citiesAndMunicipality'
 import { barangaysJaen } from '@/utils/datasetAddress/barangay'
@@ -71,13 +70,13 @@ const Checkout = () => {
 
     //make this as single state
     const [rName, setRName] = useState<string>('');
-    const [country, setCountry] = useState<string>('');
     const [cityMunicipality, setCityMunicipality] = useState<string>('');
-    const [description, setDescription] = useState<string>('');
+    const [address_line_1, setAddress_line_1] = useState<string>('');
     const [barangay, setBarangay] = useState<string>('');
     const [province, setProvince] = useState<string>('');
     const [email, setEmail] = useState<string>('');
     const [phoneNumber, setPhoneNumber] = useState<string>('');
+    const [postal_code, setPostal_code] = useState('')
 
     //zustand state for updating shipping information
     const CustomInput = useUserStore((state) => state.CustomInput)
@@ -279,7 +278,7 @@ const Checkout = () => {
                                     <div className='flex flex-col'>
                                         <label htmlFor="">Fullname</label>
                                         <div className='w-full flex gap-2 items-center'>
-                                            <Input required disabled={userAdress.length > 0} type="text" value={userAdress[0]?.rname ?? rName} onChange={(e) => setRName(e.target.value)} />
+                                            <Input required disabled={userAdress.length > 0} placeholder='Recipient Full Name' type="text" value={userAdress[0]?.rname ?? rName} onChange={(e) => setRName(e.target.value)} />
                                             {rName != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
                                         </div>
                                     </div>
@@ -287,7 +286,7 @@ const Checkout = () => {
                                     <div className='flex flex-col'>
                                         <label htmlFor="">Email Address</label>
                                         <div className='w-full flex gap-2 items-center'>
-                                            <Input disabled={userAdress.length > 0} type="email" value={userAdress[0]?.email ?? email} onChange={(e) => setEmail(e.target.value)} />
+                                            <Input disabled={userAdress.length > 0} placeholder='Recipient Email' type="email" value={userAdress[0]?.email ?? email} onChange={(e) => setEmail(e.target.value)} />
                                             {email != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
                                         </div>
 
@@ -295,21 +294,30 @@ const Checkout = () => {
                                     <div className='flex flex-col'>
                                         <label htmlFor="">Phone Number</label>
                                         <div className='w-full flex gap-2 items-center'>
-                                            <Input disabled={userAdress.length > 0} type="number" value={userAdress[0]?.phone_number ?? phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
+                                            <Input disabled={userAdress.length > 0} placeholder='09xxxxxxxxx' type="number" value={userAdress[0]?.phone_number ?? phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
                                             {phoneNumber != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
                                         </div>
 
                                     </div>
-                                    <div className='flex flex-col'>
-                                        <label htmlFor="">Country</label>
+                                    <div className='flex flex-col w-full'>
+                                        <label htmlFor="">Province</label>
                                         <div className='w-full flex gap-2 items-center'>
-                                            <Input disabled={userAdress.length > 0} list="countries" name="countries" value={userAdress[0]?.country ?? country} onChange={(e) => setCountry(e.target.value)} />
-                                            {country != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
-                                            <datalist id='countries' className='absolute bg-white text-black'>
-                                                {countries.map((data, index) => (
+                                            <Input disabled={userAdress.length > 0} placeholder='eg:Nueva Ecija' list='province' name='province' value={userAdress[0]?.province ?? province} onChange={(e) => setProvince(e.target.value)} />
+                                            {province != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
+                                            <datalist id='province'>
+                                                {luzonProvinces.map((data, index) => (
                                                     <option key={index} value={data}>{data}</option>
                                                 ))}
                                             </datalist>
+                                        </div>
+
+                                    </div>
+                                    <div className='flex flex-col'>
+                                        <label htmlFor="">Address line 1</label>
+                                        <div className='w-full flex gap-2 items-center'>
+                                            <Input disabled={userAdress.length > 0} placeholder="House No. / Street / Building" value={userAdress[0]?.address_line_1 ?? address_line_1} onChange={(e) => setAddress_line_1(e.target.value)} />
+                                            {address_line_1 != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
+
                                         </div>
 
                                     </div>
@@ -318,7 +326,7 @@ const Checkout = () => {
                                         <div className='flex flex-col w-full'>
                                             <label htmlFor="">City/Municipality</label>
                                             <div className='w-full flex gap-2 items-center'>
-                                                <Input disabled={userAdress.length > 0} list='city' name='city' value={userAdress[0]?.cityMunicipality ?? cityMunicipality} onChange={(e) => setCityMunicipality(e.target.value)} />
+                                                <Input disabled={userAdress.length > 0} placeholder='eg:Jaen' list='city' name='city' value={userAdress[0]?.cityMunicipality ?? cityMunicipality} onChange={(e) => setCityMunicipality(e.target.value)} />
                                                 {cityMunicipality != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
                                                 <datalist id='city'>
                                                     {luzonPlaces.map((data, index) => (
@@ -332,7 +340,7 @@ const Checkout = () => {
                                         <div className='flex flex-col w-full'>
                                             <label htmlFor="">Barangay</label>
                                             <div className='w-full flex gap-2 items-center'>
-                                                <Input disabled={userAdress.length > 0} list='barangay' name='barangay' value={userAdress[0]?.barangay ?? barangay} onChange={(e) => setBarangay(e.target.value)} />
+                                                <Input disabled={userAdress.length > 0} placeholder='eg:Sapang' list='barangay' name='barangay' value={userAdress[0]?.barangay ?? barangay} onChange={(e) => setBarangay(e.target.value)} />
                                                 {barangay != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
                                                 <datalist id='barangay'>
                                                     {barangaysJaen.map((data, index) => (
@@ -344,39 +352,29 @@ const Checkout = () => {
                                         </div>
 
                                         <div className='flex flex-col w-full'>
-                                            <label htmlFor="">Province</label>
+                                            <label htmlFor="">Postal Code</label>
                                             <div className='w-full flex gap-2 items-center'>
-                                                <Input disabled={userAdress.length > 0} list='province' name='province' value={userAdress[0]?.province ?? province} onChange={(e) => setProvince(e.target.value)} />
-                                                {province != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
-                                                <datalist id='province'>
-                                                    {luzonProvinces.map((data, index) => (
-                                                        <option key={index} value={data}>{data}</option>
-                                                    ))}
-                                                </datalist>
+                                                <Input disabled={userAdress.length > 0} type='number' placeholder='eg:3109'  value={userAdress[0]?.postal_code ?? postal_code} onChange={(e) => setPostal_code(e.target.value)} />
+                                                {postal_code != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
+                                                
                                             </div>
 
                                         </div>
 
                                     </div>
 
-                                    <div className='flex flex-col'>
-                                        <label htmlFor="">Trademark</label>
-                                        <div className='w-full flex gap-2 items-center'>
-                                            <Textarea disabled={userAdress.length > 0} value={userAdress[0]?.trademark ?? description} onChange={(e) => setDescription(e.target.value)} />
-                                            {description != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
-                                        </div>
-                                    </div>
+
                                     {
                                         userAdress.length <= 0 && <Button onClick={() => {
-                                            if (rName != '' && country != '' && cityMunicipality != '' && description != '' && barangay != '' && province != '' && email != '' && phoneNumber != '') {
+                                            if (rName != '' && address_line_1 != '' && cityMunicipality != '' && barangay != '' && province != '' && email != '' && phoneNumber != '' && postal_code != '') {
                                                 addCustomAddress([{
                                                     email: email,
                                                     rname: rName,
-                                                    country: country,
+                                                    address_line_1: address_line_1,
                                                     cityMunicipality: cityMunicipality,
                                                     barangay: barangay,
                                                     province: province,
-                                                    trademark: description,
+                                                    postal_code: Number(postal_code),
                                                     phone_number: phoneNumber,
                                                 }])
                                             } else {

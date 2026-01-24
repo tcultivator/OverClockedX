@@ -11,11 +11,11 @@ export async function POST(req: NextRequest) {
         const addressData = rows as UserAddress[];
         if (addressData.length == 0) {
 
-            await db.query('INSERT INTO user_address (email,rname,country,cityMunicipality,barangay,province,trademark)VALUES(?,?,?,?,?,?,?)', [body.email, body.rName, body.country, body.cityMunicipality, body.barangay, body.province, body.trademark])
+            await db.query('INSERT INTO user_address (email,rname,cityMunicipality,barangay,province,address_line_1,postal_code)VALUES(?,?,?,?,?,?,?)', [body.email, body.rName, body.cityMunicipality, body.barangay, body.province, body.address_line_1, body.postal_code])
             return NextResponse.json({ status: 200 })
         }
-        
-        await db.query('UPDATE user_address SET email = ?, rname = ?, country=?, cityMunicipality=?,barangay=?,province=?,trademark=? WHERE email = ?', [body.email, body.rName, body.country, body.cityMunicipality, body.barangay, body.province, body.trademark, body.email])
+
+        await db.query('UPDATE user_address SET email = ?, rname = ?, cityMunicipality=?,barangay=?,province=?,address_line_1=?,postal_code=? WHERE email = ?', [body.email, body.rName, body.cityMunicipality, body.barangay, body.province, body.address_line_1, body.postal_code, body.email])
         return NextResponse.json({ status: 200 })
 
     } catch (err) {

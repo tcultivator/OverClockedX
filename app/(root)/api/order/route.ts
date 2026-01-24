@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import db from "@/lib/db";
-import { sendMail } from "@/lib/nodemailer";
+import { sendMail } from "@/lib/sendGridEmail";
 type queryResult = {
     fieldCount: number,
     affectedRows: number,
@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
             await connection.query('INSERT INTO order_items (order_id, product_id, quantity, price, sub_total)VALUES(?,?,?,?,?)', [resultData.insertId, item.product_id, item.quantity, finalPriceOfItem, finalPriceOfItem * item.quantity])
             // await db.query('UPDATE products SET stocks = stocks - ?, sales_count = sales_count + ? WHERE product_id = ?', [item.quantity, item.quantity, item.product_id])
         }
-        await connection.query('INSERT INTO customer_address (order_id,email,rname,phone_number,country,city_municipality,barangay,province,trademark) VALUES (?,?,?,?,?,?,?,?,?)', [resultData.insertId, body.userAdress[0].email, body.userAdress[0].rname, body.userAdress[0].phone_number, body.userAdress[0].country, body.userAdress[0].cityMunicipality, body.userAdress[0].barangay, body.userAdress[0].province, body.userAdress[0].trademark])
+        await connection.query('INSERT INTO customer_address (order_id,email,rname,phone_number,address_line_1,city_municipality,barangay,province,postal_code) VALUES (?,?,?,?,?,?,?,?,?)', [resultData.insertId, body.userAdress[0].email, body.userAdress[0].rname, body.userAdress[0].phone_number, body.userAdress[0].address_line_1, body.userAdress[0].cityMunicipality, body.userAdress[0].barangay, body.userAdress[0].province, body.userAdress[0].postal_code])
         await connection.commit()
 
         await sendMail({
