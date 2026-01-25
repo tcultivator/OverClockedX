@@ -46,10 +46,10 @@ const AddressCard = ({ address, email }: Props) => {
     const [dialogOpen, setDialogOpen] = useState(false)
 
     const UpdateAddress = async (e: React.FormEvent<HTMLFormElement>) => {
-        console.log('check if button click')
+        
         e.preventDefault();
         if (!email) {
-            console.log('testing to')
+            
             return
         }
         setButtonLoading(true)
@@ -64,7 +64,7 @@ const AddressCard = ({ address, email }: Props) => {
         setTimeout(() => {
             setButtonLoading(false)
             setDialogOpen(false)
-            console.log('the request is done ', result)
+            
         }, 1000);
     }
 

@@ -16,7 +16,7 @@ const CategoriesFilter = () => {
     const handleFilterChange = (filterName: string, value: string) => {
 
         if (value == 'In Stock' || value == 'Out of Stock') {
-            console.log('gagana lang dapat to kapag ung availability ung ififilter ko')
+            
             setAvailabilityState(value);
             setAvailabilityFilterState(true);
         }
@@ -51,7 +51,7 @@ const CategoriesFilter = () => {
 
     const [availabilityState, setAvailabilityState] = useState('')
     const clearFilterAvailability = () => {
-        console.log('eto ung pang clear ng filter')
+        
         const params = new URLSearchParams(searchParams.toString());
         params.delete('availability')
         setAvailabilityState('')
@@ -67,7 +67,6 @@ const CategoriesFilter = () => {
 
 
     const clearFilterSortby = () => {
-        console.log('eto ung pang clear ng filter')
         const params = new URLSearchParams(searchParams.toString());
         params.delete('Sortby');
         setSortbyFilterState(false)
@@ -112,10 +111,9 @@ const CategoriesFilter = () => {
 
     useEffect(() => {
         const search = searchParams.get('search') || ''
-        console.log('eto ung sa search params ng search: ', search)
+    
         if (search != '') {
-            console.log('this should log')
-
+           
             //clear brands filter state
             setSelectedBrands([])
 
@@ -139,16 +137,16 @@ const CategoriesFilter = () => {
             className={`${displayFilter ? 'block absolute top-0 left-0 z-50' : 'hidden'
                 } h-screen bg-white w-full md:relative md:block lg:block xl:block font-thin md:w-[300px] 2xl:w-[350px] md:border-r md:border-r-black/20 z-40 p-5 box-border`}
         >
-            {/* Make this a flex column that fills the height */}
+            
             <div className="flex flex-col h-full min-h-0">
-                {/* Close button (mobile) */}
+                
                 <div className="w-full flex justify-end mb-2 md:hidden">
                     <button onClick={() => setFilterDisplay(false)}>
                         <RiCloseLargeFill className="text-black" />
                     </button>
                 </div>
 
-                {/* Filters container scrollable */}
+                
                 <div className="flex flex-col flex-1 min-h-0 overflow-y-auto gap-3">
                     {/* Availability */}
                     <div className="flex flex-col gap-2 text-black border-b border-black/20 pb-3">

@@ -24,7 +24,7 @@ const Purchase = async () => {
             WHERE orders.email = ? ORDER BY orders.created_at DESC;
     `, [session!.user?.email])
     const data = rows as Data[]
-    console.log(data)
+    
     type Data = {
         order_id: number;
         email: string;
@@ -46,7 +46,7 @@ const Purchase = async () => {
     const groupData: GroupedOrder[] = []
     for (const products of data) {
         const checkIfHaveData = groupData.findIndex(gdata => gdata.order_id == products.order_id)
-        console.log('eto ung laman, ', checkIfHaveData)
+        
         if (checkIfHaveData == -1) {
             groupData.push({
                 order_id: products.order_id,
@@ -78,7 +78,7 @@ const Purchase = async () => {
             })
         }
     }
-    console.log(JSON.stringify(groupData, null, 2))
+    
 
     return (
         <div className='px-2 py-5 w-full flex flex-col gap-2'>

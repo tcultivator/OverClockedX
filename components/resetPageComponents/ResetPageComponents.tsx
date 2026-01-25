@@ -48,9 +48,9 @@ const ResetPageComponents = ({
                 body: JSON.stringify({ token: token })
             })
             const response = await checkToken.json()
-            console.log(response.status)
+            
             if (response.status !== 500) {
-                console.log(response.result)
+                
                 setUser(response.result[0])
             }
             else {

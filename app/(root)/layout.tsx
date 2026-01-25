@@ -9,6 +9,7 @@ import Toast from "@/components/ToastNotification/Toast";
 import Loading from "@/components/loader/loading";
 import FloatingChatBot from "@/components/Chat/components/FloatingChatBot";
 import { Toaster } from "@/components/ui/sonner"
+import Error from "@/components/error/Error";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -51,6 +52,7 @@ export default function RootLayout({
         <Footer />
         <Loading />
         <FloatingChatBot />
+        <Error />
       </body>
     </html>
   );

@@ -29,7 +29,7 @@ import { UploaderProvider, UploadFn } from '@/components/upload/uploader-provide
 import { ProgressCircle } from '@/components/upload/progress-circle'
 
 const ProfileCard = ({ user }: user) => {
-    console.log('eto laman ng image: ', user.profile_Image)
+    
     const [username, setUsername] = useState(user.username || '')
     const [profileImage, setProfileImage] = useState(user.profile_Image || '')
     const [tempProfileImage, setTempProfileImage] = useState<string | null>(null)
@@ -47,7 +47,7 @@ const ProfileCard = ({ user }: user) => {
 
     //e: React.FormEvent<HTMLFormElement>
     const UpdateProfile = async () => {
-        console.log('button click???')
+      
         // e.preventDefault();
         setButtonLoading(true)
 
@@ -81,7 +81,7 @@ const ProfileCard = ({ user }: user) => {
                 image: user.profile_Image ?? null
             })
         } else {
-            console.log('dapat eto naman gagana kapag naglogout')
+            
 
         }
     }, [])

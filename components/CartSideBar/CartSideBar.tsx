@@ -41,7 +41,7 @@ const CartSideBar = () => {
 
     const clearSelectedItemsInCart = useCartStore((state) => state.clearSelectedItemsInCart)
     const clearCart = useCartStore((state) => state.clearCart)
-    console.log(cartItems)
+  
     return (
         <Sheet open={openCart}>
             <SheetTrigger asChild>

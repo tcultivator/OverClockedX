@@ -1,10 +1,9 @@
 "use client";
 import React from 'react'
-import { LuCircleChevronLeft } from "react-icons/lu";
-import { LuCircleChevronRight } from "react-icons/lu";
+import { IoMdArrowDropleft } from "react-icons/io";
+import { IoMdArrowDropright } from "react-icons/io";
 import { useEffect, useState } from 'react';
 import { AiOutlineShoppingCart } from "react-icons/ai";
-import { ProductsType } from '@/types/ProductTypes';
 import { Skeleton } from "@/components/ui/skeleton"
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -25,15 +24,15 @@ import { Label } from '../ui/label';
 const Dashboard = () => {
     const router = useRouter();
     const [current, setCurrent] = useState(0);
-    const featuredProducts = useFeatureProductsStore((state)=>state.featuredProducts)
-    const setFeaturedProducts = useFeatureProductsStore((state)=>state.setFeaturedProducts)
-    
+    const featuredProducts = useFeatureProductsStore((state) => state.featuredProducts)
+    const setFeaturedProducts = useFeatureProductsStore((state) => state.setFeaturedProducts)
+
     const addToCart = useCartStore((state) => state.addToCart)
     const user = useUserStore((state) => state.user)
     const toastState = useToast((state) => state.toastState)
 
 
-
+    // get the data onces the page mounts, this will get the all featured products that has the most sales count from database
     useEffect(() => {
         const getFeaturedProductsFunc = async () => {
             const getFeaturedProducts = await fetch('/api/featuredProducts', {
@@ -50,19 +49,20 @@ const Dashboard = () => {
 
     }, [])
 
-
+    // prev slide, this check if the slide is on the first page, if first page it go back to last page
     function prevSlide() {
-
         setCurrent((prev) => (prev === 0 ? featuredProducts.length - 1 : prev - 1));
 
     };
+
+    // next slide, this check if the slide is on the last page, if last page it go back to first page
     function nextSlide() {
 
         setCurrent((prev) => (prev === featuredProducts.length - 1 ? 0 : prev + 1));
 
     };
 
-
+    // auto slide, with the interval of 5 secs, every 5 secs it will turn to next slide
     useEffect(() => {
         const interval = setInterval(() => {
             if (featuredProducts.length > 0) {
@@ -73,13 +73,11 @@ const Dashboard = () => {
         return () => clearInterval(interval);
     });
 
-    function SelectCategories(category: string): void {
-        router.push(`/categories/${category}`);
-    }
     return (
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-5 bg-white">
             <div className='flex flex-col px-[2px] gap-[2px] sm:px-2 sm:gap-2 md:flex-row lg:flex-row  '>
                 <div className='text-black w-full gap-1 flex flex-col-reverse items-center bg-white py-7 rounded w-[85%] mx-auto px-[3%] relative sm:py-3 md:w-[85%] py-3 sm:flex-row 2xl:ww-[85%] py-3'>
+                    {/* product description and function */}
                     <AnimatePresence mode='wait'>
                         {featuredProducts.length > 0 ?
                             (<motion.div className='flex flex-col w-full lg:w-[50%]'
@@ -87,7 +85,6 @@ const Dashboard = () => {
                                 initial={{ opacity: 0, y: -100, animationDuration: .5 }}
                                 animate={{ opacity: 1, y: 0, animationDuration: .5 }}
                                 exit={{ opacity: 0, animationDuration: .5 }}>
-
 
                                 <label className='text-[15px] font-orbitron md:text-[14px] lg:text-[23px] xl:text-[33px] 2xl:text-[43px] overflow-hidden line-clamp-2'>{featuredProducts[current].product_name}</label>
                                 <label className='font-light text-[13px] md:text-[10px] lg:text-[12px] xl:text-[14px] 2xl:text-[15px] overflow-hidden line-clamp-3'>
@@ -138,6 +135,8 @@ const Dashboard = () => {
                             )
                         }
                     </AnimatePresence>
+
+                    {/* product image */}
                     <AnimatePresence mode='wait'>
                         {featuredProducts.length > 0 ? (
 
@@ -156,6 +155,8 @@ const Dashboard = () => {
                                             width={1000}
                                             height={1000}
                                             className='w-full max-w-full flex-shrink-0 object-contain ' />
+
+                                        {/* discounted product tags */}
                                         {featuredProducts[current].value != null &&
                                             <div className="absolute top-8 right-1 rotate-[45deg]">
                                                 <div className={`${featuredProducts[current].promotion_type == 'FlashSale' ? 'bg-[#FFD477]' : 'bg-[#e31612]'} rounded-tl-[45%] rounded-bl-[45%] rounded-tr-xl rounded-br-xl shadow-md`}>
@@ -181,9 +182,10 @@ const Dashboard = () => {
 
 
                                 </div>
-                                <div className="w-full flex justify-between p-3 text-4xl absolute top-[50%] transform -translate-y-1/2 mix-blend-normal">
-                                    <button onClick={prevSlide}><LuCircleChevronLeft /></button>
-                                    <button onClick={nextSlide}><LuCircleChevronRight /></button>
+                                {/* slider control */}
+                                <div className="w-full flex justify-end gap-5 p-3 text-4xl absolute bottom-[10%]">
+                                    <button onClick={prevSlide} className="aspect-square p-1  text-[25px] rounded border border-black text-white bg-black   hover:bg-white hover:border-black hover:text-black active:bg-white active:border-black active:text-black "><IoMdArrowDropleft/></button>
+                                    <button onClick={nextSlide} className="aspect-square text-[25px] p-1 rounded border border-black text-white bg-black  hover:bg-white hover:border-black hover:text-black active:bg-white active:border-black active:text-black"><IoMdArrowDropright /></button>
                                 </div>
                             </motion.div>
 

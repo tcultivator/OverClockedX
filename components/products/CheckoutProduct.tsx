@@ -51,7 +51,7 @@ const CheckoutProduct = ({ id, product_id, product_image,
     const user = useUserStore((state) => state.user)
     const [quantity, setQuantity] = useState(1)
     const toastState = useToast((state) => state.toastState)
-    console.log('eto laman ng value', value)
+    
 
 
     // ai insights

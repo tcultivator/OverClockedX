@@ -28,7 +28,7 @@ const CredentialsForm = () => {
         setButtonLoading(true)
         try {
             const result = await doCredentialsSignin(formdata);
-            console.log("Auth result:", result);
+            
 
             if (result.error) {
                 if (result.error === "CredentialsSignin") {

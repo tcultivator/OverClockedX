@@ -30,7 +30,7 @@ const CategoriesHeader = () => {
         params.forEach((value, key) => {
             arr.push(key)
         })
-        console.log(arr)
+        
         for (const item of arr) {
             params.delete(item)
             window.history.pushState({}, '', `?${params.toString()}`);
@@ -49,7 +49,7 @@ const CategoriesHeader = () => {
 
     useEffect(() => {
         const search = searchParams.get('search') || ''
-        console.log('eto ung sa search params ng search: ', search)
+        
         if (search == '') {
             clearSearch()
         }

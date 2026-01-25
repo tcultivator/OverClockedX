@@ -112,8 +112,7 @@ const SettingsComponents = ({ checkResult, email }: { checkResult: count[], emai
         setChangePasswordButtonLoading(true)
         const validation = changePasswordValidation({ currentPasswordInput, newPasswordInput })
         if (validation) {
-            console.log(validation)
-            console.log(validation.filter(item => item.currentPassword))
+            
             setValidationErros(validation)
             setChangePasswordButtonLoading(false)
             return

@@ -36,7 +36,7 @@ type GcashCB = {
 import { MdOutlineChevronRight } from "react-icons/md";
 
 import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
+
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
@@ -46,6 +46,7 @@ import { ClipLoader } from 'react-spinners';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
 
 import { Label } from '@/components/ui/label';
+import { useAlertNotification } from '@/stores/alertNotificationStore';
 const Checkout = () => {
     const finalCheckoutItems = useCartStore((state) => state.finalCheckoutItems)
     const [shippingOptions, setShippingOption] = useState('delivery');
@@ -86,6 +87,9 @@ const Checkout = () => {
     const getAllVouchers = useVoucherStore((state) => state.getAllVouchers)
     const vouchers = useVoucherStore((state) => state.vouchers)
     const [voucherAmount, setVoucherAmount] = useState(0)
+
+    // controller to display an error modal
+    const setErrorMessageDisplay = useAlertNotification((state) => state.setErrorMessageDisplay)
 
     // this is the configuration for shipping options, if user select delivery, the shipping cost will increase while if pickup no shipping cost
     useEffect(() => {
@@ -140,7 +144,7 @@ const Checkout = () => {
                     }),
                 })
                 const insertOrdersDone = await insertOrders.json()
-                console.log("eto laman ng inser orderr ", insertOrdersDone)
+
                 if (insertOrdersDone.status == 200) {
                     router.push(data.actions[0].url);
 
@@ -148,7 +152,12 @@ const Checkout = () => {
 
                 break;
             case 'Maya':
-                alert('this feature is not ready yet, please select Gcash as payment options')
+                setErrorMessageDisplay({
+                    display: true,
+                    title: 'Something went wrong!',
+                    message: 'Maya as a payment method is not ready yet, please select other options'
+                })
+
                 break
             case 'Cash On Delivery':
                 const codOrder = await fetch('/api/order', {
@@ -166,17 +175,25 @@ const Checkout = () => {
                     }),
                 })
                 const codOrderDone = await codOrder.json()
-                console.log("eto laman ng inser orderr ", codOrderDone)
+
                 if (codOrderDone.status == 500) {
-                    //add better error handling
-                    alert('something went wrong')
+                    setErrorMessageDisplay({
+                        display: true,
+                        title: 'Something went wrong!',
+                        message: 'Something went wrong from processing your order, please try again later'
+                    })
+
                 }
                 router.push('/cod-success-page');
 
                 break
 
             default:
-                alert('please select payment options to continue!')
+                setErrorMessageDisplay({
+                    display: true,
+                    title: 'No Payment Option Selected!',
+                    message: 'Please select payment options to continue'
+                })
                 break;
         }
         setButtonLoading(false)
@@ -207,7 +224,7 @@ const Checkout = () => {
                                 value='delivery'
                                 checked={shippingOptions == 'delivery'}
                                 onChange={(e) => {
-                                    console.log(e.target.checked)
+
                                     setShippingOption(e.target.value)
 
                                 }}
@@ -273,12 +290,12 @@ const Checkout = () => {
                                 </div>
 
 
-                                <form className='flex flex-col gap-1 md:flex  '>
+                                <div className='flex flex-col gap-1 md:flex  '>
 
                                     <div className='flex flex-col'>
                                         <label htmlFor="">Fullname</label>
                                         <div className='w-full flex gap-2 items-center'>
-                                            <Input required disabled={userAdress.length > 0} placeholder='Recipient Full Name' type="text" value={userAdress[0]?.rname ?? rName} onChange={(e) => setRName(e.target.value)} />
+                                            <Input  disabled={userAdress.length > 0} placeholder='Recipient Full Name' type="text" value={userAdress[0]?.rname ?? rName} onChange={(e) => setRName(e.target.value)} />
                                             {rName != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
                                         </div>
                                     </div>
@@ -354,9 +371,9 @@ const Checkout = () => {
                                         <div className='flex flex-col w-full'>
                                             <label htmlFor="">Postal Code</label>
                                             <div className='w-full flex gap-2 items-center'>
-                                                <Input disabled={userAdress.length > 0} type='number' placeholder='eg:3109'  value={userAdress[0]?.postal_code ?? postal_code} onChange={(e) => setPostal_code(e.target.value)} />
+                                                <Input disabled={userAdress.length > 0} type='number' placeholder='eg:3109' value={userAdress[0]?.postal_code ?? postal_code} onChange={(e) => setPostal_code(e.target.value)} />
                                                 {postal_code != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
-                                                
+
                                             </div>
 
                                         </div>
@@ -378,11 +395,15 @@ const Checkout = () => {
                                                     phone_number: phoneNumber,
                                                 }])
                                             } else {
-                                                alert('you need to fillup all the field')
+                                                setErrorMessageDisplay({
+                                                    display: true,
+                                                    title: 'Missing Shipping Information Fields',
+                                                    message: 'Please fillup all the field to continue!'
+                                                })
                                             }
                                         }} variant={'default'} className='w-full'>Submit</Button>
                                     }
-                                </form>
+                                </div>
                             </AccordionContent>
                         </AccordionItem>
                     </Accordion>
@@ -591,7 +612,11 @@ const Checkout = () => {
                                         if (totalPrice < 100000 && user != null) {
                                             CheckoutProduct();
                                         } else {
-                                            alert('Order Price Maximum is 100000');
+                                            setErrorMessageDisplay({
+                                                display: true,
+                                                title: 'Maximum Ammount!',
+                                                message: 'Please limit your order ammount to less that 100k!'
+                                            })
                                         }
                                     }}>Continue</AlertDialogAction>
                                 </AlertDialogFooter>

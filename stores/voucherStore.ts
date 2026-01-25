@@ -20,7 +20,7 @@ export const useVoucherStore = create<voucher>((set) => ({
                 body: JSON.stringify({ email: useUserStore.getState().user?.email })
             })
             const response = await getVouchers.json()
-            console.log(response)
+            
             set({
                 vouchers: response
             })

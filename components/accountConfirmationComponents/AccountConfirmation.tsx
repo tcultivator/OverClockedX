@@ -15,7 +15,7 @@ const AccountConfirmationComponent = ({
     const token = params.token
     useEffect(() => {
         setTimeout(() => {
-            console.log('eto ung laman ng token, ', token)
+            
             if (token) {
                 const confirmAccountCreation = async () => {
                     const confirmAccount = await fetch('api/signup/confirmAccount', {
@@ -32,14 +32,14 @@ const AccountConfirmationComponent = ({
                     } else {
                         setLoading(false)
                         setError(true)
-                        console.log('something went wrong')
+                        
                     }
                 }
                 confirmAccountCreation()
             } else {
                 setLoading(false)
                 setError(true)
-                console.log('invalid token')
+                
             }
         }, 1000);
 
