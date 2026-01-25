@@ -112,7 +112,7 @@ const ShopByCategory = () => {
                                 <button onClick={prevSlide} className="aspect-square p-1  text-[20px] rounded border border-white text-white bg-white/20 backdrop-blur-md hover:bg-white/30 hover:border-white/40 hover:text-white/80"><IoMdArrowDropleft /></button>
                                 <div className="flex items-center gap-[2px]">
                                     {categoriesData.map((data, index) => (
-                                        <div key={index} className={`w-[20px] ${current == index ? 'bg-white' : 'bg-white/50 backdrop-blur-md'}  h-[2px]`}></div>
+                                        <div key={index} className={`${current == index ? 'bg-white w-[20px]' : 'bg-white/50 backdrop-blur-md w-[10px]'}  h-[2px]`}></div>
                                     ))}
                                 </div>
                                 <button onClick={nextSlide} className="aspect-square text-[20px] p-1 rounded border border-white text-white bg-white/20 backdrop-blur-md hover:bg-white/30 hover:border-white/40 hover:text-white/80"><IoMdArrowDropright /></button>

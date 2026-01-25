@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import { useLoading } from './loadingStore';
 import { toast } from "sonner"
 import { UserAddress } from '@/types/UserAddressTypes';
+import { useAlertNotification } from './alertNotificationStore';
 type userDataTypesFromGoogle = {
     email: string;
     name: string;
@@ -34,13 +35,25 @@ export const useUserStore = create<useStore>((set) => ({
             body: JSON.stringify({ email: useUserStore.getState().user?.email })
         })
         const response = await userAdressInfo.json()
-        set({
-            userAdress: response
-        })
-        useLoading.getState().setLoading('')
-        toast.success("Successfully added shipping information", {
-            description: "Your shipping information has been updated! please double check it before checkout!",
-        })
+        if (response.status != 500 && response.length > 0) {
+            set({
+                userAdress: response
+            })
+            useLoading.getState().setLoading('')
+            toast.success("Successfully added shipping information", {
+                description: "Your shipping information has been updated! please double check it before checkout!",
+            })
+        } else {
+
+            useLoading.getState().setLoading('')
+            useAlertNotification.getState().setErrorMessageDisplay({
+                display: true,
+                title: 'No Address Found!',
+                message: 'Please check if you have a registered address'
+            })
+
+        }
+
     },
     CustomInput: () => {
         set({
@@ -54,5 +67,5 @@ export const useUserStore = create<useStore>((set) => ({
             description: "Your shipping information has been updated! please double check it before checkout!",
         })
     },
-    
+
 }))

@@ -7,6 +7,8 @@ import { useRouter } from 'next/navigation';
 const DiscountedProducts = () => {
     const [promotionProducts, setPromotionProducts] = useState<promotion_products[]>([]);
     const router = useRouter();
+
+    // get the products that has promotion or discount
     useEffect(() => {
         const fetProductsPromotion = async () => {
             try {
@@ -34,19 +36,19 @@ const DiscountedProducts = () => {
 
             <div className="relative">
 
-                {/* LEFT BLUR */}
+               
                 <div className="pointer-events-none absolute left-0 top-0 h-full w-10 bg-gradient-to-r from-white to-transparent z-10"></div>
 
-                {/* RIGHT BLUR */}
+              
                 <div className="pointer-events-none absolute right-0 top-0 h-full w-10 bg-gradient-to-l from-white to-transparent z-10"></div>
 
-                {/* HORIZONTAL SCROLL WITHOUT SCROLLBAR */}
+               
                 <div className="overflow-x-auto no-scrollbar">
                     <div className="flex gap-3">
                         {promotionProducts.map((data, index) => (
                             <div
                                 key={index}
-                                className="bg-white p-2 rounded relative
+                                className="bg-white border border-black/10 p-2 rounded relative
                                            flex-shrink-0
                                            w-[48%] sm:w-[45%] md:w-[30%] lg:w-[22%] xl:w-[16%]"
                                 onClick={() => router.push(`/product/${data.product_id}`)}

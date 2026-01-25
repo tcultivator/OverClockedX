@@ -15,7 +15,7 @@ const NewsLetterSubscriberConfirmationComponents = () => {
     const [type, setType] = useState<'AlreadySubscriber' | 'SuccessSubscribe' | 'ServerError' | null>(null)
     const email = searchParams.get('email') || ''
     useEffect(() => {
-        console.log('eto ung email: ', email)
+        
         if (email) {
             setLoading(true)
             try {
@@ -30,7 +30,7 @@ const NewsLetterSubscriberConfirmationComponents = () => {
                     const registerResult = await register.json()
                     if (registerResult.type == 'ServerError') return
                     setType(registerResult.type)
-                    console.log(registerResult.type)
+                    
                 }
                 registerSubscriber()
             } catch (err) {

@@ -11,6 +11,7 @@ import Image from 'next/image';
 import { ProductsType } from '@/types/ProductTypes';
 import { Spinner } from "@/components/ui/spinner"
 import { useRouter } from 'next/navigation';
+import { useAlertNotification } from '@/stores/alertNotificationStore';
 const SearchActions = () => {
     const router = useRouter();
     const setSideBar = useSideBarStore((state) => state.setSideBar)
@@ -26,7 +27,8 @@ const SearchActions = () => {
         }
     })
 
-
+    // controller to display an error modal
+    const setErrorMessageDisplay = useAlertNotification((state) => state.setErrorMessageDisplay)
 
     const [openSearch, setOpenSearch] = useState(false)
 
@@ -99,7 +101,11 @@ const SearchActions = () => {
         })
         const submitSearchPostRequestResult = await submitSearchPostRequest.json()
         if (submitSearchPostRequestResult.status == 500) {
-            alert('something went wrong please try again')
+            setErrorMessageDisplay({
+                display: true,
+                title: 'Something went wrong!',
+                message: 'Something went wrong processing your request, Please try again later'
+            })
             setSearchLoading(false)
             return
         }
@@ -114,7 +120,7 @@ const SearchActions = () => {
         <div className='w-[25%] flex items-center gap-4'>
             <div onClick={() => {
                 setSideBar()
-                console.log('eto ung sidebar')
+
             }} className={`flex flex-col gap-1 cursor-pointer w-[15px] ${sideBar ? 'px-0' : 'px-0'} md:hidden z-50 `}>
                 <div className={`bg-black rounded w-[15px] h-[2px] transition duration-200 ${sideBar ? 'absolute rotate-45' : 'relative rotate-0'}`}></div>
                 <div className={`bg-black rounded w-[15px] h-[2px] transition duration-200 ${sideBar ? 'absolute rotate-135' : 'relative rotate-0'}`}></div>

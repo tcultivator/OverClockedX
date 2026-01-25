@@ -26,11 +26,11 @@ const CartButtonAction = ({ session }: Props) => {
 
     useEffect(() => {
         if (session) {
-            console.log('eto ung laman ng session ', session.user?.email)
+            
             const email = session.user?.email;
             fetchCartItems(email)
         } else {
-            console.log('try kung gagana to kapag nabago laman ng session')
+            
             clearUserCartInSignout()
         }
     }, [session, clearUserCartInSignout])

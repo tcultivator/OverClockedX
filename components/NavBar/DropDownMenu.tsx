@@ -20,7 +20,7 @@ const HeaderDropDown = () => {
     const sideBar = useSideBarStore((state) => state.sideBar)
     const setSideBar = useSideBarStore((state) => state.setSideBar)
     function SelectCategories(category: string): void {
-        console.log('eto ung screen size: ', window.innerWidth)
+        
         if (window.innerWidth < 768) {
             setSideBar()
         }
@@ -38,11 +38,11 @@ const HeaderDropDown = () => {
                         <NavigationMenu>
                             <NavigationMenuList>
                                 <NavigationMenuItem>
-                                    <NavigationMenuTrigger className={`py-0 text-black font-orbitron uppercase`}>Computers</NavigationMenuTrigger>
+                                    <NavigationMenuTrigger className={`py-0 text-black font-orbitron  uppercase`}>Computers</NavigationMenuTrigger>
                                     <NavigationMenuContent>
-                                        <NavigationMenuLink className='font-orbitron uppercase' onClick={() => SelectCategories('Computers')}>All</NavigationMenuLink>
+                                        <NavigationMenuLink className='' onClick={() => SelectCategories('Computers')}>All</NavigationMenuLink>
                                         {Computer.map((cpn, index) => (
-                                            <NavigationMenuLink className='font-orbitron uppercase' onClick={() => SelectCategories(cpn)} key={index}>{cpn}</NavigationMenuLink>
+                                            <NavigationMenuLink className='' onClick={() => SelectCategories(cpn)} key={index}>{cpn}</NavigationMenuLink>
                                         ))}
                                     </NavigationMenuContent>
                                 </NavigationMenuItem>
@@ -53,11 +53,11 @@ const HeaderDropDown = () => {
                         <NavigationMenu>
                             <NavigationMenuList>
                                 <NavigationMenuItem>
-                                    <NavigationMenuTrigger className='text-black font-orbitron uppercase'>Components</NavigationMenuTrigger>
+                                    <NavigationMenuTrigger className='text-black font-orbitron  uppercase'>Components</NavigationMenuTrigger>
                                     <NavigationMenuContent>
-                                        <NavigationMenuLink className='font-orbitron uppercase' onClick={() => SelectCategories('Components')}>All</NavigationMenuLink>
+                                        <NavigationMenuLink className='' onClick={() => SelectCategories('Components')}>All</NavigationMenuLink>
                                         {Components.map((cpn, index) => (
-                                            <NavigationMenuLink className='font-orbitron uppercase' onClick={() => SelectCategories(cpn)} key={index}>{cpn}</NavigationMenuLink>
+                                            <NavigationMenuLink className='' onClick={() => SelectCategories(cpn)} key={index}>{cpn}</NavigationMenuLink>
                                         ))}
                                     </NavigationMenuContent>
                                 </NavigationMenuItem>
@@ -70,9 +70,9 @@ const HeaderDropDown = () => {
                                 <NavigationMenuItem>
                                     <NavigationMenuTrigger className='text-black font-orbitron uppercase'>Peripherals</NavigationMenuTrigger>
                                     <NavigationMenuContent>
-                                        <NavigationMenuLink className='font-orbitron uppercase' onClick={() => SelectCategories('Peripherals')}>All</NavigationMenuLink>
+                                        <NavigationMenuLink className='' onClick={() => SelectCategories('Peripherals')}>All</NavigationMenuLink>
                                         {Peripherals.map((cpn, index) => (
-                                            <NavigationMenuLink className='font-orbitron uppercase' onClick={() => SelectCategories(cpn)} key={index}>{cpn}</NavigationMenuLink>
+                                            <NavigationMenuLink className='' onClick={() => SelectCategories(cpn)} key={index}>{cpn}</NavigationMenuLink>
                                         ))}
                                     </NavigationMenuContent>
                                 </NavigationMenuItem>
@@ -83,11 +83,11 @@ const HeaderDropDown = () => {
                         <NavigationMenu>
                             <NavigationMenuList>
                                 <NavigationMenuItem>
-                                    <NavigationMenuTrigger className='text-black font-orbitron uppercase'>Networks</NavigationMenuTrigger>
+                                    <NavigationMenuTrigger className='text-black font-orbitron  uppercase'>Networks</NavigationMenuTrigger>
                                     <NavigationMenuContent>
-                                        <NavigationMenuLink className='font-orbitron uppercase' onClick={() => SelectCategories('Networks')}>All</NavigationMenuLink>
+                                        <NavigationMenuLink className='' onClick={() => SelectCategories('Networks')}>All</NavigationMenuLink>
                                         {Networks.map((cpn, index) => (
-                                            <NavigationMenuLink className='font-orbitron uppercase' onClick={() => SelectCategories(cpn)} key={index}>{cpn}</NavigationMenuLink>
+                                            <NavigationMenuLink className='' onClick={() => SelectCategories(cpn)} key={index}>{cpn}</NavigationMenuLink>
                                         ))}
                                     </NavigationMenuContent>
                                 </NavigationMenuItem>

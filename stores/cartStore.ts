@@ -174,7 +174,7 @@ export const useCartStore = create<cart>((set) => ({
         })
         const response = await clearCartItems.json()
         if (response.status == 200) {
-            console.log('success')
+           
             useLoading.getState().setLoading('')
             set({
                 cartItems: []
@@ -208,7 +208,7 @@ export const useCartStore = create<cart>((set) => ({
 
             //this ensure that if the item in cart is remove and user is currently selected that to checkout, this remove that item from checkout items as well
             const newCheckoutItems = useCartStore.getState().checkoutItems.filter(products => products.product_id !== ItemFromCartNeedToRemove.product_id)
-            console.log(newCheckoutItems)
+            
             set({
                 checkoutItems: newCheckoutItems
             })
@@ -234,7 +234,7 @@ export const useCartStore = create<cart>((set) => ({
 
 
         } catch (err) {
-            console.log('error removing item in cart', err)
+            
             //this is a rollback, if remove item from cart fails
             set({
                 cartItems: cartItemsForRollback
@@ -293,7 +293,7 @@ export const useCartStore = create<cart>((set) => ({
         };
 
         const newCheckoutItems = useCartStore.getState().checkoutItems.filter(products => products.product_id !== newChecoutItemss.product_id)
-        console.log(newCheckoutItems)
+        
         set({
             checkoutItems: newCheckoutItems
         })
@@ -367,7 +367,7 @@ export const useCartStore = create<cart>((set) => ({
     removeItemFromFinalCheckoutItems: (product_id: string) => {
         if (useCartStore.getState().finalCheckoutItems.length > 1) {
             const newCheckoutItems = useCartStore.getState().finalCheckoutItems.filter(products => products.product_id !== product_id)
-            console.log(newCheckoutItems)
+            
             set({
                 finalCheckoutItems: newCheckoutItems
             })
