@@ -135,7 +135,7 @@ const SearchActions = () => {
                                 onClick={openSearchWindow}
                                 className="cursor-pointer"
                             >
-                                <CiSearch className="aspect-square text-[22px]" />
+                                <CiSearch className="aspect-square text-black/50 text-[22px]" />
                             </label>
 
                             <input

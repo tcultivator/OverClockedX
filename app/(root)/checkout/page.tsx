@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from 'react'
+import React, { FormEvent, useEffect, useState } from 'react'
 import { TbTruckDelivery } from "react-icons/tb";
 import { PiPackageDuotone } from "react-icons/pi";
 import { BiSolidDiscount } from "react-icons/bi";
@@ -65,19 +65,25 @@ const Checkout = () => {
     const updateQuantityOfFinalCheckoutItem = useCartStore((state) => state.updateQuantityOfFinalCheckoutItem)
     const removeItemFromFinalCheckoutItems = useCartStore((state) => state.removeItemFromFinalCheckoutItems)
 
+    // zustand function that add the custom shipping information to global state which needed for orders
     const addToUserAdress = useUserStore((state) => state.addToUserAdress)
+
+    // this is the state that going to change if the user change shipping information
     const userAdress = useUserStore((state) => state.userAdress)
 
 
-    //make this as single state
-    const [rName, setRName] = useState<string>('');
-    const [cityMunicipality, setCityMunicipality] = useState<string>('');
-    const [address_line_1, setAddress_line_1] = useState<string>('');
-    const [barangay, setBarangay] = useState<string>('');
-    const [province, setProvince] = useState<string>('');
-    const [email, setEmail] = useState<string>('');
-    const [phoneNumber, setPhoneNumber] = useState<string>('');
-    const [postal_code, setPostal_code] = useState('')
+    // custom shipping information states
+    const [address, setAddress] = useState({
+        rName: '',
+        cityMunicipality: '',
+        address_line_1: '',
+        barangay: '',
+        province: '',
+        email: '',
+        phoneNumber: '',
+        postal_code: ''
+
+    })
 
     //zustand state for updating shipping information
     const CustomInput = useUserStore((state) => state.CustomInput)
@@ -122,12 +128,14 @@ const Checkout = () => {
                     body: JSON.stringify({
                         amount: finalCheckoutItems.reduce((sum, item) => sum + (item.price - (item.value != null ? item.value : 0)) * item.quantity, 0) + shippingCost,
                         referenceId: 'txn-' + Date.now(),
-                        phoneNumber: phoneNumber,
+                        phoneNumber: address.phoneNumber,
                         email: user?.email,
                     }),
                 });
                 const result = await res.json()
                 const data = result as GcashCB
+
+                // i should add validation to this, if gcash failed the order api should not run
 
                 const insertOrders = await fetch('/api/order', {
                     method: 'POST',
@@ -211,6 +219,25 @@ const Checkout = () => {
             },
         })
     }
+
+
+
+    // adding a new shipping information on incoming order, meaning if the user order, instead of using the default address it will input this new address in the orders
+    const submitNewShippingInformation = (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        addCustomAddress([{
+            email: address.email,
+            rname: address.rName,
+            address_line_1: address.address_line_1,
+            cityMunicipality: address.cityMunicipality,
+            barangay: address.barangay,
+            province: address.province,
+            postal_code: Number(address.postal_code),
+            phone_number: address.phoneNumber,
+        }])
+
+    }
+
     return (
         <div className='pb-2 text-white flex justify-center flex-col md:flex-row'>
             <div className='w-full bg-white border-r md:border-r-black/30 flex justify-end'>
@@ -263,7 +290,7 @@ const Checkout = () => {
                                     </SelectGroup>
                                 </SelectContent>
                             </Select>
-
+                            {/* icon for payment optinon field*/}
                             {paymentOptions != '' ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
                         </div>
 
@@ -290,37 +317,62 @@ const Checkout = () => {
                                 </div>
 
 
-                                <div className='flex flex-col gap-1 md:flex  '>
+                                <form onSubmit={submitNewShippingInformation} className='flex flex-col gap-1 md:flex  '>
 
                                     <div className='flex flex-col'>
                                         <label htmlFor="">Fullname</label>
                                         <div className='w-full flex gap-2 items-center'>
-                                            <Input  disabled={userAdress.length > 0} placeholder='Recipient Full Name' type="text" value={userAdress[0]?.rname ?? rName} onChange={(e) => setRName(e.target.value)} />
-                                            {rName != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
+                                            <Input disabled={userAdress.length > 0}
+                                                placeholder='Recipient Full Name'
+                                                type="text"
+                                                required
+                                                value={userAdress[0]?.rname ?? address.rName}
+                                                onChange={(e) => setAddress(prev => ({ ...prev, rName: e.target.value }))} />
+                                            {/* icon for input field, guide to user if the field is already fill */}
+                                            {address.rName != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
                                         </div>
                                     </div>
 
                                     <div className='flex flex-col'>
                                         <label htmlFor="">Email Address</label>
                                         <div className='w-full flex gap-2 items-center'>
-                                            <Input disabled={userAdress.length > 0} placeholder='Recipient Email' type="email" value={userAdress[0]?.email ?? email} onChange={(e) => setEmail(e.target.value)} />
-                                            {email != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
+                                            <Input disabled={userAdress.length > 0}
+                                                placeholder='Recipient Email'
+                                                type="email"
+                                                required
+                                                value={userAdress[0]?.email ?? address.email}
+                                                onChange={(e) => setAddress(prev => ({ ...prev, email: e.target.value }))} />
+                                            {/* icon for input field, guide to user if the field is already fill */}
+                                            {address.email != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
                                         </div>
 
                                     </div>
                                     <div className='flex flex-col'>
                                         <label htmlFor="">Phone Number</label>
                                         <div className='w-full flex gap-2 items-center'>
-                                            <Input disabled={userAdress.length > 0} placeholder='09xxxxxxxxx' type="number" value={userAdress[0]?.phone_number ?? phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
-                                            {phoneNumber != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
+                                            <Input disabled={userAdress.length > 0}
+                                                placeholder='09xxxxxxxxx'
+                                                type="number"
+                                                required
+                                                value={userAdress[0]?.phone_number ?? address.phoneNumber}
+                                                onChange={(e) => setAddress(prev => ({ ...prev, phoneNumber: e.target.value }))} />
+                                            {/* icon for input field, guide to user if the field is already fill */}
+                                            {address.phoneNumber != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
                                         </div>
 
                                     </div>
                                     <div className='flex flex-col w-full'>
                                         <label htmlFor="">Province</label>
                                         <div className='w-full flex gap-2 items-center'>
-                                            <Input disabled={userAdress.length > 0} placeholder='eg:Nueva Ecija' list='province' name='province' value={userAdress[0]?.province ?? province} onChange={(e) => setProvince(e.target.value)} />
-                                            {province != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
+                                            <Input disabled={userAdress.length > 0}
+                                                placeholder='eg:Nueva Ecija'
+                                                list='province'
+                                                name='province'
+                                                required
+                                                value={userAdress[0]?.province ?? address.province}
+                                                onChange={(e) => setAddress(prev => ({ ...prev, province: e.target.value }))} />
+                                            {/* icon for input field, guide to user if the field is already fill */}
+                                            {address.province != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
                                             <datalist id='province'>
                                                 {luzonProvinces.map((data, index) => (
                                                     <option key={index} value={data}>{data}</option>
@@ -332,8 +384,13 @@ const Checkout = () => {
                                     <div className='flex flex-col'>
                                         <label htmlFor="">Address line 1</label>
                                         <div className='w-full flex gap-2 items-center'>
-                                            <Input disabled={userAdress.length > 0} placeholder="House No. / Street / Building" value={userAdress[0]?.address_line_1 ?? address_line_1} onChange={(e) => setAddress_line_1(e.target.value)} />
-                                            {address_line_1 != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
+                                            <Input disabled={userAdress.length > 0}
+                                                placeholder="House No. / Street / Building"
+                                                value={userAdress[0]?.address_line_1 ?? address.address_line_1}
+                                                required
+                                                onChange={(e) => setAddress(prev => ({ ...prev, address_line_1: e.target.value }))} />
+                                            {/* icon for input field, guide to user if the field is already fill */}
+                                            {address.address_line_1 != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
 
                                         </div>
 
@@ -343,8 +400,15 @@ const Checkout = () => {
                                         <div className='flex flex-col w-full'>
                                             <label htmlFor="">City/Municipality</label>
                                             <div className='w-full flex gap-2 items-center'>
-                                                <Input disabled={userAdress.length > 0} placeholder='eg:Jaen' list='city' name='city' value={userAdress[0]?.cityMunicipality ?? cityMunicipality} onChange={(e) => setCityMunicipality(e.target.value)} />
-                                                {cityMunicipality != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
+                                                <Input disabled={userAdress.length > 0}
+                                                    placeholder='eg:Jaen'
+                                                    list='city'
+                                                    name='city'
+                                                    required
+                                                    value={userAdress[0]?.cityMunicipality ?? address.cityMunicipality}
+                                                    onChange={(e) => setAddress(prev => ({ ...prev, cityMunicipality: e.target.value }))} />
+                                                {/* icon for input field, guide to user if the field is already fill */}
+                                                {address.cityMunicipality != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
                                                 <datalist id='city'>
                                                     {luzonPlaces.map((data, index) => (
                                                         <option key={index} value={data}>{data}</option>
@@ -357,8 +421,15 @@ const Checkout = () => {
                                         <div className='flex flex-col w-full'>
                                             <label htmlFor="">Barangay</label>
                                             <div className='w-full flex gap-2 items-center'>
-                                                <Input disabled={userAdress.length > 0} placeholder='eg:Sapang' list='barangay' name='barangay' value={userAdress[0]?.barangay ?? barangay} onChange={(e) => setBarangay(e.target.value)} />
-                                                {barangay != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
+                                                <Input disabled={userAdress.length > 0}
+                                                    placeholder='eg:Sapang'
+                                                    list='barangay'
+                                                    name='barangay'
+                                                    required
+                                                    value={userAdress[0]?.barangay ?? address.barangay}
+                                                    onChange={(e) => setAddress(prev => ({ ...prev, barangay: e.target.value }))} />
+                                                {/* icon for input field, guide to user if the field is already fill */}
+                                                {address.barangay != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
                                                 <datalist id='barangay'>
                                                     {barangaysJaen.map((data, index) => (
                                                         <option key={index} value={data}>{data}</option>
@@ -371,8 +442,14 @@ const Checkout = () => {
                                         <div className='flex flex-col w-full'>
                                             <label htmlFor="">Postal Code</label>
                                             <div className='w-full flex gap-2 items-center'>
-                                                <Input disabled={userAdress.length > 0} type='number' placeholder='eg:3109' value={userAdress[0]?.postal_code ?? postal_code} onChange={(e) => setPostal_code(e.target.value)} />
-                                                {postal_code != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
+                                                <Input disabled={userAdress.length > 0}
+                                                    type='number'
+                                                    placeholder='eg:3109'
+                                                    required
+                                                    value={userAdress[0]?.postal_code ?? address.postal_code}
+                                                    onChange={(e) => setAddress(prev => ({ ...prev, postal_code: e.target.value }))} />
+                                                {/* icon for input field, guide to user if the field is already fill */}
+                                                {address.postal_code != '' || userAdress.length > 0 ? <IoIosCheckmarkCircle className='text-green-400' /> : <RiErrorWarningFill className='text-yellow-400' />}
 
                                             </div>
 
@@ -382,28 +459,9 @@ const Checkout = () => {
 
 
                                     {
-                                        userAdress.length <= 0 && <Button onClick={() => {
-                                            if (rName != '' && address_line_1 != '' && cityMunicipality != '' && barangay != '' && province != '' && email != '' && phoneNumber != '' && postal_code != '') {
-                                                addCustomAddress([{
-                                                    email: email,
-                                                    rname: rName,
-                                                    address_line_1: address_line_1,
-                                                    cityMunicipality: cityMunicipality,
-                                                    barangay: barangay,
-                                                    province: province,
-                                                    postal_code: Number(postal_code),
-                                                    phone_number: phoneNumber,
-                                                }])
-                                            } else {
-                                                setErrorMessageDisplay({
-                                                    display: true,
-                                                    title: 'Missing Shipping Information Fields',
-                                                    message: 'Please fillup all the field to continue!'
-                                                })
-                                            }
-                                        }} variant={'default'} className='w-full'>Submit</Button>
+                                        userAdress.length <= 0 && <Button type='submit' variant={'default'} className='w-full'>Submit</Button>
                                     }
-                                </div>
+                                </form>
                             </AccordionContent>
                         </AccordionItem>
                     </Accordion>
@@ -609,14 +667,21 @@ const Checkout = () => {
                                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                                     <AlertDialogAction onClick={() => {
                                         const totalPrice = finalCheckoutItems.reduce((sum, item) => sum + item.price * item.quantity, 0) + shippingCost;
-                                        if (totalPrice < 100000 && user != null) {
-                                            CheckoutProduct();
-                                        } else {
+                                        if (totalPrice >= 100000) {
                                             setErrorMessageDisplay({
                                                 display: true,
                                                 title: 'Maximum Ammount!',
                                                 message: 'Please limit your order ammount to less that 100k!'
                                             })
+                                            
+                                        } else if (user == null) {
+                                            setErrorMessageDisplay({
+                                                display: true,
+                                                title: 'Unauthorize',
+                                                message: 'Please signin first before placing an order!'
+                                            })
+                                        } else {
+                                           CheckoutProduct();
                                         }
                                     }}>Continue</AlertDialogAction>
                                 </AlertDialogFooter>
