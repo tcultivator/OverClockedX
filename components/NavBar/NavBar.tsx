@@ -15,7 +15,7 @@ const NavBar = async () => {
                 <SearchActions />
 
                 <div className='w-[50%] flex justify-center items-center'>
-                    <Link href="/"><label className="text-[18px] items-center text-center flex cursor-pointer text-black font-orbitron md:text-[27px]">OVERCLOCKEDX</label></Link>
+                    <Link href="/"><label className="text-[18px] items-center text-center font-bold flex cursor-pointer text-black font-orbitron md:text-[27px]">OVERCLOCKEDX</label></Link>
                 </div>
 
                 <div id='menus' className='flex  w-[25%] items-end justify-end gap-20 '>
