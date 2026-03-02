@@ -4,6 +4,8 @@ import { ProductsType } from '@/types/ProductTypes';
 import Image from 'next/image'
 import { redirect } from 'next/navigation';
 import { Label } from '../ui/label';
+
+import { LuCircleAlert } from "react-icons/lu";
 interface Props {
     relatedProducts: ProductsType[];
 }
@@ -32,8 +34,13 @@ const SuggestedProducts = ({ relatedProducts }: Props) => {
                         }
 
                     </div> :
-                    <div className='flex w-full p-5 text-black/50 justify-center'>
-                        <p>No Related Products</p>
+                    <div className='py-3 flex w-full text-black'>
+                        <div className='p-5 rounded flex flex-col gap-1 justify-center items-center border border-black/20 w-full'>
+                            <LuCircleAlert className='text-[25px]' />
+                            <Label>No Related Products Found</Label>
+                            <Label className='text-black/50 text-[12px]'>We couldn&apos;t find any related products at the moment. Please check back later or explore other items.</Label>
+                        </div>
+
                     </div>
 
             }
